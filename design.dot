@@ -1,0 +1,44 @@
+# dot -T png design.dot >design.png && xv design.png
+
+digraph Twinit
+{
+        fontname="monospace";
+        fontsize=8;
+
+        node [fontname="monospace",fontsize=8,shape="record"];
+        edge [fontname="monospace",fontsize=8,shape="record"];
+
+        Hefur [shape=record,label="{Hefur|/Singleton/}"];
+        TorrentDb;
+        Torrent;
+        Peer;
+        PeerDb;
+        HttpServer;
+        AnnounceHandler;
+        StatHandler;
+        UdpServer;
+        WhiteList;
+        FsTreeWhiteList;
+        AnnounceRequest;
+        AnnounceResponse;
+
+        Hefur -> PeerDb [arrowhead=diamond];
+        Hefur -> TorrentDb [arrowhead=diamond];
+        Hefur -> WhiteList [arrowhead=diamond];
+        Hefur -> HttpServer [arrowhead=diamond];
+        Hefur -> UdpServer [arrowhead=diamond];
+
+        PeerDb -> Peer [arrowhead=odiamond];
+
+        TorrentDb -> Torrent [arrowhead=odiamond];
+
+        HttpServer -> AnnounceHandler [arrowhead=diamond];
+        HttpServer -> StatHandler [arrowhead=diamond];
+
+        FsTreeWhiteList -> WhiteList [arrowhead=onormal];
+
+        AnnounceHandler -> AnnounceRequest;
+        UdpServer -> AnnounceRequest;
+
+        AnnounceRequest -> AnnounceResponse;
+}

@@ -12,8 +12,13 @@
 Hefur is a torrent tracker.
 
 Features:
- - support both http and https
+ - support http, https
+ - support udp (TODO)
  - support ipv4 and ipv6
- - no database requiered (every thing in memory)
+ - no database required (every thing in memory)
  - should be efficient
  - perfect for small setup
+ - info_hash white list based on .torrent in a directory tree
+ - can be open and accept any torrent if no white list, through it is not
+   yet recommended
+ - private tracker support (TODO)
