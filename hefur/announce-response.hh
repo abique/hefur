@@ -1,6 +1,11 @@
 #ifndef HEFUR_ANNOUNCE_RESPONSE_HH
 # define HEFUR_ANNOUNCE_RESPONSE_HH
 
+# include <cstdint>
+# include <string>
+
+# include "address.hh"
+
 namespace hefur
 {
   /**
