@@ -1,3 +1,4 @@
+#include "hefur.hh"
 #include "announce-handler.hh"
 
 namespace hefur
@@ -6,6 +7,10 @@ namespace hefur
   AnnounceHandler::handle(mimosa::http::RequestReader & request,
                           mimosa::http::ResponseWriter & response) const
   {
-    return false;
+    AnnounceRequest::Ptr rq = new AnnounceRequest;
+
+    rq->downloaded_ = atoll(request.queryGet("downloaded").c_str());
+    rq->uploaded_ = atoll(request.queryGet("uploaded").c_str());
+    return true;
   }
 }

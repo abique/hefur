@@ -1,10 +1,12 @@
 add_executable(hefurd
   announce-handler.cc
+  announce-request.cc
   fs-tree-white-list.cc
   hefur.cc
   http-server.cc
   log.cc
   main.cc
+  peer.cc
   torrent-db.cc
   udp-server.cc
 )

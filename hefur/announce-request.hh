@@ -11,7 +11,7 @@
 namespace hefur
 {
   /**
-   * This class represents a generic announce request.
+   * This class represents an announce request.
    * It is used by both http(s) server and upd server.
    */
   struct AnnounceRequest : public mimosa::RefCountable<AnnounceRequest>
@@ -24,16 +24,11 @@ namespace hefur
       kStopped,
     };
 
-    enum Action
-    {
-      kAnnounce,
-      kScrape,
-    };
+    static Event parseEvent(const char *str);
 
     char     peerid_[20];
     InfoSha1 info_sha1_;
     Event    event_;
-    Action   action_;
     uint64_t downloaded_;
     uint64_t uploaded_;
     Address  addr_;

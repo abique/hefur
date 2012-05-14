@@ -1,6 +1,8 @@
 #ifndef HEFUR_ADDRESS_HH
 # define HEFUR_ADDRESS_HH
 
+# include <cstring>
+
 # include <sys/socket.h>
 # include <netinet/in.h>
 
