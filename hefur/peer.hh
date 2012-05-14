@@ -3,22 +3,60 @@
 
 # include <cstdint>
 
+# include <mimosa/container/intrusive-dlist.hh>
+
+# include "address.hh"
+
 namespace hefur
 {
   class Peer
   {
   public:
+    Peer();
 
-    uint32_t next_;
-    uint32_t prev_;
-    uint32_t ts_;
-    uint32_t to_next_; // timeout
+    char     peerid_[20];
+    Address  addr_;
+    uint64_t left_;
+    uint64_t downloaded_;
+    uint64_t uploaded_;
+    uint32_t timeout_ts_;
 
-    union {
-      struct sockaddr_in  in_;
-      struct sockaddr_in6 in6_;
+    mimosa::container::IntrusiveDListHook<Peer*> timeout_hook_;
+
+
+    inline bool operator==(const Peer & other) const {
+      return !memcmp(peerid_, other.peerid_, 20) &&
+        addr_ == other.addr_;
+    }
+
+    inline bool operator<(const Peer & other) const {
+      int ret = memcmp(peerid_, other.peerid_, 20);
+      if (ret > 0)
+        return false;
+      if (ret < 0)
+        return true;
+
+      return addr_ < other.addr_;
+    }
+
+    // XXX improve me
+    struct Hash
+    {
+      inline size_t operator()(const Peer * peer) const
+      {
+        return peer->addr_.in_.sin_addr.s_addr;
+      }
     };
-  } __attribute__((packed));
+
+    struct Equal
+    {
+      inline bool operator()(const Peer * p1,
+                             const Peer * p2) const
+      {
+        return *p1 == *p2;
+      }
+    };
+  };
 }
 
 #endif /* !HEFUR_PEER_HH */
