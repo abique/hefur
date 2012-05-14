@@ -3,6 +3,8 @@
 
 # include <cstdint>
 
+# include <mimosa/ref-countable.hh>
+
 # include "address.hh"
 # include "info-sha1.hh"
 
@@ -12,7 +14,7 @@ namespace hefur
    * This class represents a generic announce request.
    * It is used by both http(s) server and upd server.
    */
-  struct AnnounceRequest
+  struct AnnounceRequest : public mimosa::RefCountable<AnnounceRequest>
   {
     enum Event
     {

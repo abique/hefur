@@ -4,6 +4,8 @@
 # include <cstdint>
 # include <string>
 
+# include <mimosa/ref-countable.hh>
+
 # include "address.hh"
 
 namespace hefur
@@ -12,7 +14,7 @@ namespace hefur
    * This class represents a generic announce response.
    * It is used by both http(s) server and upd server.
    */
-  struct AnnounceResponse
+  struct AnnounceResponse : public mimosa::RefCountable<AnnounceRequest>
   {
     bool                 error_;
     std::string          error_msg_;

@@ -5,6 +5,7 @@ add_executable(hefurd
   http-server.cc
   log.cc
   main.cc
+  torrent-db.cc
   udp-server.cc
 )
 
