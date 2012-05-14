@@ -11,13 +11,18 @@ namespace hefur
   class Torrent
   {
   public:
-    typedef IntrusiveDList::<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
+    typedef mimosa::container::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
     typedef std::unordered_set<Peer*, Peer::Hash, Peer::Equal> peers_type;
 
     InfoSha1      info_sha1_;
     std::string   name_;
     timeouts_type timeouts_;
     peers_type    peers_;
+
+    inline operator const InfoSha1 & () const
+    {
+      return info_sha1_;
+    }
   };
 }
 

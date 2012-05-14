@@ -35,7 +35,6 @@ namespace hefur
     : mutex_(),
       cond_(),
       stop_(false),
-      pdb_(),
       wl_(nullptr),
       http_server_(nullptr),
       https_server_(nullptr),

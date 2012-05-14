@@ -5,7 +5,6 @@
 # include <mimosa/mutex.hh>
 # include <mimosa/condition.hh>
 
-# include "peer-db.hh"
 # include "white-list.hh"
 # include "torrent-db.hh"
 # include "udp-server.hh"
@@ -22,7 +21,6 @@ namespace hefur
     void run();
     void stop();
 
-    inline PeerDb & peerDb() { return pdb_; }
     inline TorrentDb & torrentDb() { return tdb_; }
     inline const WhiteList * whiteList() const { return wl_; }
 
@@ -31,7 +29,6 @@ namespace hefur
     mimosa::Condition cond_;
     bool              stop_;
 
-    PeerDb       pdb_;
     TorrentDb    tdb_;
     WhiteList *  wl_;
     HttpServer * http_server_;
