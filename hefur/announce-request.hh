@@ -22,9 +22,16 @@ namespace hefur
       kStopped,
     };
 
+    enum Action
+    {
+      kAnnounce,
+      kScrape,
+    };
+
     char     peerid_[20];
     InfoSha1 info_sha1_;
     Event    event_;
+    Action   action_;
     uint64_t downloaded_;
     uint64_t uploaded_;
     Address  addr_;
