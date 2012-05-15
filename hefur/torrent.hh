@@ -15,7 +15,8 @@ namespace hefur
     typedef std::unordered_set<Peer*, Peer::Hash, Peer::Equal> peers_type;
 
     InfoSha1      info_sha1_;
-    std::string   name_;
+    std::string   name_; // optional, used by StatHandler
+    std::string   path_; // optional, for later download
     timeouts_type timeouts_;
     peers_type    peers_;
 
