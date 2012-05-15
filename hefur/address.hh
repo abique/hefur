@@ -11,7 +11,7 @@ namespace hefur
   union Address
   {
   public:
-
+    struct sockaddr     addr_;
     struct sockaddr_in  in_;
     struct sockaddr_in6 in6_;
 

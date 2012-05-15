@@ -31,6 +31,7 @@ namespace hefur
     Event    event_;
     uint64_t downloaded_;
     uint64_t uploaded_;
+    uint64_t left_;
     Address  addr_;
   };
 }
