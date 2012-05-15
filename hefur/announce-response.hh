@@ -14,7 +14,7 @@ namespace hefur
    * This class represents an announce response.
    * It is used by both http(s) server and upd server.
    */
-  struct AnnounceResponse : public mimosa::RefCountable<AnnounceRequest>
+  struct AnnounceResponse : public mimosa::RefCountable<AnnounceResponse>
   {
     bool                 error_;
     std::string          error_msg_;

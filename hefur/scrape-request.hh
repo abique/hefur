@@ -9,7 +9,7 @@ namespace hefur
    */
   struct ScrapeRequest : public mimosa::RefCountable<ScrapeRequest>
   {
-    std::vector<InfoSha1> info_sha1_;
+    std::vector<InfoSha1> info_sha1s_;
   };
 }
 

@@ -8,6 +8,15 @@ namespace hefur
   struct InfoSha1
   {
   public:
+    inline InfoSha1()
+    {
+    }
+
+    inline InfoSha1(const char *data)
+    {
+      ::memcpy(bytes_, data, 20);
+    }
+
     inline bool operator<(const InfoSha1 & other) const {
       return ::memcmp(bytes_, other.bytes_, 20) < 0;
     }
