@@ -12,33 +12,38 @@ digraph Twinit
         TorrentDb;
         Torrent;
         Peer;
-        PeerDb;
         HttpServer;
+        AnnounceRequest;
+        AnnounceResponse;
         AnnounceHandler;
+        ScrapeRequest;
+        ScrapeResponse;
+        ScrapeHandler;
         StatHandler;
         UdpServer;
         WhiteList;
         FsTreeWhiteList;
-        AnnounceRequest;
-        AnnounceResponse;
 
-        Hefur -> PeerDb [arrowhead=diamond];
         Hefur -> TorrentDb [arrowhead=diamond];
         Hefur -> WhiteList [arrowhead=diamond];
         Hefur -> HttpServer [arrowhead=diamond];
         Hefur -> UdpServer [arrowhead=diamond];
 
-        PeerDb -> Peer [arrowhead=odiamond];
+        Torrent -> Peer [arrowhead=odiamond];
 
         TorrentDb -> Torrent [arrowhead=odiamond];
 
         HttpServer -> AnnounceHandler [arrowhead=diamond];
+        HttpServer -> ScrapeHandler [arrowhead=diamond];
         HttpServer -> StatHandler [arrowhead=diamond];
 
         FsTreeWhiteList -> WhiteList [arrowhead=onormal];
 
         AnnounceHandler -> AnnounceRequest;
+        ScrapeHandler -> ScrapeRequest;
         UdpServer -> AnnounceRequest;
+        UdpServer -> ScrapeRequest;
 
         AnnounceRequest -> AnnounceResponse;
+        ScrapeRequest -> ScrapeResponse;
 }
