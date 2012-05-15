@@ -6,6 +6,7 @@
 
 #include "http-server.hh"
 #include "announce-handler.hh"
+#include "scrape-handler.hh"
 #include "log.hh"
 
 namespace hefur
@@ -33,6 +34,7 @@ namespace hefur
 
     auto dispatch = new mimosa::http::DispatchHandler;
     dispatch->registerHandler("/announce", new AnnounceHandler);
+    dispatch->registerHandler("/scrape", new ScrapeHandler);
 
     auto log_handler = new mimosa::http::LogHandler;
     log_handler->setHandler(dispatch);

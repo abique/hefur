@@ -7,6 +7,7 @@ add_executable(hefurd
   log.cc
   main.cc
   peer.cc
+  scrape-handler.cc
   torrent-db.cc
   udp-server.cc
 )
