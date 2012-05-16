@@ -7,6 +7,7 @@
 
 # include "address.hh"
 # include "info-sha1.hh"
+# include "crypto-support.hh"
 
 namespace hefur
 {
@@ -26,13 +27,15 @@ namespace hefur
 
     static Event parseEvent(const char *str);
 
-    char     peerid_[20];
-    InfoSha1 info_sha1_;
-    Event    event_;
-    uint64_t downloaded_;
-    uint64_t uploaded_;
-    uint64_t left_;
-    Address  addr_;
+    char          peerid_[20];
+    InfoSha1      info_sha1_;
+    Event         event_;
+    uint64_t      downloaded_;
+    uint64_t      uploaded_;
+    uint64_t      left_;
+    Address       addr_;
+    uint16_t      crypto_port_;
+    CryptoSupport crypto_support_;
   };
 }
 

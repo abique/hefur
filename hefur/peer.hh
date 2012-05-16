@@ -6,6 +6,7 @@
 # include <mimosa/container/intrusive-dlist.hh>
 
 # include "address.hh"
+# include "crypto-support.hh"
 
 namespace hefur
 {
@@ -14,12 +15,14 @@ namespace hefur
   public:
     Peer();
 
-    char     peerid_[20];
-    Address  addr_;
-    uint64_t left_;
-    uint64_t downloaded_;
-    uint64_t uploaded_;
-    uint32_t timeout_ts_;
+    char          peerid_[20];
+    Address       addr_;
+    uint16_t      crypto_port_;
+    CryptoSupport crypto_support_;
+    uint64_t      left_;
+    uint64_t      downloaded_;
+    uint64_t      uploaded_;
+    uint32_t      timeout_ts_;
 
     mimosa::container::IntrusiveDListHook<Peer*> timeout_hook_;
 
