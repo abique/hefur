@@ -9,6 +9,7 @@ add_executable(hefurd
   peer.cc
   scrape-handler.cc
   stat-handler.cc
+  torrent.cc
   torrent-db.cc
   udp-server.cc
 )

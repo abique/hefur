@@ -22,7 +22,7 @@ namespace hefur
     uint64_t      left_;
     uint64_t      downloaded_;
     uint64_t      uploaded_;
-    uint32_t      timeout_ts_;
+    uint32_t      timeout_ts_; // monotonic coarse clock
 
     mimosa::container::IntrusiveDListHook<Peer*> timeout_hook_;
 

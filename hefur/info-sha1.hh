@@ -1,6 +1,7 @@
 #ifndef HEFUR_INFO_SHA1_HH
 # define HEFUR_INFO_SHA1_HH
 
+# include <cstdint>
 # include <cstring>
 
 namespace hefur

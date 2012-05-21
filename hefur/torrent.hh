@@ -1,7 +1,10 @@
 #ifndef HEFUR_TORRENT_HH
 # define HEFUR_TORRENT_HH
 
+# include <string>
 # include <unordered_set>
+
+# include <mimosa/container/intrusive-dlist.hh>
 
 # include "info-sha1.hh"
 # include "peer.hh"
@@ -13,6 +16,8 @@ namespace hefur
   public:
     typedef mimosa::container::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
     typedef std::unordered_set<Peer*, Peer::Hash, Peer::Equal> peers_type;
+
+    void cleanup();
 
     InfoSha1      info_sha1_;
     std::string   name_; // optional, used by StatHandler
