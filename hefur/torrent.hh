@@ -2,33 +2,39 @@
 # define HEFUR_TORRENT_HH
 
 # include <string>
-# include <unordered_set>
 
-# include <mimosa/container/intrusive-dlist.hh>
+# include <mimosa/intrusive-dlist.hh>
+# include <mimosa/ref-countable.hh>
+# include <mimosa/trie.hh>
 
 # include "info-sha1.hh"
 # include "peer.hh"
+# include "announce-request.hh"
+# include "announce-response.hh"
 
 namespace hefur
 {
-  class Torrent
+  class Torrent : public mimosa::RefCountable<Torrent>
   {
   public:
-    typedef mimosa::container::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
-    typedef std::unordered_set<Peer*, Peer::Hash, Peer::Equal> peers_type;
+    Torrent(const InfoSha1 &    info_sha1,
+            const std::string & name = "",
+            const std::string & path = "");
+    ~Torrent();
 
     void cleanup();
+
+    AnnounceResponse::Ptr announce(AnnounceRequest::Ptr request);
+
+    typedef mimosa::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
+    typedef mimosa::Trie<Peer *, Peer::key> peers_type;
+
 
     InfoSha1      info_sha1_;
     std::string   name_; // optional, used by StatHandler
     std::string   path_; // optional, for later download
     timeouts_type timeouts_;
     peers_type    peers_;
-
-    inline operator const InfoSha1 & () const
-    {
-      return info_sha1_;
-    }
   };
 }
 

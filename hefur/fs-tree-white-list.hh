@@ -26,7 +26,7 @@ namespace hefur
     void scan();
 
   private:
-    typedef std::unordered_set<InfoSha1, InfoSha1::BasicHasher> sha1s_type;
+    typedef std::unordered_set<InfoSha1, InfoSha1::Hasher> sha1s_type;
 
     void loadTorrent(sha1s_type & sha1s, const std::string & path);
     void loopScan();

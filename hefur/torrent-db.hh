@@ -1,10 +1,10 @@
 #ifndef HEFUR_TORRENT_DB_HH
 # define HEFUR_TORRENT_DB_HH
 
-# include <mimosa/channel.hh>
 # include <mimosa/future.hh>
 # include <mimosa/thread.hh>
 # include <mimosa/shared-mutex.hh>
+# include <mimosa/trie.hh>
 
 # include "torrent.hh"
 # include "announce-request.hh"
@@ -32,7 +32,12 @@ namespace hefur
     /** @} */
 
   private:
-    typedef std::unordered_set<Torrent, InfoSha1::BasicHasher> torrents_type;
+
+    static inline mimosa::StringRef torrentKey(Torrent::Ptr torrent) {
+      return mimosa::StringRef(torrent->info_sha1_.bytes());
+    }
+
+    typedef mimosa::Trie<Torrent::Ptr, torrentKey> torrents_type;
 
     void cleanup();
     void cleanupLoop();

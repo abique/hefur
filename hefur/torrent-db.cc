@@ -12,6 +12,7 @@ namespace hefur
 
   TorrentDb::~TorrentDb()
   {
+    mimosa::SharedMutex::Locker locker(torrents_lock_);
     cleanup_stop_.set(true);
     cleanup_thread_.join();
   }
@@ -20,6 +21,10 @@ namespace hefur
   TorrentDb::announce(AnnounceRequest::Ptr request)
   {
     mimosa::SharedMutex::Locker locker(torrents_lock_);
+
+    Torrent * torrent = torrents_.find(request->info_sha1_.bytes());
+    if (torrent)
+      return torrent->announce(request);
     return nullptr;
   }
 
@@ -34,8 +39,9 @@ namespace hefur
   TorrentDb::cleanup()
   {
     mimosa::SharedMutex::Locker locker(torrents_lock_);
-    for (auto it = torrents_.begin(); it != torrents_.end(); ++it)
-      const_cast<Torrent&> (*it).cleanup();
+    torrents_.foreach([] (Torrent::Ptr torrent) {
+        torrent->cleanup();
+      });
   }
 
   void

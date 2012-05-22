@@ -3,6 +3,7 @@
 
 # include <cstdint>
 # include <string>
+# include <vector>
 
 # include <mimosa/ref-countable.hh>
 

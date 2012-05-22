@@ -4,6 +4,8 @@
 # include <cstdint>
 # include <cstring>
 
+# include <mimosa/string-ref.hh>
+
 namespace hefur
 {
   struct InfoSha1
@@ -30,13 +32,17 @@ namespace hefur
       return ::memcmp(bytes_, other.bytes_, 20) > 0;
     }
 
-    struct BasicHasher
+    struct Hasher
     {
       inline size_t operator()(const InfoSha1 & sha1) const
       {
         return *(size_t*)sha1.bytes_;
       }
     };
+
+    inline mimosa::StringRef bytes() const {
+      return mimosa::StringRef((const char*)bytes_, 20);
+    }
 
     uint8_t bytes_[20];
   };
