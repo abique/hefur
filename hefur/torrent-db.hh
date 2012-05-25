@@ -31,10 +31,16 @@ namespace hefur
     ScrapeResponse::Ptr scrape(ScrapeRequest::Ptr request);
     /** @} */
 
+    void addTorrent(const InfoSha1 & info_sha1,
+                    const std::string & name,
+                    const std::string & path);
+
+    void addTorrent(const std::string & path);
+
   private:
 
     static inline mimosa::StringRef torrentKey(Torrent::Ptr torrent) {
-      return mimosa::StringRef(torrent->info_sha1_.bytes());
+      return mimosa::StringRef(torrent->key());
     }
 
     typedef mimosa::Trie<Torrent::Ptr, torrentKey> torrents_type;
