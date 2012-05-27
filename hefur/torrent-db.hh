@@ -15,6 +15,7 @@
 namespace hefur
 {
   class StatHandler;
+  class PeersHandler;
 
   class TorrentDb
   {
@@ -42,6 +43,7 @@ namespace hefur
   private:
 
     friend class StatHandler;
+    friend class PeersHandler;
 
     static inline mimosa::StringRef torrentKey(Torrent::Ptr torrent) {
       return mimosa::StringRef(torrent->key());
