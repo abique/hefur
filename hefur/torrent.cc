@@ -38,9 +38,10 @@ namespace hefur
     while (!timeouts_.empty())
     {
       auto peer = timeouts_.front();
-      if (peer->timeout_ts_ >= now)
+      if (peer->timeout_ts_ < now)
         return;
 
+      removePeer(peer);
       timeouts_.erase(peer);
       peers_.erase(Peer::key(peer));
       delete peer;
@@ -58,16 +59,19 @@ namespace hefur
     response->nseeders_           = nseeders_;
     response->ncompleted_         = ncompleted_;
 
+    // update stats
+    downloaded_ += request->downloaded_;
+    uploaded_   += request->uploaded_;
+
     // find the peer
     Peer * peer = peers_.find(mimosa::StringRef((const char*)request->peerid_ + 8, 12));
 
-    // remove the peer from the counters
-    if (peer)
+    // update counters to reflect a leecher becoming seeder
+    if (peer && peer->left_ > 0 && request->left_ == 0 &&
+        request->event_ == AnnounceRequest::kCompleted)
     {
-      if (peer->left_ == 0)
-        --nseeders_;
-      else
-        --nleechers_;
+      --nleechers_;
+      ++nseeders_;
     }
 
     // the peer wants to stop, so remove it from the peers
@@ -96,14 +100,12 @@ namespace hefur
       }
     }
 
-    ncompleted_ += request->event_ == AnnounceRequest::kCompleted;
-    downloaded_ += request->downloaded_;
-    uploaded_   += request->uploaded_;
-    nseeders_   += request->left_ == 0;
-    nleechers_  += request->left_ > 0;
+    if (request->num_want_ > 100)
+      request->num_want_ = 100;
+
     for (auto it = timeouts_.rbegin(); it != timeouts_.rend(); ++it)
     {
-      if (response->addrs_.size() >= 50)
+      if (response->addrs_.size() >= request->num_want_)
         break;
 
       if (!::memcmp(it->peerid_, request->peerid_, 20))
@@ -126,6 +128,10 @@ namespace hefur
     peer->timeout_ts_ = mimosa::monotonicTimeCoarse() + mimosa::minute * 45;
     memcpy(peer->peerid_, request->peerid_, 20);
 
+    if (peer->left_ == 0)
+      ++nseeders_;
+    else
+      ++nleechers_;
     peers_.insert(peer);
     timeouts_.pushBack(peer);
     return peer;
@@ -134,6 +140,11 @@ namespace hefur
   void
   Torrent::removePeer(Peer * peer)
   {
+    if (peer->left_ == 0)
+      --nseeders_;
+    else
+      --nleechers_;
+
     timeouts_.erase(peer);
     peers_.erase(peer);
     delete peer;

@@ -29,6 +29,7 @@ namespace hefur
 
     char          peerid_[20];
     InfoSha1      info_sha1_;
+    uint32_t      num_want_;
     Event         event_;
     uint64_t      downloaded_;
     uint64_t      uploaded_;

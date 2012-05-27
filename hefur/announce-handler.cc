@@ -20,6 +20,12 @@ namespace hefur
     if (peerid.size() != 20 || info_hash.size() != 20)
       return false;
 
+    auto query_it = request.query().find("numwant");
+    if (query_it == request.query().end())
+      rq->num_want_ = 50;
+    else
+      rq->num_want_ = atoi(query_it->second.c_str());
+
     uint16_t port = atoi(request.queryGet("port").c_str());
     bool compact = request.query().count("compact");
     memcpy(rq->peerid_, peerid.data(), 20);
