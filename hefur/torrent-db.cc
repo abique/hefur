@@ -31,7 +31,11 @@ namespace hefur
 
     Torrent * torrent = torrents_.find(request->info_sha1_.bytes());
     if (torrent)
-      return torrent->announce(request);
+    {
+      auto response = torrent->announce(request);
+      response->interval_ = mimosa::minute * 1;
+      return response;
+    }
     return nullptr;
   }
 
