@@ -14,6 +14,8 @@
 
 namespace hefur
 {
+  class StatHandler;
+
   class TorrentDb
   {
   public:
@@ -38,6 +40,8 @@ namespace hefur
     void addTorrent(const std::string & path);
 
   private:
+
+    friend class StatHandler;
 
     static inline mimosa::StringRef torrentKey(Torrent::Ptr torrent) {
       return mimosa::StringRef(torrent->key());

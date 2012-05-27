@@ -59,9 +59,9 @@ namespace hefur
         continue;
 
       item.info_sha1_   = *it;
-      item.nleechers_   = torrent->nleechers();
-      item.nseeders_    = torrent->nseeders();
-      item.ndownloaded_ = torrent->ncompleted();
+      item.nleechers_   = torrent->leechers();
+      item.nseeders_    = torrent->seeders();
+      item.ndownloaded_ = torrent->completed();
       response->items_.push_back(item);
     }
     response->interval_ = SCRAPE_INTERVAL * 60;

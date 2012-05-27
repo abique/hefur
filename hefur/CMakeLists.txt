@@ -10,12 +10,14 @@ add_executable(hefurd
   peer.cc
   scrape-handler.cc
   stat-handler.cc
+  template-factory.cc
   torrent.cc
   torrent-db.cc
   udp-server.cc
 )
 
 target_link_libraries(hefurd
+  mimosa-tpl
   mimosa-http
   mimosa-fs
   mimosa-bencode

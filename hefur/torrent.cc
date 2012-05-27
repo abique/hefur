@@ -13,9 +13,9 @@ namespace hefur
       path_(path),
       timeouts_(),
       peers_(),
-      nleechers_(0),
-      nseeders_(0),
-      ncompleted_(0),
+      leechers_(0),
+      seeders_(0),
+      completed_(0),
       downloaded_(0),
       uploaded_(0)
   {
@@ -56,9 +56,9 @@ namespace hefur
     AnnounceResponse::Ptr response = new AnnounceResponse;
     response->error_              = false;
     response->error_msg_.clear();
-    response->nleechers_          = nleechers_;
-    response->nseeders_           = nseeders_;
-    response->ncompleted_         = ncompleted_;
+    response->nleechers_          = leechers_;
+    response->nseeders_           = seeders_;
+    response->ncompleted_         = completed_;
 
     // update stats
     downloaded_ += request->downloaded_;
@@ -71,8 +71,8 @@ namespace hefur
     if (peer && peer->left_ > 0 && request->left_ == 0 &&
         request->event_ == AnnounceRequest::kCompleted)
     {
-      --nleechers_;
-      ++nseeders_;
+      --leechers_;
+      ++seeders_;
     }
 
     // the peer wants to stop, so remove it from the peers
@@ -131,9 +131,9 @@ namespace hefur
     memcpy(peer->peerid_, request->peerid_, 20);
 
     if (peer->left_ == 0)
-      ++nseeders_;
+      ++seeders_;
     else
-      ++nleechers_;
+      ++leechers_;
     peers_.insert(peer);
     timeouts_.pushBack(peer);
     return peer;
@@ -143,9 +143,9 @@ namespace hefur
   Torrent::removePeer(Peer * peer)
   {
     if (peer->left_ == 0)
-      --nseeders_;
+      --seeders_;
     else
-      --nleechers_;
+      --leechers_;
 
     timeouts_.erase(peer);
     peers_.erase(peer);
