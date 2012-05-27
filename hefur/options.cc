@@ -19,7 +19,7 @@ namespace hefur
   uint16_t & UDP_PORT = *mimosa::options::addOption<uint16_t>(
     "", "udp-port", "the port to use, 0 to disable", 6969);
   bool & IPV6 = *mimosa::options::addSwitch(
-    "", "ipv6", "use ipv6 instead of ipv4");
+    "", "ipv6", "bind on ipv6 instead of ipv4");
 
   std::string & CERT = *mimosa::options::addOption<std::string>(
     "", "cert", "the path to the certificate", "");
@@ -34,4 +34,12 @@ namespace hefur
   uint32_t & SCAN_INTERVAL = *mimosa::options::addOption<uint32_t>(
     "", "scan-interval", "the duration in seconds between two torrent-dir scans",
     60);
+
+  const char * VERSION_MSG = mimosa::options::addMessage(
+    "", "version", "display the software's version",
+    "hefurd " HEFUR_VERSION "\n"
+    "Copyright (C) 2012 Alexandre Bique\n"
+    "License: MIT\n"
+    "This is free software: you are free to change and redistribute it.\n"
+    "There is NO WARRANTY, to the extent permitted by law.");
 }
