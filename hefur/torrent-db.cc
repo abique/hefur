@@ -30,19 +30,24 @@ namespace hefur
     mimosa::SharedMutex::Locker locker(torrents_lock_);
 
     Torrent * torrent = torrents_.find(request->info_sha1_.bytes());
-    if (torrent)
+    if (!torrent)
     {
-      auto response = torrent->announce(request);
-      response->interval_ = mimosa::minute * 1;
+      AnnounceResponse::Ptr response = new AnnounceResponse;
+      response->error_               = true;
+      response->error_msg_           = "torrent not found";
       return response;
     }
-    return nullptr;
+    auto response       = torrent->announce(request);
+    response->interval_ = 60;
+    return response;
   }
 
   ScrapeResponse::Ptr
   TorrentDb::scrape(ScrapeRequest::Ptr request)
   {
     ScrapeResponse::Ptr response = new ScrapeResponse;
+    response->error_ = false;
+
     mimosa::SharedMutex::ReadLocker locker(torrents_lock_);
     for (auto it = request->info_sha1s_.begin(); it != request->info_sha1s_.end(); ++it)
     {
@@ -51,9 +56,9 @@ namespace hefur
       if (!torrent)
         continue;
 
-      item.info_sha1_ = *it;
-      item.nleechers_ = torrent->nleechers();
-      item.nseeders_ = torrent->nseeders();
+      item.info_sha1_   = *it;
+      item.nleechers_   = torrent->nleechers();
+      item.nseeders_    = torrent->nseeders();
       item.ndownloaded_ = torrent->ncompleted();
       response->items_.push_back(item);
     }

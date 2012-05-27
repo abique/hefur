@@ -26,7 +26,6 @@ namespace hefur
     response.content_type_ = "text/plain";
     response.keep_alive_   = false;
 
-
     mimosa::stream::StringStream::Ptr buf = new mimosa::stream::StringStream;
     mimosa::bencode::Encoder enc(buf);
 
