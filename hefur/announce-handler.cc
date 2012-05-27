@@ -1,3 +1,4 @@
+#include <mimosa/stream/string-stream.hh>
 #include <mimosa/bencode/encoder.hh>
 #include <mimosa/net/print.hh>
 #include <mimosa/http/server-channel.hh>
@@ -29,7 +30,7 @@ namespace hefur
     rq->left_ = atoll(request.queryGet("left").c_str());
     memcpy(&rq->addr_, request.channel().remoteAddr(), request.channel().remoteAddrLen());
     if (rq->addr_.in_.sin_family == AF_INET)
-      rq->addr_.in_.sin_port = htons(atoi(request.queryGet("port").c_str()));
+      rq->addr_.in_.sin_port = htons(port);
     else if (rq->addr_.in_.sin_family == AF_INET6)
       rq->addr_.in6_.sin6_port = htons(port);
     else
@@ -37,8 +38,9 @@ namespace hefur
 
     response.content_type_ = "text/plain";
     response.keep_alive_   = false;
-    response.sendHeader();
-    mimosa::bencode::Encoder enc(&response);
+
+    mimosa::stream::StringStream::Ptr buf = new mimosa::stream::StringStream;
+    mimosa::bencode::Encoder enc(buf);
 
     auto rp = Hefur::instance().torrentDb().announce(rq);
     if (!rp || rp->error_)
@@ -47,6 +49,10 @@ namespace hefur
       enc.pushData("failure reason", 14);
       enc.pushData(rp ? rp->error_msg_ : "internal error (1)");
       enc.end();
+
+      // avoid Chunked-Encoding for old client
+      response.content_length_ = buf->str().size();
+      response.write(buf->str().data(), buf->str().size());
       return true;
     }
 
@@ -96,6 +102,9 @@ namespace hefur
 
     enc.end(); // doc
 
+    // avoid Chunked-Encoding for old client
+    response.content_length_ = buf->str().size();
+    response.write(buf->str().data(), buf->str().size());
     return true;
   }
 }

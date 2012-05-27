@@ -1,4 +1,5 @@
 #include <mimosa/bencode/encoder.hh>
+#include <mimosa/stream/string-stream.hh>
 
 #include "hefur.hh"
 #include "scrape-handler.hh"
@@ -24,8 +25,10 @@ namespace hefur
 
     response.content_type_ = "text/plain";
     response.keep_alive_   = false;
-    response.sendHeader();
-    mimosa::bencode::Encoder enc(&response);
+
+
+    mimosa::stream::StringStream::Ptr buf = new mimosa::stream::StringStream;
+    mimosa::bencode::Encoder enc(buf);
 
     auto rp = Hefur::instance().torrentDb().scrape(rq);
     if (!rp || rp->error_)
@@ -34,6 +37,10 @@ namespace hefur
       enc.pushData("failure reason", 14);
       enc.pushData(rp ? rp->error_msg_ : "internal error");
       enc.end();
+
+      // avoid Chunked-Encoding for old client
+      response.content_length_ = buf->str().size();
+      response.write(buf->str().data(), buf->str().size());
       return true;
     }
 
@@ -57,6 +64,9 @@ namespace hefur
     enc.end(); // files
     enc.end(); // doc
 
+    // avoid Chunked-Encoding for old client
+    response.content_length_ = buf->str().size();
+    response.write(buf->str().data(), buf->str().size());
     return true;
   }
 }
