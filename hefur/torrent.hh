@@ -66,6 +66,8 @@ namespace hefur
     uint32_t nleechers_;        // the number of leechers
     uint32_t nseeders_;         // the number of seeders
     uint32_t ncompleted_;       // the number of times a peer completed the download
+    uint32_t downloaded_;       // the number of bytes downloaded (reported by peers, unreliable)
+    uint32_t uploaded_;         // the number of bytes uploaded (reported by peers, unreliable)
   };
 }
 

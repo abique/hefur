@@ -11,7 +11,12 @@ namespace hefur
       name_(name),
       path_(path),
       timeouts_(),
-      peers_()
+      peers_(),
+      nleechers_(0),
+      nseeders_(0),
+      ncompleted_(0),
+      downloaded_(0),
+      uploaded_(0)
   {
   }
 
@@ -56,6 +61,12 @@ namespace hefur
     // find the peer
     Peer * peer = peers_.find(mimosa::StringRef((const char*)request->peerid_ + 8, 12));
 
+    // remove the peer from the counters
+    if (peer->left_ == 0)
+      --nseeders_;
+    else
+      --nleechers_;
+
     // the peer wants to stop, so remove it from the peers
     if (request->event_ == AnnounceRequest::kStopped)
     {
@@ -67,29 +78,50 @@ namespace hefur
       }
 
       removePeer(peer);
+      return response;
     }
 
-    if (!peer && request->event_ != AnnounceRequest::kStarted)
+    // create the peer
+    if (!peer)
     {
       peer = createPeer(request);
       if (!peer)
-        return nullptr;
+      {
+        response->error_ = true;
+        response->error_msg_ = "internal error";
+        return response;
+      }
     }
 
-    // XXX finish the announce
-    return nullptr;
+    ncompleted_ += request->event_ == AnnounceRequest::kCompleted;
+    downloaded_ += request->downloaded_;
+    uploaded_   += request->uploaded_;
+    nseeders_   += request->left_ == 0;
+    nleechers_  += request->left_ > 0;
+    for (auto it = timeouts_.rbegin(); it != timeouts_.rend(); ++it)
+    {
+      if (response->addrs_.size() >= 50)
+        break;
+
+      if (!::memcmp(it->peerid_, request->peerid_, 20))
+        continue;
+
+      response->addrs_.push_back(it->addr_);
+    }
+
+    return response;
   }
 
   Peer *
   Torrent::createPeer(AnnounceRequest::Ptr request)
   {
-    Peer * peer = new Peer;
-    memcpy(peer->peerid_, request->peerid_, 20);
-    peer->addr_ = request->addr_;
-    peer->left_ = request->left_;
+    Peer * peer       = new Peer;
+    peer->addr_       = request->addr_;
+    peer->left_       = request->left_;
     peer->downloaded_ = request->downloaded_;
-    peer->uploaded_ = request->uploaded_;
+    peer->uploaded_   = request->uploaded_;
     peer->timeout_ts_ = mimosa::monotonicTimeCoarse() + mimosa::minute * 45;
+    memcpy(peer->peerid_, request->peerid_, 20);
 
     peers_.insert(peer);
     timeouts_.pushBack(peer);

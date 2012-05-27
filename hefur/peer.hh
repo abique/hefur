@@ -13,6 +13,8 @@ namespace hefur
   class Peer
   {
   public:
+    Peer();
+
     Address       addr_;
     uint64_t      left_;
     uint64_t      downloaded_;
