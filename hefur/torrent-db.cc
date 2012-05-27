@@ -42,8 +42,22 @@ namespace hefur
   ScrapeResponse::Ptr
   TorrentDb::scrape(ScrapeRequest::Ptr request)
   {
+    ScrapeResponse::Ptr response = new ScrapeResponse;
     mimosa::SharedMutex::ReadLocker locker(torrents_lock_);
-    return nullptr;
+    for (auto it = request->info_sha1s_.begin(); it != request->info_sha1s_.end(); ++it)
+    {
+      ScrapeResponse::Item item;
+      Torrent * torrent = torrents_.find(it->bytes());
+      if (!torrent)
+        continue;
+
+      item.info_sha1_ = *it;
+      item.nleechers_ = torrent->nleechers();
+      item.nseeders_ = torrent->nseeders();
+      item.ndownloaded_ = torrent->ncompleted();
+      response->items_.push_back(item);
+    }
+    return response;
   }
 
   void
