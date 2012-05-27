@@ -39,6 +39,12 @@ namespace hefur
      */
     inline mimosa::StringRef key() const;
 
+    inline uint32_t nleechers() const { return nleechers_; }
+    inline uint32_t nseeders() const { return nseeders_; }
+    inline uint32_t ncompleted() const { return ncompleted_; }
+    inline uint32_t downloaded() const { return downloaded_; }
+    inline uint32_t uploader() const { return uploaded_; }
+
   private:
 
     /**
@@ -66,8 +72,8 @@ namespace hefur
     uint32_t nleechers_;        // the number of leechers
     uint32_t nseeders_;         // the number of seeders
     uint32_t ncompleted_;       // the number of times a peer completed the download
-    uint32_t downloaded_;       // the number of bytes downloaded (reported by peers, unreliable)
-    uint32_t uploaded_;         // the number of bytes uploaded (reported by peers, unreliable)
+    uint64_t downloaded_;       // the number of bytes downloaded (reported by peers, unreliable)
+    uint64_t uploaded_;         // the number of bytes uploaded (reported by peers, unreliable)
   };
 }
 
