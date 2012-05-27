@@ -62,10 +62,13 @@ namespace hefur
     Peer * peer = peers_.find(mimosa::StringRef((const char*)request->peerid_ + 8, 12));
 
     // remove the peer from the counters
-    if (peer && peer->left_ == 0)
-      --nseeders_;
-    else
-      --nleechers_;
+    if (peer)
+    {
+      if (peer->left_ == 0)
+        --nseeders_;
+      else
+        --nleechers_;
+    }
 
     // the peer wants to stop, so remove it from the peers
     if (request->event_ == AnnounceRequest::kStopped)
