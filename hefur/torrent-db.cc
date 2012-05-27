@@ -5,6 +5,7 @@
 #include <mimosa/bencode/decoder.hh>
 
 #include "torrent-db.hh"
+#include "log.hh"
 
 namespace hefur
 {
@@ -108,6 +109,7 @@ namespace hefur
     if (torrent)
       return;
 
+    log->info("creating torrent: %s <- %s", name, path);
     torrent = new Torrent(info_sha1, name, path);
     torrents_.insert(torrent);
   }

@@ -13,7 +13,7 @@ namespace hefur
   {
     AnnounceRequest::Ptr rq = new AnnounceRequest;
 
-    auto & peerid = request.queryGet("peerid");
+    auto & peerid = request.queryGet("peer_id");
     auto & info_hash = request.queryGet("info_hash");
 
     if (peerid.size() != 20 || info_hash.size() != 20)
@@ -45,7 +45,7 @@ namespace hefur
     {
       enc.startDict();
       enc.pushData("failure reason", 14);
-      enc.pushData(rp ? rp->error_msg_ : "internal error");
+      enc.pushData(rp ? rp->error_msg_ : "internal error (1)");
       enc.end();
       return true;
     }

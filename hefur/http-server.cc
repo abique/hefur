@@ -55,6 +55,8 @@ namespace hefur
     if (!cert.empty() && !key.empty())
       server_->setSecure(cert, key);
 
+    thread_.start();
+
     return true;
   }
 

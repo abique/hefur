@@ -62,7 +62,7 @@ namespace hefur
     Peer * peer = peers_.find(mimosa::StringRef((const char*)request->peerid_ + 8, 12));
 
     // remove the peer from the counters
-    if (peer->left_ == 0)
+    if (peer && peer->left_ == 0)
       --nseeders_;
     else
       --nleechers_;
@@ -88,7 +88,7 @@ namespace hefur
       if (!peer)
       {
         response->error_ = true;
-        response->error_msg_ = "internal error";
+        response->error_msg_ = "internal error (2)";
         return response;
       }
     }

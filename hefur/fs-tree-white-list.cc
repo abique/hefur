@@ -37,7 +37,8 @@ namespace hefur
   void
   FsTreeWhiteList::loopScan()
   {
-    while (!stop_.timedWait(mimosa::time() + mimosa::second * rescan_period_))
+    do
       scan();
+    while (!stop_.timedWait(mimosa::time() + mimosa::second * rescan_period_));
   }
 }
