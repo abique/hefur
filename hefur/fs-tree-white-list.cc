@@ -8,9 +8,9 @@
 namespace hefur
 {
   FsTreeWhiteList::FsTreeWhiteList(const std::string & root,
-                                   uint32_t            rescan_period)
+                                   uint32_t            rescan_interval)
     : root_(root),
-      rescan_period_(rescan_period),
+      rescan_interval_(rescan_interval),
       stop_(),
       scan_thread_([this] { this->loopScan(); })
   {
@@ -39,6 +39,6 @@ namespace hefur
   {
     do
       scan();
-    while (!stop_.timedWait(mimosa::time() + mimosa::second * rescan_period_));
+    while (!stop_.timedWait(mimosa::time() + mimosa::second * rescan_interval_));
   }
 }

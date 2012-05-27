@@ -6,6 +6,7 @@ add_executable(hefurd
   http-server.cc
   log.cc
   main.cc
+  options.cc
   peer.cc
   scrape-handler.cc
   stat-handler.cc

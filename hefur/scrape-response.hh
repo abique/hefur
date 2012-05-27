@@ -20,6 +20,7 @@ namespace hefur
       uint32_t ndownloaded_;
     };
 
+    uint32_t          interval_;
     std::vector<Item> items_;
   };
 }

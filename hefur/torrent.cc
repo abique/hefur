@@ -1,5 +1,6 @@
 #include <mimosa/time.hh>
 
+#include "options.hh"
 #include "torrent.hh"
 
 namespace hefur
@@ -125,7 +126,8 @@ namespace hefur
     peer->left_       = request->left_;
     peer->downloaded_ = request->downloaded_;
     peer->uploaded_   = request->uploaded_;
-    peer->timeout_ts_ = mimosa::monotonicTimeCoarse() + mimosa::minute * 45;
+    peer->timeout_ts_ = mimosa::monotonicTimeCoarse() +
+      mimosa::minute * ANNOUNCE_INTERVAL * 3 / 2;
     memcpy(peer->peerid_, request->peerid_, 20);
 
     if (peer->left_ == 0)

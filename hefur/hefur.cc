@@ -1,33 +1,10 @@
 #include <cstring>
 #include <cerrno>
 
-#include <mimosa/options/options.hh>
-
+#include "options.hh"
 #include "log.hh"
 #include "hefur.hh"
 #include "fs-tree-white-list.hh"
-
-auto & HTTP_PORT = *mimosa::options::addOption<uint16_t>(
-  "", "http-port", "the port to use, 0 to disable", 6969);
-auto & HTTPS_PORT = *mimosa::options::addOption<uint16_t>(
-  "", "https-port", "the port to use, 0 to disable", 6970);
-auto & UDP_PORT = *mimosa::options::addOption<uint16_t>(
-  "", "udp-port", "the port to use, 0 to disable", 6969);
-auto & IPV6 = *mimosa::options::addSwitch(
-  "", "ipv6", "use ipv6 instead of ipv4");
-
-auto & CERT = *mimosa::options::addOption<std::string>(
-  "", "cert", "the path to the certificate", "");
-auto & KEY = *mimosa::options::addOption<std::string>(
-  "", "key", "the path to the key", "");
-
-auto & TORRENT_DIR = *mimosa::options::addOption<std::string>(
-  "", "torrent-dir",
-  "the directory containing the allowed torrents,"
-  " if empty every torrents are allowed", "");
-auto & SCAN_PERIOD = *mimosa::options::addOption<uint32_t>(
-  "", "scan-period", "the duration in seconds between two torrent-dir scans",
-  60);
 
 namespace hefur
 {
@@ -41,7 +18,7 @@ namespace hefur
       udp_server_(nullptr)
   {
     if (!TORRENT_DIR.empty())
-      wl_ = new FsTreeWhiteList(TORRENT_DIR, SCAN_PERIOD);
+      wl_ = new FsTreeWhiteList(TORRENT_DIR, SCAN_INTERVAL);
 
     if (UDP_PORT != 0)
     {

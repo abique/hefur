@@ -44,6 +44,13 @@ namespace hefur
     }
 
     enc.startDict();
+
+    enc.pushData("flags", 5);
+    enc.startDict();
+    enc.pushData("min_request_interval", 20);
+    enc.pushInt(rp->interval_);
+    enc.end();
+
     enc.pushData("files", 5);
     enc.startDict();
 

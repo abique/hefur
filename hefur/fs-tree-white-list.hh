@@ -19,7 +19,7 @@ namespace hefur
   {
   public:
     FsTreeWhiteList(const std::string & root,
-                    uint32_t            rescan_period = 60);
+                    uint32_t            rescan_interval = 60);
     ~FsTreeWhiteList();
 
     void scan();
@@ -28,7 +28,7 @@ namespace hefur
     void loopScan();
 
     const std::string &  root_;
-    uint32_t             rescan_period_;
+    uint32_t             rescan_interval_;
     mimosa::Future<bool> stop_;
     mimosa::Thread       scan_thread_;
   };

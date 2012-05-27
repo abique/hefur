@@ -6,12 +6,14 @@
 
 #include "torrent-db.hh"
 #include "log.hh"
+#include "options.hh"
 
 namespace hefur
 {
   TorrentDb::TorrentDb()
     : cleanup_stop_(),
       cleanup_thread_([this] { this->cleanupLoop(); }),
+      torrents_lock_(),
       torrents_()
   {
     cleanup_thread_.start();
@@ -38,7 +40,7 @@ namespace hefur
       return response;
     }
     auto response       = torrent->announce(request);
-    response->interval_ = 60;
+    response->interval_ = ANNOUNCE_INTERVAL * 60;
     return response;
   }
 
@@ -62,6 +64,7 @@ namespace hefur
       item.ndownloaded_ = torrent->ncompleted();
       response->items_.push_back(item);
     }
+    response->interval_ = SCRAPE_INTERVAL * 60;
     return response;
   }
 
