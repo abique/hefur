@@ -80,7 +80,7 @@ namespace hefur
   void
   TorrentDb::cleanupLoop()
   {
-    while (!cleanup_stop_.timedWait(mimosa::time() + 5 * mimosa::minute))
+    while (!cleanup_stop_.timedWait(mimosa::time() + mimosa::minute))
       cleanup();
   }
 

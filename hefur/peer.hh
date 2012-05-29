@@ -4,6 +4,7 @@
 # include <cstdint>
 
 # include <mimosa/intrusive-dlist.hh>
+# include <mimosa/time.hh>
 
 # include "address.hh"
 # include "crypto-support.hh"
@@ -19,7 +20,7 @@ namespace hefur
     uint64_t      left_;
     uint64_t      downloaded_;
     uint64_t      uploaded_;
-    uint32_t      timeout_ts_; // monotonic coarse clock
+    mimosa::Time  timeout_ts_; // monotonic coarse clock
     uint8_t       peerid_[20];
 
     mimosa::IntrusiveDListHook<Peer*> timeout_hook_;

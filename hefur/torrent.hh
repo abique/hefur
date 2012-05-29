@@ -55,6 +55,14 @@ namespace hefur
     Peer * createPeer(AnnounceRequest::Ptr request);
 
     /**
+     * Updates peer's timeout and place it at the back of timeouts_.
+     *
+     * @param remove if true, remove the peer from timeouts_ before placing
+     * it at the back.
+     */
+    void updateTimeout(Peer * peer, bool remove);
+
+    /**
      * Remove the peer from peers_ and timeouts_ and update stats.
      */
     void removePeer(Peer * peer);

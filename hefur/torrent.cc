@@ -39,13 +39,10 @@ namespace hefur
     while (!timeouts_.empty())
     {
       auto peer = timeouts_.front();
-      if (peer->timeout_ts_ < now)
+      if (peer->timeout_ts_ > now)
         return;
 
       removePeer(peer);
-      timeouts_.erase(peer);
-      peers_.erase(Peer::key(peer));
-      delete peer;
     }
   }
 
@@ -100,6 +97,8 @@ namespace hefur
         return response;
       }
     }
+    else
+      updateTimeout(peer, true);
 
     if (request->num_want_ > 100)
       request->num_want_ = 100;
@@ -126,8 +125,6 @@ namespace hefur
     peer->left_       = request->left_;
     peer->downloaded_ = request->downloaded_;
     peer->uploaded_   = request->uploaded_;
-    peer->timeout_ts_ = mimosa::monotonicTimeCoarse() +
-      mimosa::minute * ANNOUNCE_INTERVAL * 3 / 2;
     memcpy(peer->peerid_, request->peerid_, 20);
 
     if (peer->left_ == 0)
@@ -135,8 +132,18 @@ namespace hefur
     else
       ++leechers_;
     peers_.insert(peer);
-    timeouts_.pushBack(peer);
+    updateTimeout(peer, false);
     return peer;
+  }
+
+  void
+  Torrent::updateTimeout(Peer * peer, bool remove)
+  {
+    if (remove)
+      timeouts_.erase(peer);
+    peer->timeout_ts_ = mimosa::monotonicTimeCoarse()
+      + mimosa::minute * (ANNOUNCE_INTERVAL + 5);
+    timeouts_.pushBack(peer);
   }
 
   void
