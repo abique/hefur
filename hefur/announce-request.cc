@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "announce-request.hh"
 
 namespace hefur
@@ -5,11 +7,11 @@ namespace hefur
   AnnounceRequest::Event
   AnnounceRequest::parseEvent(const char * str)
   {
-    if (strcasecmp(str, "started"))
+    if (::strcasecmp(str, "started"))
       return kStarted;
-    if (strcasecmp(str, "completed"))
+    if (::strcasecmp(str, "completed"))
       return kCompleted;
-    if (strcasecmp(str, "stopped"))
+    if (::strcasecmp(str, "stopped"))
       return kStopped;
     return kNone;
   }
