@@ -6,13 +6,13 @@
   </head>
 
   <body>
-    <table>
+    <table border=1>
       <thead>
         <tr>
-          <th><!-- torrent dl --></th>
-          <th><!-- magnet link --></th>
-          <th>name</th>
+          <!-- <th>torrent dl</th> -->
+          <!-- <th>magnet link</th> -->
           <th>info hash</th>
+          <th>name</th>
           <th>seeders</th>
           <th>leechers</th>
           <th>completed</th>
@@ -25,10 +25,10 @@
 
         {{*torrents}}
         <tr>
-          <td><!-- torrent dl --></td>
-          <td><!-- magnet link --></td>
-          <td>{{name}}</td>
+          <!-- <td>torrent dl</td> -->
+          <!-- <td>magnet link</td> -->
           <td>{{info_sha1|b16}}</td>
+          <td>{{name}}</td>
           <td>{{seeders}}</td>
           <td>{{leechers}}</td>
           <td>{{completed}}</td>
