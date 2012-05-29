@@ -56,7 +56,7 @@ namespace hefur
     response->ncompleted_         = completed_;
 
     // find the peer
-    Peer * peer = peers_.find(mimosa::StringRef((const char*)request->peerid_ + 8, 12));
+    Peer * peer = peers_.find(request->addr_.key());
 
     // update counters to reflect a leecher becoming seeder
     if (peer && peer->left_ > 0 && request->left_ == 0 &&

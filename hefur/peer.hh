@@ -25,10 +25,14 @@ namespace hefur
 
     mimosa::IntrusiveDListHook<Peer*> timeout_hook_;
 
-    static inline mimosa::StringRef key(Peer * peer) {
+    static inline mimosa::StringRef peerId(Peer * peer) {
       // don't use the 8 first bytes as they're not really relevant:
       // they represent the peer's client and version.
       return mimosa::StringRef((const char *)peer->peerid_ + 8, 12);
+    }
+
+    static inline mimosa::StringRef addr(Peer * peer) {
+      return peer->addr_.key();
     }
   };
 }

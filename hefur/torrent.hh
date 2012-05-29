@@ -66,7 +66,7 @@ namespace hefur
     void removePeer(Peer * peer);
 
     typedef mimosa::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
-    typedef mimosa::Trie<Peer *, Peer::key>                           peers_type;
+    typedef mimosa::Trie<Peer *, Peer::addr>                          peers_type;
 
 
     InfoSha1      info_sha1_;   // this is the torrent key

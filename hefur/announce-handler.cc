@@ -34,13 +34,30 @@ namespace hefur
     rq->downloaded_ = atoll(request.queryGet("downloaded").c_str());
     rq->uploaded_ = atoll(request.queryGet("uploaded").c_str());
     rq->left_ = atoll(request.queryGet("left").c_str());
-    memcpy(&rq->addr_, request.channel().remoteAddr(), request.channel().remoteAddrLen());
-    if (rq->addr_.in_.sin_family == AF_INET)
-      rq->addr_.in_.sin_port = htons(port);
-    else if (rq->addr_.in_.sin_family == AF_INET6)
-      rq->addr_.in6_.sin6_port = htons(port);
-    else
+
+    const struct ::sockaddr * addr = request.channel().remoteAddr();
+    switch (addr->sa_family)
+    {
+    case AF_INET:
+    {
+      const struct ::sockaddr_in * in = (const struct ::sockaddr_in *)addr;
+      rq->addr_.in_.port_ = htons(port);
+      memcpy(rq->addr_.in_.addr_, &in->sin_addr, 4);
+      break;
+    }
+
+    case AF_INET6:
+    {
+      const struct ::sockaddr_in6 * in6 = (const struct ::sockaddr_in6 *)addr;
+      rq->addr_.in6_.port_ = htons(port);
+      memcpy(rq->addr_.in6_.addr_, &in6->sin6_addr, 16);
+      break;
+    }
+
+    default:
+      // XXX set an error message
       return false;
+    }
 
     response.content_type_ = "text/plain";
     response.keep_alive_   = false;
@@ -84,11 +101,10 @@ namespace hefur
       std::string data;
       for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it)
       {
-        if (it->in_.sin_family != AF_INET)
+        if (it->family_ != AF_INET)
           continue;
 
-        data.append((const char*)&it->in_.sin_addr, 4);
-        data.append((const char*)&it->in_.sin_port, 2);
+        data.append((const char*)&it->in_, 6);
       }
       enc.pushData("peers", 5);
       enc.pushData(data);
@@ -96,11 +112,10 @@ namespace hefur
       data.clear();
       for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it)
       {
-        if (it->in_.sin_family != AF_INET6)
+        if (it->family_ != AF_INET6)
           continue;
 
-        data.append((const char*)&it->in6_.sin6_addr, 16);
-        data.append((const char*)&it->in6_.sin6_port, 2);
+        data.append((const char*)&it->in6_, 18);
       }
       enc.pushData("peers6", 6);
       enc.pushData(data);
