@@ -15,9 +15,7 @@ namespace hefur
       peers_(),
       leechers_(0),
       seeders_(0),
-      completed_(0),
-      downloaded_(0),
-      uploaded_(0)
+      completed_(0)
   {
   }
 
@@ -56,10 +54,6 @@ namespace hefur
     response->nleechers_          = leechers_;
     response->nseeders_           = seeders_;
     response->ncompleted_         = completed_;
-
-    // update stats
-    downloaded_ += request->downloaded_;
-    uploaded_   += request->uploaded_;
 
     // find the peer
     Peer * peer = peers_.find(mimosa::StringRef((const char*)request->peerid_ + 8, 12));

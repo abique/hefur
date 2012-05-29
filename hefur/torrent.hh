@@ -43,8 +43,6 @@ namespace hefur
     inline uint32_t leechers() const { return leechers_; }
     inline uint32_t seeders() const { return seeders_; }
     inline uint32_t completed() const { return completed_; }
-    inline uint32_t downloaded() const { return downloaded_; }
-    inline uint32_t uploaded() const { return uploaded_; }
 
   private:
 
@@ -81,8 +79,6 @@ namespace hefur
     uint32_t leechers_;         // the number of leechers
     uint32_t seeders_;          // the number of seeders
     uint32_t completed_;        // the number of times a peer completed the download
-    uint64_t downloaded_;       // the number of bytes downloaded (reported by peers, unreliable)
-    uint64_t uploaded_;         // the number of bytes uploaded (reported by peers, unreliable)
   };
 }
 

@@ -33,8 +33,6 @@ namespace hefur
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());
           torrent->append("completed", it->completed());
-          torrent->append("downloaded", it->downloaded());
-          torrent->append("uploaded", it->uploaded());
         });
     }
 
