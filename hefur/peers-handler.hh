@@ -8,7 +8,7 @@ namespace hefur
   class PeersHandler : public mimosa::http::Handler
   {
   public:
-    MIMOSA_DEF_PTR(StatHandler);
+    MIMOSA_DEF_PTR(PeersHandler);
 
     virtual bool handle(mimosa::http::RequestReader & request,
                         mimosa::http::ResponseWriter & response) const override;

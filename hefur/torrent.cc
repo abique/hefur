@@ -69,14 +69,8 @@ namespace hefur
     // the peer wants to stop, so remove it from the peers
     if (request->event_ == AnnounceRequest::kStopped)
     {
-      if (!peer)
-      {
-        response->error_ = true;
-        response->error_msg_ = "peer not found";
-        return response;
-      }
-
-      removePeer(peer);
+      if (peer)
+        removePeer(peer);
       return response;
     }
 
@@ -102,7 +96,8 @@ namespace hefur
       if (response->addrs_.size() >= request->num_want_)
         break;
 
-      if (!::memcmp(it->peerid_, request->peerid_, 20))
+      if (!::memcmp(it->peerid_, request->peerid_, 20) ||
+          request->addr_ == it->addr_)
         continue;
 
       response->addrs_.push_back(it->addr_);
@@ -115,10 +110,10 @@ namespace hefur
   Torrent::createPeer(AnnounceRequest::Ptr request)
   {
     Peer * peer       = new Peer;
-    peer->addr_       = request->addr_;
     peer->left_       = request->left_;
     peer->downloaded_ = request->downloaded_;
     peer->uploaded_   = request->uploaded_;
+    memcpy(&peer->addr_, &request->addr_, sizeof (request->addr_));
     memcpy(peer->peerid_, request->peerid_, 20);
 
     if (peer->left_ == 0)

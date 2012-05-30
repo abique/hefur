@@ -26,6 +26,11 @@ namespace hefur
     else
       rq->num_want_ = atoi(query_it->second.c_str());
 
+    if (rq->num_want_ == 0)
+      rq->num_want_ = 50;
+    else if (rq->num_want_ > 100)
+      rq->num_want_ = 100;
+
     uint16_t port = atoi(request.queryGet("port").c_str());
     bool compact = request.query().count("compact");
     memcpy(rq->peerid_, peerid.data(), 20);
@@ -41,6 +46,7 @@ namespace hefur
     case AF_INET:
     {
       const struct ::sockaddr_in * in = (const struct ::sockaddr_in *)addr;
+      rq->addr_.family_ = AF_INET;
       rq->addr_.in_.port_ = htons(port);
       memcpy(rq->addr_.in_.addr_, &in->sin_addr, 4);
       break;
@@ -49,6 +55,7 @@ namespace hefur
     case AF_INET6:
     {
       const struct ::sockaddr_in6 * in6 = (const struct ::sockaddr_in6 *)addr;
+      rq->addr_.family_ = AF_INET6;
       rq->addr_.in6_.port_ = htons(port);
       memcpy(rq->addr_.in6_.addr_, &in6->sin6_addr, 16);
       break;
@@ -89,8 +96,7 @@ namespace hefur
       for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it)
       {
         enc.pushData("ip", 2);
-        enc.pushData(mimosa::net::print(request.channel().remoteAddr(),
-                                        request.channel().remoteAddrLen()));
+        enc.pushData("XXX", 3);
         enc.pushData("port", 4);
         enc.pushInt(port);
       }
@@ -99,26 +105,22 @@ namespace hefur
     else
     {
       std::string data;
+      std::string data6;
+
       for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it)
       {
-        if (it->family_ != AF_INET)
-          continue;
-
-        data.append((const char*)&it->in_, 6);
+        if (it->family_ == AF_INET) {
+          data.append((const char*)&it->in_.addr_, 4);
+          data.append((const char*)&it->in_.port_, 2);
+        } else if (it->family_ != AF_INET6) {
+          data.append((const char*)&it->in6_.addr_, 16);
+          data.append((const char*)&it->in6_.port_, 2);
+        }
       }
       enc.pushData("peers", 5);
       enc.pushData(data);
-
-      data.clear();
-      for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it)
-      {
-        if (it->family_ != AF_INET6)
-          continue;
-
-        data.append((const char*)&it->in6_, 18);
-      }
       enc.pushData("peers6", 6);
-      enc.pushData(data);
+      enc.pushData(data6);
     }
 
     enc.end(); // doc

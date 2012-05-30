@@ -14,6 +14,8 @@
 
 namespace hefur
 {
+  class PeersHandler;
+
   class Torrent : public mimosa::RefCountable<Torrent>
   {
   public:
@@ -45,6 +47,8 @@ namespace hefur
     inline uint32_t completed() const { return completed_; }
 
   private:
+
+    friend class PeersHandler;
 
     /**
      * Create a peer from an announce request and add the peer

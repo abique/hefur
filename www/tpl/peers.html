@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>Hefurd's peers</title>
+  </head>
+
+  <body>
+    <table border=1>
+      <thead>
+        <tr>
+          <th>ip</th>
+          <th>port</th>
+          <th>peerid</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {{*peers}}
+        <tr>
+          <th>{{ip}}</th>
+          <th>{{port}}</th>
+          <th>{{peerid|u}}</th>
+        </tr>
+        {{/peers}}
+
+      </tbody>
+    </table>
+  </body>
+</html>

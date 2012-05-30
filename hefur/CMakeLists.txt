@@ -1,4 +1,5 @@
 add_executable(hefurd
+  address.cc
   announce-handler.cc
   announce-request.cc
   fs-tree-white-list.cc
@@ -8,6 +9,7 @@ add_executable(hefurd
   main.cc
   options.cc
   peer.cc
+  peers-handler.cc
   scrape-handler.cc
   stat-handler.cc
   template-factory.cc
