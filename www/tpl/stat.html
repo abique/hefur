@@ -1,41 +1,31 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf8" />
-    <title>Hefurd's stats</title>
-  </head>
+<table border=1>
+  <thead>
+    <tr>
+      <!-- <th>torrent dl</th> -->
+      <!-- <th>magnet link</th> -->
+      <th>info hash</th>
+      <th>name</th>
+      <!-- size -->
+      <th>seeders</th>
+      <th>leechers</th>
+      <th>completed</th>
+    </tr>
+  </thead>
 
-  <body>
-    <table border=1>
-      <thead>
-        <tr>
-          <!-- <th>torrent dl</th> -->
-          <!-- <th>magnet link</th> -->
-          <th>info hash</th>
-          <th>name</th>
-          <!-- size -->
-          <th>seeders</th>
-          <th>leechers</th>
-          <th>completed</th>
-        </tr>
-      </thead>
+  <tbody>
 
-      <tbody>
+    {{*torrents}}
+    <tr>
+      <!-- <td>torrent dl</td> -->
+      <!-- <td>magnet link</td> -->
+      <td>{{info_sha1|b16}}</td>
+      <td>{{name}}</td>
+      <!-- size -->
+      <td>{{seeders}}</td>
+      <td>{{leechers}}</td>
+      <td>{{completed}}</td>
+    </tr>
+    {{/torrents}}
 
-        {{*torrents}}
-        <tr>
-          <!-- <td>torrent dl</td> -->
-          <!-- <td>magnet link</td> -->
-          <td>{{info_sha1|b16}}</td>
-          <td>{{name}}</td>
-          <!-- size -->
-          <td>{{seeders}}</td>
-          <td>{{leechers}}</td>
-          <td>{{completed}}</td>
-        </tr>
-        {{/torrents}}
-
-      </tbody>
-    </table>
-  </body>
-</html>
+  </tbody>
+</table>

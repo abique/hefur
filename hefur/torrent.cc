@@ -2,6 +2,7 @@
 
 #include "options.hh"
 #include "torrent.hh"
+#include "log.hh"
 
 namespace hefur
 {
@@ -40,6 +41,10 @@ namespace hefur
       if (peer->timeout_ts_ > now)
         return;
 
+      log->debug("remove peer (%v) because %v > %v",
+          peer->addr_.ipStr(),
+          now / mimosa::second,
+          peer->timeout_ts_ / mimosa::second);
       removePeer(peer);
     }
   }

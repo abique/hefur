@@ -3,7 +3,7 @@
 
 namespace hefur
 {
-  mimosa::tpl::Template::Ptr
+  mimosa::tpl::Template::ConstPtr
   TemplateFactory::create(const char *path)
   {
     char real_path[PATH_MAX];

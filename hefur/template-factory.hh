@@ -9,7 +9,7 @@ namespace hefur
   class TemplateFactory : public mimosa::Singleton<TemplateFactory>
   {
   public:
-    mimosa::tpl::Template::Ptr create(const char *path);
+    mimosa::tpl::Template::ConstPtr create(const char *path);
 
   private:
     mimosa::tpl::Cache cache_;

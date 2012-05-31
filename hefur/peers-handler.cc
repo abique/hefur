@@ -1,6 +1,7 @@
-#include <mimosa/tpl/template.hh>
 #include <mimosa/tpl/dict.hh>
+#include <mimosa/tpl/include.hh>
 #include <mimosa/tpl/list.hh>
+#include <mimosa/tpl/template.hh>
 #include <mimosa/tpl/value.hh>
 
 #include "peers-handler.hh"
@@ -14,20 +15,27 @@ namespace hefur
   PeersHandler::handle(mimosa::http::RequestReader &  request,
                        mimosa::http::ResponseWriter & response) const
   {
-    auto tpl = TemplateFactory::instance().create("peers.html");
-    if (!tpl)
-      return false;
-
     auto & info_hash = request.queryGet("info_hash");
     if (info_hash.size() != 20)
       return false;
 
+    auto tpl = TemplateFactory::instance().create("page.html");
+    if (!tpl)
+      return false;
+
+    auto tpl_body = TemplateFactory::instance().create("peers.html");
+    if (!tpl_body)
+      return false;
+
     mimosa::tpl::Dict dict;
+    dict.append("body", tpl_body);
+    dict.append("title", "Torrent peers");
+
     auto peers = new mimosa::tpl::List("peers");
     dict.append(peers);
-    TorrentDb & tdb = Hefur::instance().torrentDb();
 
     {
+      TorrentDb & tdb = Hefur::instance().torrentDb();
       mimosa::SharedMutex::ReadLocker locker(tdb.torrents_lock_);
       auto torrent = tdb.torrents_.find(info_hash);
       if (!torrent)
@@ -44,16 +52,10 @@ namespace hefur
         peer->append("ip", ip);
         peer->append("port", it->addr_.port());
         peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
+        peer->append("downloaded", it->downloaded_);
+        peer->append("uploaded", it->uploaded_);
+        peer->append("left", it->left_);
       }
-
-      torrent->peers_.foreach([&peers] (Peer * it) {
-          auto ip = it->addr_.ipStr();
-          auto peer = new mimosa::tpl::Dict("peer");
-          peers->append(peer);
-          peer->append("ip", ip);
-          peer->append("port", it->addr_.port());
-          peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
-        });
     }
 
     tpl->execute(&response, dict, response.writeTimeout());
