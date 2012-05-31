@@ -1,8 +1,8 @@
 <table border=1>
   <thead>
     <tr>
-      <!-- <th>torrent dl</th> -->
-      <!-- <th>magnet link</th> -->
+      <th><!-- magnet link</th> --></th>
+      <th><!-- torrent dl --></th>
       <th>info hash</th>
       <th>name</th>
       <!-- size -->
@@ -16,8 +16,8 @@
 
     {{*torrents}}
     <tr>
-      <!-- <td>torrent dl</td> -->
-      <!-- <td>magnet link</td> -->
+      <td><img src="/img/magnet-icon.gif"/></td>
+      <td><a href="/file?info_hash={{info_sha1|b16}}"><img src="/img/torrent-icon.png"/></a></td>
       <td>{{info_sha1|b16}}</td>
       <td>{{name}}</td>
       <!-- size -->

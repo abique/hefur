@@ -2,6 +2,7 @@
 #include <cstring>
 
 #include <mimosa/http/dispatch-handler.hh>
+#include <mimosa/http/fs-handler.hh>
 #include <mimosa/http/log-handler.hh>
 
 #include "http-server.hh"
@@ -10,6 +11,7 @@
 #include "stat-handler.hh"
 #include "peers-handler.hh"
 #include "log.hh"
+#include "options.hh"
 
 namespace hefur
 {
@@ -35,6 +37,9 @@ namespace hefur
       stop();
 
     auto dispatch = new mimosa::http::DispatchHandler;
+    dispatch->registerHandler(
+      "/img/*", new mimosa::http::FsHandler(
+        WWW_DIR + "/img/", 1, true));
     dispatch->registerHandler("/announce", new AnnounceHandler);
     dispatch->registerHandler("/scrape", new ScrapeHandler);
     dispatch->registerHandler("/stat", new StatHandler);
