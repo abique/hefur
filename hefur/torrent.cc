@@ -190,6 +190,11 @@ namespace hefur
       mimosa::stream::Sha1::Ptr sha1(new mimosa::stream::Sha1);
       mimosa::bencode::Encoder enc(sha1);
 
+      token = dec.pull();
+      if (token != mimosa::bencode::kDict ||
+          !mimosa::bencode::copyToken(token, dec, enc))
+        return nullptr;
+
       while (true)
       {
         token = dec.pull();
@@ -219,6 +224,8 @@ namespace hefur
             continue;
           }
         }
+        else if (token == mimosa::bencode::kEnd)
+          break;
 
         if (!mimosa::bencode::copyValue(dec, enc))
           return nullptr;
