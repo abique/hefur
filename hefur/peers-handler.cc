@@ -1,3 +1,5 @@
+#include <mimosa/stream/string-stream.hh>
+#include <mimosa/stream/base16-decoder.hh>
 #include <mimosa/tpl/dict.hh>
 #include <mimosa/tpl/include.hh>
 #include <mimosa/tpl/list.hh>
@@ -15,7 +17,14 @@ namespace hefur
   PeersHandler::handle(mimosa::http::RequestReader &  request,
                        mimosa::http::ResponseWriter & response) const
   {
-    auto & info_hash = request.queryGet("info_hash");
+    std::string info_hash = request.queryGet("info_hash");
+
+    mimosa::stream::StringStream::Ptr ss = new mimosa::stream::StringStream;
+    mimosa::stream::Base16Decoder::Ptr dec = new mimosa::stream::Base16Decoder(ss);
+    dec->write(info_hash.data(), info_hash.size());
+
+    info_hash = ss->str();
+
     if (info_hash.size() != 20)
       return false;
 
