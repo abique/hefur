@@ -1,3 +1,8 @@
+#include <mimosa/bencode/copy.hh>
+#include <mimosa/bencode/decoder.hh>
+#include <mimosa/bencode/encoder.hh>
+#include <mimosa/stream/fd-stream.hh>
+#include <mimosa/stream/hash.hh>
 #include <mimosa/time.hh>
 
 #include "options.hh"
@@ -8,10 +13,12 @@ namespace hefur
 {
   Torrent::Torrent(const InfoSha1 &    info_sha1,
                    const std::string & name,
-                   const std::string & path)
+                   const std::string & path,
+                   uint64_t            length)
     : info_sha1_(info_sha1),
       name_(name),
       path_(path),
+      length_(length),
       timeouts_(),
       peers_(),
       leechers_(0),
@@ -151,5 +158,75 @@ namespace hefur
     timeouts_.erase(peer);
     peers_.erase(peer);
     delete peer;
+  }
+
+  Torrent::Ptr
+  Torrent::parseFile(const std::string & path)
+  {
+    auto        input = mimosa::stream::FdStream::openFile(path.c_str());
+    std::string name;
+    uint64_t    length = 0;
+
+    if (!input)
+      return nullptr;
+
+    mimosa::bencode::Decoder dec(input);
+    auto token = dec.pull();
+    if (token != mimosa::bencode::kDict)
+      return nullptr;
+
+    while (true)
+    {
+      token = dec.pull();
+      if (token != mimosa::bencode::kData)
+        return nullptr;
+
+      if (dec.getData() != "info")
+      {
+        dec.eatValue();
+        continue;
+      }
+
+      mimosa::stream::Sha1::Ptr sha1(new mimosa::stream::Sha1);
+      mimosa::bencode::Encoder enc(sha1);
+
+      while (true)
+      {
+        token = dec.pull();
+        if (!mimosa::bencode::copyToken(token, dec, enc))
+          return nullptr;
+
+        if (token == mimosa::bencode::kData)
+        {
+          if (!::strcasecmp(dec.getData().c_str(), "name"))
+          {
+            token = dec.pull();
+            if (token != mimosa::bencode::kData ||
+                !mimosa::bencode::copyToken(token, dec, enc))
+              return nullptr;
+
+            name = dec.getData();
+            continue;
+          }
+          else if (!::strcasecmp(dec.getData().c_str(), "length"))
+          {
+            token = dec.pull();
+            if (token != mimosa::bencode::kInt ||
+                !mimosa::bencode::copyToken(token, dec, enc))
+              return nullptr;
+
+            length = dec.getInt();
+            continue;
+          }
+        }
+
+        if (!mimosa::bencode::copyValue(dec, enc))
+          return nullptr;
+      }
+
+      InfoSha1 info;
+      memcpy(info.bytes_, sha1->digest(), 20);
+      return new Torrent(info, name, path, length);
+    }
   }
 }

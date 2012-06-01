@@ -21,7 +21,8 @@ namespace hefur
   public:
     Torrent(const InfoSha1 &    info_sha1,
             const std::string & name = "",
-            const std::string & path = "");
+            const std::string & path = "",
+            uint64_t            length = 0);
     ~Torrent();
 
     /**
@@ -42,9 +43,12 @@ namespace hefur
     inline mimosa::StringRef key() const;
 
     inline const std::string & name() const { return name_; }
+    inline uint64_t length() const { return length_; }
     inline uint32_t leechers() const { return leechers_; }
     inline uint32_t seeders() const { return seeders_; }
     inline uint32_t completed() const { return completed_; }
+
+    static Torrent::Ptr parseFile(const std::string & path);
 
   private:
 
@@ -76,6 +80,7 @@ namespace hefur
     InfoSha1      info_sha1_;   // this is the torrent key
     std::string   name_;        // optional, used by StatHandler
     std::string   path_;        // optional, for later download
+    uint64_t      length_;
     timeouts_type timeouts_;    // this is a timeout sorted list of peers
     peers_type    peers_;       // this is an index of peers by using their peer id.
 

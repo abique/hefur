@@ -37,6 +37,7 @@ namespace hefur
           auto torrent = new mimosa::tpl::Dict("torrent");
           torrents->append(torrent);
           torrent->append("name", it->name());
+          torrent->append("length", it->length());
           torrent->append("info_sha1", it->key());
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());

@@ -34,11 +34,7 @@ namespace hefur
     ScrapeResponse::Ptr scrape(ScrapeRequest::Ptr request);
     /** @} */
 
-    void addTorrent(const InfoSha1 & info_sha1,
-                    const std::string & name,
-                    const std::string & path);
-
-    void addTorrent(const std::string & path);
+    void addTorrent(Torrent::Ptr torrent);
 
   private:
 

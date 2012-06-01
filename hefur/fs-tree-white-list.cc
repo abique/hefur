@@ -30,7 +30,7 @@ namespace hefur
         if (::fnmatch("*.torrent", path.c_str(), FNM_CASEFOLD))
           return;
 
-        Hefur::instance().torrentDb().addTorrent(path);
+        Hefur::instance().torrentDb().addTorrent(Torrent::parseFile(path));
       });
   }
 
