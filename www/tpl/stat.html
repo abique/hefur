@@ -16,7 +16,7 @@
 
     {{*torrents}}
     <tr>
-      <td><img src="/img/magnet-icon.gif"/></td>
+      <td><a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&dn={{name|u}}&tr={{tracker_http|u}}&tr={{tracker_udp|u}}"><img src="/img/magnet-icon.gif"/></a></td>
       <td><a href="/file?info_hash={{info_sha1|b16}}"><img src="/img/torrent-icon.png"/></a></td>
       <td>{{info_sha1|b16}}</td>
       <td>{{name}}</td>
