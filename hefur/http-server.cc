@@ -12,6 +12,7 @@
 #include "peers-handler.hh"
 #include "log.hh"
 #include "options.hh"
+#include "file-handler.hh"
 
 namespace hefur
 {
@@ -44,6 +45,7 @@ namespace hefur
     dispatch->registerHandler("/scrape", new ScrapeHandler);
     dispatch->registerHandler("/stat", new StatHandler);
     dispatch->registerHandler("/peers", new PeersHandler);
+    dispatch->registerHandler("/file/*", new FileHandler);
 
     auto log_handler = new mimosa::http::LogHandler;
     log_handler->setHandler(dispatch);

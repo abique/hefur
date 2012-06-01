@@ -40,6 +40,7 @@ namespace hefur
 
     friend class StatHandler;
     friend class PeersHandler;
+    friend class FileHandler;
 
     static inline mimosa::StringRef torrentKey(Torrent::Ptr torrent) {
       return mimosa::StringRef(torrent->key());

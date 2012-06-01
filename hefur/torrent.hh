@@ -43,6 +43,7 @@ namespace hefur
     inline mimosa::StringRef key() const;
 
     inline const std::string & name() const { return name_; }
+    inline const std::string & path() const { return path_; }
     inline uint64_t length() const { return length_; }
     inline uint32_t leechers() const { return leechers_; }
     inline uint32_t seeders() const { return seeders_; }
