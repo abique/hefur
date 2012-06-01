@@ -1,3 +1,4 @@
+#include <mimosa/format/format.hh>
 #include <mimosa/tpl/dict.hh>
 #include <mimosa/tpl/include.hh>
 #include <mimosa/tpl/list.hh>
@@ -8,11 +9,12 @@
 #include "hefur.hh"
 #include "stat-handler.hh"
 #include "template-factory.hh"
+#include "options.hh"
 
 namespace hefur
 {
   bool
-  StatHandler::handle(mimosa::http::RequestReader & /*request*/,
+  StatHandler::handle(mimosa::http::RequestReader &  request,
                       mimosa::http::ResponseWriter & response) const
   {
     auto tpl = TemplateFactory::instance().create("page.html");
@@ -26,6 +28,10 @@ namespace hefur
     mimosa::tpl::Dict dict;
     dict.append("body", tpl_body);
     dict.append("title", "Hefur torrents");
+    dict.append("tracker_http", mimosa::format::str(
+                  "http://%v:%v/announce", request.host(), request.port()));
+    dict.append("tracker_udp", mimosa::format::str(
+                  "udp://%v:%v", request.host(), UDP_PORT));
 
     auto torrents = new mimosa::tpl::List("torrents");
     dict.append(torrents);
