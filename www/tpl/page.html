@@ -2,13 +2,26 @@
 <html>
   <head>
     <meta charset="utf8" />
+    <link rel="stylesheet" type="text/css" href="/css/hefur.css" />
+    <style>
+      body { padding-top: 50px; }
+    </style>
     <title>{{title}}</title>
   </head>
 
   <body>
-    {{body}}
-    <hr>
-    <a href="https://github.com/abique/hefur">Hefur</a> is free software
-    licensed under MIT: you are free to change and redistribute it.
+    <div class="container">
+      <div class="page-header">
+        <h1>{{title}}</h1>
+      </div>
+      {{body}}
+      <hr>
+      <h6>
+        <a href="https://github.com/abique/hefur">Hefur</a> is free software
+        licensed under MIT: you are free to change and redistribute it.
+      </h6>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
   </body>
 </html>

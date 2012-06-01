@@ -1,9 +1,7 @@
-<table border=1>
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
-      <th><!-- magnet link</th> --></th>
-      <th><!-- torrent dl --></th>
-      <th><!-- peers --></th>
+      <th><!-- magnet, torrent, peers --></th>
       <th>info hash</th>
       <th>name</th>
       <th>size</th>
@@ -17,9 +15,18 @@
 
     {{*torrents}}
     <tr>
-      <td><a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&dn={{name|u}}&tr={{tracker_http|u}}&tr={{tracker_udp|u}}"><img src="/img/magnet-icon.gif"/></a></td>
-      <td><a href="/file/{{name|u}}.torrent?info_hash={{info_sha1|b16}}"><img src="/img/torrent-icon.png"/></a></td>
-      <td><a href="/peers?info_hash={{info_sha1|b16}}"><img src="/img/peers.png"/></a></td>
+      <td>
+        <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&dn={{name|u}}&tr={{tracker_http|u}}&tr={{tracker_udp|u}}"
+           title="Magnet link">
+          <img src="/img/magnet-icon.gif"/>
+        </a>
+        <a href="/file/{{name|u}}.torrent?info_hash={{info_sha1|b16}}" title="Torrent">
+          <img src="/img/torrent-icon.png"/>
+        </a>
+        <a href="/peers?info_hash={{info_sha1|b16}}" title="List peers">
+          <img src="/img/peers.png"/>
+        </a>
+      </td>
       <td>{{info_sha1|b16}}</td>
       <td>{{name}}</td>
       <td>{{length}}</td>

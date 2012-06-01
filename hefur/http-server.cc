@@ -41,6 +41,12 @@ namespace hefur
     dispatch->registerHandler(
       "/img/*", new mimosa::http::FsHandler(
         WWW_DIR + "/img/", 1, true));
+    dispatch->registerHandler(
+      "/css/*", new mimosa::http::FsHandler(
+        WWW_DIR + "/css/", 1, true));
+    dispatch->registerHandler(
+      "/js/*", new mimosa::http::FsHandler(
+        WWW_DIR + "/js/", 1, true));
     dispatch->registerHandler("/announce", new AnnounceHandler);
     dispatch->registerHandler("/scrape", new ScrapeHandler);
     dispatch->registerHandler("/stat", new StatHandler);
