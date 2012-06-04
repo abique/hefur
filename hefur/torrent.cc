@@ -61,11 +61,11 @@ namespace hefur
   {
     // prepare the response
     AnnounceResponse::Ptr response = new AnnounceResponse;
-    response->error_              = false;
+    response->error_      = false;
     response->error_msg_.clear();
-    response->nleechers_          = leechers_;
-    response->nseeders_           = seeders_;
-    response->ncompleted_         = completed_;
+    response->nleechers_  = leechers_;
+    response->nseeders_   = seeders_;
+    response->ncompleted_ = completed_;
 
     // find the peer
     Peer * peer = peers_.find(request->addr_.key());
@@ -73,10 +73,7 @@ namespace hefur
     // update counters to reflect a leecher becoming seeder
     if (peer && peer->left_ > 0 && request->left_ == 0 &&
         request->event_ == AnnounceRequest::kCompleted)
-    {
-      --leechers_;
-      ++seeders_;
-    }
+      ++completed_;
 
     // the peer wants to stop, so remove it from the peers
     if (request->event_ == AnnounceRequest::kStopped)
@@ -87,18 +84,12 @@ namespace hefur
     }
 
     // create the peer
-    if (!peer)
+    if (!createOrUpdatePeer(request, peer))
     {
-      peer = createPeer(request);
-      if (!peer)
-      {
-        response->error_ = true;
-        response->error_msg_ = "internal error (2)";
-        return response;
-      }
+      response->error_ = true;
+      response->error_msg_ = "internal error (2)";
+      return response;
     }
-    else
-      updateTimeout(peer, true);
 
     if (request->num_want_ > 100)
       request->num_want_ = 100;
@@ -119,21 +110,35 @@ namespace hefur
   }
 
   Peer *
-  Torrent::createPeer(AnnounceRequest::Ptr request)
+  Torrent::createOrUpdatePeer(AnnounceRequest::Ptr request, Peer * peer)
   {
-    Peer * peer       = new Peer;
+    bool update = !!peer;
+
+    // decrements the counters to simplify the completed event
+    if (peer)
+    {
+      if (peer->left_ == 0)
+        --seeders_;
+      else
+        --leechers_;
+    }
+
+    if (!peer)
+      peer = new Peer;
     peer->left_       = request->left_;
     peer->downloaded_ = request->downloaded_;
     peer->uploaded_   = request->uploaded_;
     memcpy(&peer->addr_, &request->addr_, sizeof (request->addr_));
     memcpy(peer->peerid_, request->peerid_, 20);
 
+    // increments the counters
     if (peer->left_ == 0)
       ++seeders_;
     else
       ++leechers_;
-    peers_.insert(peer);
-    updateTimeout(peer, false);
+    if (!update)
+      peers_.insert(peer);
+    updateTimeout(peer, update);
     return peer;
   }
 

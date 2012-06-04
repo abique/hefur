@@ -59,7 +59,7 @@ namespace hefur
      * Create a peer from an announce request and add the peer
      * to peers_ and timeouts_.
      */
-    Peer * createPeer(AnnounceRequest::Ptr request);
+    Peer * createOrUpdatePeer(AnnounceRequest::Ptr request, Peer * peer = nullptr);
 
     /**
      * Updates peer's timeout and place it at the back of timeouts_.
