@@ -37,6 +37,7 @@ namespace hefur
       return false;
 
     mimosa::tpl::Dict dict;
+    HttpServer::commonDict(dict);
     dict.append("body", tpl_body);
     dict.append("title", "Torrent peers");
 

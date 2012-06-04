@@ -3,11 +3,12 @@
 
 # include <mimosa/thread.hh>
 # include <mimosa/http/server.hh>
+# include <mimosa/tpl/dict.hh>
 
 namespace hefur
 {
   /**
-   * This is the udp bittorrent tracker.
+   * This is the Http bittorrent tracker.
    *
    * See:
    * - http://www.bittorrent.org/beps/bep_0003.html (standard interface)
@@ -45,6 +46,8 @@ namespace hefur
      * stopped.
      */
     void stop();
+
+    static void commonDict(mimosa::tpl::Dict & dict);
 
   private:
     void run();

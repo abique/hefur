@@ -93,4 +93,10 @@ namespace hefur
     thread_.join();
     server_ = nullptr;
   }
+
+  void
+  HttpServer::commonDict(mimosa::tpl::Dict & dict)
+  {
+    dict.append("hefur_version", HEFUR_VERSION);
+  }
 }
