@@ -1,9 +1,12 @@
 #include <cerrno>
 #include <cstring>
 
+#include <mimosa/format/print.hh>
 #include <mimosa/http/dispatch-handler.hh>
 #include <mimosa/http/fs-handler.hh>
 #include <mimosa/http/log-handler.hh>
+#include <mimosa/stream/string-stream.hh>
+#include <mimosa/uptime.hh>
 
 #include "http-server.hh"
 #include "announce-handler.hh"
@@ -97,6 +100,11 @@ namespace hefur
   void
   HttpServer::commonDict(mimosa::tpl::Dict & dict)
   {
+    {
+      mimosa::stream::StringStream ss;
+      mimosa::format::printDuration(ss, mimosa::uptime());
+      dict.append("hefur_uptime", ss.str());
+    }
     dict.append("hefur_version", HEFUR_VERSION);
   }
 }
