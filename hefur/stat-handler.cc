@@ -52,7 +52,7 @@ namespace hefur
         });
     }
 
-    tpl->execute(&response, dict, response.writeTimeout());
+    tpl->execute(&response, dict);
     return true;
   }
 }
