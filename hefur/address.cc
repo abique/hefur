@@ -22,7 +22,7 @@ namespace hefur
       break;
 
     case AF_INET6:
-      inet_ntop(AF_INET, in6_.addr_, buffer, sizeof (buffer));
+      inet_ntop(AF_INET6, in6_.addr_, buffer, sizeof (buffer));
       break;
 
     default:
