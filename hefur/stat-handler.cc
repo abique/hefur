@@ -1,4 +1,6 @@
 #include <mimosa/format/format.hh>
+#include <mimosa/format/print.hh>
+#include <mimosa/stream/string-stream.hh>
 #include <mimosa/tpl/dict.hh>
 #include <mimosa/tpl/include.hh>
 #include <mimosa/tpl/list.hh>
@@ -44,7 +46,11 @@ namespace hefur
           auto torrent = new mimosa::tpl::Dict("torrent");
           torrents->append(torrent);
           torrent->append("name", it->name());
-          torrent->append("length", it->length());
+          {
+            mimosa::stream::StringStream ss;
+            mimosa::format::printByteSize(ss, it->length());
+            torrent->append("length", ss.str());
+          }
           torrent->append("info_sha1", it->key());
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());
