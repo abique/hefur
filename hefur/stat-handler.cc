@@ -30,7 +30,7 @@ namespace hefur
     mimosa::tpl::Dict dict;
     HttpServer::commonDict(dict);
     dict.append("body", tpl_body);
-    dict.append("title", "Hefur torrents");
+    dict.append("title", "Torrents");
     dict.append("tracker_http", mimosa::format::str(
                   "http://%v:%v/announce", request.host(), request.port()));
     dict.append("tracker_udp", mimosa::format::str(
