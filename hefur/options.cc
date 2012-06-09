@@ -4,6 +4,10 @@
 
 namespace hefur
 {
+  const uint32_t & MAX_PEERS = *mimosa::options::addOption<uint32_t>(
+    "", "max-peers", "the maximum number of peers per torrent",
+    30000);
+
   const uint32_t & ANNOUNCE_INTERVAL = *mimosa::options::addOption<uint32_t>(
     "", "announce-interval", "the duration in minutes between two announces",
     15);

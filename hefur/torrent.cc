@@ -106,6 +106,10 @@ namespace hefur
       response->addrs_.push_back(it->addr_);
     }
 
+    // check that we have less than MAX_PEERS
+    if (leechers_ + seeders_ > MAX_PEERS)
+      removePeer(timeouts_.front());
+
     return response;
   }
 
