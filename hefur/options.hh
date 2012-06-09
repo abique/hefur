@@ -9,6 +9,7 @@ namespace hefur
   extern const uint32_t &    MAX_PEERS;
   extern const uint32_t &    ANNOUNCE_INTERVAL;
   extern const uint32_t &    SCRAPE_INTERVAL;
+  extern const uint32_t &    HTTP_TIMEOUT;
   extern const uint16_t &    HTTP_PORT;
   extern const uint16_t &    HTTPS_PORT;
   extern const uint16_t &    UDP_PORT;

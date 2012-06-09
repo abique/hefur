@@ -16,6 +16,9 @@ namespace hefur
     "", "scrape-interval", "the duration in minutes between two scrapes",
     15);
 
+  const uint32_t & HTTP_TIMEOUT = *mimosa::options::addOption<uint32_t>(
+    "", "http-timeout", "the number of milliseconds to wait until timeout", 2000);
+
   const uint16_t & HTTP_PORT = *mimosa::options::addOption<uint16_t>(
     "", "http-port", "the port to use, 0 to disable", 6969);
   const uint16_t & HTTPS_PORT = *mimosa::options::addOption<uint16_t>(
