@@ -42,7 +42,12 @@ namespace hefur
 
     {
       mimosa::SharedMutex::ReadLocker locker(tdb.torrents_lock_);
-      tdb.torrents_.foreach([&torrents] (Torrent *it) {
+      uint64_t total_leechers  = 0;
+      uint64_t total_seeders   = 0;
+      uint64_t total_length    = 0;
+      uint64_t total_completed = 0;
+
+      tdb.torrents_.foreach([&] (Torrent *it) {
           auto torrent = new mimosa::tpl::Dict("torrent");
           torrents->append(torrent);
           torrent->append("name", it->name());
@@ -55,7 +60,21 @@ namespace hefur
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());
           torrent->append("completed", it->completed());
+
+          total_leechers  += it->leechers();
+          total_seeders   += it->seeders();
+          total_length    += it->length();
+          total_completed += it->completed();
         });
+
+      dict.append("total_leechers", total_leechers);
+      dict.append("total_seeders", total_seeders);
+      dict.append("total_completed", total_completed);
+      {
+        mimosa::stream::StringStream ss;
+        mimosa::format::printByteSize(ss, total_length);
+        dict.append("total_length", ss.str());
+      }
     }
 
     tpl->execute(&response, dict);
