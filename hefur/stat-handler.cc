@@ -16,8 +16,8 @@
 namespace hefur
 {
   bool
-  StatHandler::handle(mimosa::http::RequestReader &  request,
-                      mimosa::http::ResponseWriter & response) const
+  StatHandler::handle(mh::RequestReader &  request,
+                      mh::ResponseWriter & response) const
   {
     auto tpl = TemplateFactory::instance().create("page.html");
     if (!tpl)
@@ -31,9 +31,9 @@ namespace hefur
     HttpServer::commonDict(dict);
     dict.append("body", tpl_body);
     dict.append("title", "Torrents");
-    dict.append("tracker_http", mimosa::format::str(
+    dict.append("tracker_http", mf::str(
                   "http://%v:%v/announce", request.host(), request.port()));
-    dict.append("tracker_udp", mimosa::format::str(
+    dict.append("tracker_udp", mf::str(
                   "udp://%v:%v", request.host(), UDP_PORT));
 
     auto torrents = new mimosa::tpl::List("torrents");
@@ -52,8 +52,8 @@ namespace hefur
           torrents->append(torrent);
           torrent->append("name", it->name());
           {
-            mimosa::stream::StringStream ss;
-            mimosa::format::printByteSize(ss, it->length());
+            ms::StringStream ss;
+            mf::printByteSize(ss, it->length());
             torrent->append("length", ss.str());
           }
           torrent->append("info_sha1", it->key());
@@ -71,8 +71,8 @@ namespace hefur
       dict.append("total_seeders", total_seeders);
       dict.append("total_completed", total_completed);
       {
-        mimosa::stream::StringStream ss;
-        mimosa::format::printByteSize(ss, total_length);
+        ms::StringStream ss;
+        mf::printByteSize(ss, total_length);
         dict.append("total_length", ss.str());
       }
     }

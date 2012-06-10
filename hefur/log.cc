@@ -2,5 +2,5 @@
 
 namespace hefur
 {
-  mimosa::log::Origin * log = new mimosa::log::Origin("hefur", mimosa::log::kDebug);
+  ml::Origin * log = new ml::Origin("hefur", ml::kDebug);
 }

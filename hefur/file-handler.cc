@@ -15,13 +15,13 @@
 namespace hefur
 {
   bool
-  FileHandler::handle(mimosa::http::RequestReader &  request,
-                      mimosa::http::ResponseWriter & response) const
+  FileHandler::handle(mh::RequestReader &  request,
+                      mh::ResponseWriter & response) const
   {
     std::string info_hash = request.queryGet("info_hash");
 
-    mimosa::stream::StringStream::Ptr ss = new mimosa::stream::StringStream;
-    mimosa::stream::Base16Decoder::Ptr dec = new mimosa::stream::Base16Decoder(ss);
+    ms::StringStream::Ptr ss = new ms::StringStream;
+    ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss);
     dec->write(info_hash.data(), info_hash.size());
 
     info_hash = ss->str();
@@ -36,7 +36,7 @@ namespace hefur
       auto torrent = tdb.torrents_.find(info_hash);
       if (!torrent)
       {
-        response.status_ = mimosa::http::kStatusNotFound;
+        response.status_ = mh::kStatusNotFound;
         return true;
       }
 
@@ -44,6 +44,6 @@ namespace hefur
     }
 
     response.content_type_ = "application/x-bittorrent";
-    return mimosa::http::FsHandler::streamFile(request, response, path);
+    return mh::FsHandler::streamFile(request, response, path);
   }
 }

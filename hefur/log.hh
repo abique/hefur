@@ -5,7 +5,7 @@
 
 namespace hefur
 {
-  extern mimosa::log::Origin * log;
+  extern ml::Origin * log;
 }
 
 #endif /* !HEFUR_LOG_HH */

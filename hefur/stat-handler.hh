@@ -5,13 +5,13 @@
 
 namespace hefur
 {
-  class StatHandler : public mimosa::http::Handler
+  class StatHandler : public mh::Handler
   {
   public:
     MIMOSA_DEF_PTR(StatHandler);
 
-    virtual bool handle(mimosa::http::RequestReader & request,
-                        mimosa::http::ResponseWriter & response) const override;
+    virtual bool handle(mh::RequestReader & request,
+                        mh::ResponseWriter & response) const override;
   };
 }
 

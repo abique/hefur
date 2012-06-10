@@ -15,13 +15,13 @@
 namespace hefur
 {
   bool
-  PeersHandler::handle(mimosa::http::RequestReader &  request,
-                       mimosa::http::ResponseWriter & response) const
+  PeersHandler::handle(mh::RequestReader &  request,
+                       mh::ResponseWriter & response) const
   {
     std::string info_hash = request.queryGet("info_hash");
 
-    mimosa::stream::StringStream::Ptr ss = new mimosa::stream::StringStream;
-    mimosa::stream::Base16Decoder::Ptr dec = new mimosa::stream::Base16Decoder(ss);
+    ms::StringStream::Ptr ss = new ms::StringStream;
+    ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss);
     dec->write(info_hash.data(), info_hash.size());
 
     info_hash = ss->str();
@@ -51,7 +51,7 @@ namespace hefur
       auto torrent = tdb.torrents_.find(info_hash);
       if (!torrent)
       {
-        response.status_ = mimosa::http::kStatusNotFound;
+        response.status_ = mh::kStatusNotFound;
         return true;
       }
 
@@ -64,16 +64,16 @@ namespace hefur
         peer->append("port", it->addr_.port());
         peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
 
-        mimosa::stream::StringStream ss;
-        mimosa::format::printByteSize(ss, it->downloaded_);
+        ms::StringStream ss;
+        mf::printByteSize(ss, it->downloaded_);
         dict.append("downloaded", ss.str());
 
         ss.setStr("");
-        mimosa::format::printByteSize(ss, it->uploaded_);
+        mf::printByteSize(ss, it->uploaded_);
         dict.append("uploaded", ss.str());
 
         ss.setStr("");
-        mimosa::format::printByteSize(ss, it->left_);
+        mf::printByteSize(ss, it->left_);
         dict.append("left", ss.str());
       }
     }

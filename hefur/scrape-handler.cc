@@ -7,8 +7,8 @@
 namespace hefur
 {
   bool
-  ScrapeHandler::handle(mimosa::http::RequestReader & request,
-                        mimosa::http::ResponseWriter & response) const
+  ScrapeHandler::handle(mh::RequestReader & request,
+                        mh::ResponseWriter & response) const
   {
     ScrapeRequest::Ptr rq = new ScrapeRequest;
 
@@ -26,8 +26,8 @@ namespace hefur
     response.content_type_ = "text/plain";
     response.keep_alive_   = false;
 
-    mimosa::stream::StringStream::Ptr buf = new mimosa::stream::StringStream;
-    mimosa::bencode::Encoder enc(buf);
+    ms::StringStream::Ptr buf = new ms::StringStream;
+    mb::Encoder enc(buf);
 
     auto rp = Hefur::instance().torrentDb().scrape(rq);
     if (!rp || rp->error_)

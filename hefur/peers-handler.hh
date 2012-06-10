@@ -5,13 +5,13 @@
 
 namespace hefur
 {
-  class PeersHandler : public mimosa::http::Handler
+  class PeersHandler : public mh::Handler
   {
   public:
     MIMOSA_DEF_PTR(PeersHandler);
 
-    virtual bool handle(mimosa::http::RequestReader & request,
-                        mimosa::http::ResponseWriter & response) const override;
+    virtual bool handle(mh::RequestReader & request,
+                        mh::ResponseWriter & response) const override;
   };
 }
 

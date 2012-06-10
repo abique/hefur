@@ -40,15 +40,15 @@ namespace hefur
     if (server_)
       stop();
 
-    auto dispatch = new mimosa::http::DispatchHandler;
+    auto dispatch = new mh::DispatchHandler;
     dispatch->registerHandler(
-      "/img/*", new mimosa::http::FsHandler(
+      "/img/*", new mh::FsHandler(
         WWW_DIR + "/img/", 1, true));
     dispatch->registerHandler(
-      "/css/*", new mimosa::http::FsHandler(
+      "/css/*", new mh::FsHandler(
         WWW_DIR + "/css/", 1, true));
     dispatch->registerHandler(
-      "/js/*", new mimosa::http::FsHandler(
+      "/js/*", new mh::FsHandler(
         WWW_DIR + "/js/", 1, true));
     dispatch->registerHandler("/announce", new AnnounceHandler);
     dispatch->registerHandler("/scrape", new ScrapeHandler);
@@ -56,10 +56,10 @@ namespace hefur
     dispatch->registerHandler("/peers", new PeersHandler);
     dispatch->registerHandler("/file/*", new FileHandler);
 
-    auto log_handler = new mimosa::http::LogHandler;
+    auto log_handler = new mh::LogHandler;
     log_handler->setHandler(dispatch);
 
-    server_ = new mimosa::http::Server;
+    server_ = new mh::Server;
     server_->setHandler(log_handler);
     server_->setReadTimeout(HTTP_TIMEOUT * mimosa::millisecond);
     server_->setWriteTimeout(HTTP_TIMEOUT * mimosa::millisecond);
@@ -103,8 +103,8 @@ namespace hefur
   HttpServer::commonDict(mimosa::tpl::Dict & dict)
   {
     {
-      mimosa::stream::StringStream ss;
-      mimosa::format::printDuration(ss, mimosa::uptime());
+      ms::StringStream ss;
+      mf::printDuration(ss, mimosa::uptime());
       dict.append("hefur_uptime", ss.str());
     }
     dict.append("hefur_version", HEFUR_VERSION);

@@ -5,13 +5,13 @@
 
 namespace hefur
 {
-  class FileHandler : public mimosa::http::Handler
+  class FileHandler : public mh::Handler
   {
   public:
     MIMOSA_DEF_PTR(FileHandler);
 
-    virtual bool handle(mimosa::http::RequestReader & request,
-                        mimosa::http::ResponseWriter & response) const override;
+    virtual bool handle(mh::RequestReader & request,
+                        mh::ResponseWriter & response) const override;
   };
 }
 

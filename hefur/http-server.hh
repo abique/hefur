@@ -54,7 +54,7 @@ namespace hefur
 
     bool                      stop_;
     mimosa::Thread            thread_;
-    mimosa::http::Server::Ptr server_;
+    mh::Server::Ptr server_;
   };
 }
 

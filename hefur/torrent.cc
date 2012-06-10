@@ -172,22 +172,22 @@ namespace hefur
   Torrent::Ptr
   Torrent::parseFile(const std::string & path)
   {
-    auto        input = mimosa::stream::FdStream::openFile(path.c_str());
+    auto        input = ms::FdStream::openFile(path.c_str());
     std::string name;
     uint64_t    length = 0;
 
     if (!input)
       return nullptr;
 
-    mimosa::bencode::Decoder dec(input);
+    mb::Decoder dec(input);
     auto token = dec.pull();
-    if (token != mimosa::bencode::kDict)
+    if (token != mb::kDict)
       return nullptr;
 
     while (true)
     {
       token = dec.pull();
-      if (token != mimosa::bencode::kData)
+      if (token != mb::kData)
         return nullptr;
 
       if (dec.getData() != "info")
@@ -196,27 +196,27 @@ namespace hefur
         continue;
       }
 
-      mimosa::stream::Sha1::Ptr sha1(new mimosa::stream::Sha1);
-      mimosa::bencode::Encoder enc(sha1);
+      ms::Sha1::Ptr sha1(new ms::Sha1);
+      mb::Encoder enc(sha1);
 
       token = dec.pull();
-      if (token != mimosa::bencode::kDict ||
-          !mimosa::bencode::copyToken(token, dec, enc))
+      if (token != mb::kDict ||
+          !mb::copyToken(token, dec, enc))
         return nullptr;
 
       while (true)
       {
         token = dec.pull();
-        if (!mimosa::bencode::copyToken(token, dec, enc))
+        if (!mb::copyToken(token, dec, enc))
           return nullptr;
 
-        if (token == mimosa::bencode::kData)
+        if (token == mb::kData)
         {
           if (!::strcasecmp(dec.getData().c_str(), "name"))
           {
             token = dec.pull();
-            if (token != mimosa::bencode::kData ||
-                !mimosa::bencode::copyToken(token, dec, enc))
+            if (token != mb::kData ||
+                !mb::copyToken(token, dec, enc))
               return nullptr;
 
             name = dec.getData();
@@ -225,18 +225,18 @@ namespace hefur
           else if (!::strcasecmp(dec.getData().c_str(), "length"))
           {
             token = dec.pull();
-            if (token != mimosa::bencode::kInt ||
-                !mimosa::bencode::copyToken(token, dec, enc))
+            if (token != mb::kInt ||
+                !mb::copyToken(token, dec, enc))
               return nullptr;
 
             length = dec.getInt();
             continue;
           }
         }
-        else if (token == mimosa::bencode::kEnd)
+        else if (token == mb::kEnd)
           break;
 
-        if (!mimosa::bencode::copyValue(dec, enc))
+        if (!mb::copyValue(dec, enc))
           return nullptr;
       }
 
