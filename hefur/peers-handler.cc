@@ -1,3 +1,4 @@
+#include <mimosa/format/print.hh>
 #include <mimosa/stream/string-stream.hh>
 #include <mimosa/stream/base16-decoder.hh>
 #include <mimosa/tpl/dict.hh>
@@ -62,9 +63,18 @@ namespace hefur
         peer->append("ip", ip);
         peer->append("port", it->addr_.port());
         peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
-        peer->append("downloaded", it->downloaded_);
-        peer->append("uploaded", it->uploaded_);
-        peer->append("left", it->left_);
+
+        mimosa::stream::StringStream ss;
+        mimosa::format::printByteSize(ss, it->downloaded_);
+        dict.append("downloaded", ss.str());
+
+        ss.setStr("");
+        mimosa::format::printByteSize(ss, it->uploaded_);
+        dict.append("uploaded", ss.str());
+
+        ss.setStr("");
+        mimosa::format::printByteSize(ss, it->left_);
+        dict.append("left", ss.str());
       }
     }
 
