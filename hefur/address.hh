@@ -13,15 +13,16 @@ namespace hefur
 {
   /**
    * Represent an internet address. Both ipv4 and ipv6 are supported.
+   *
+   * @internal move constructor has no interest as there is no pointers.
    */
   struct Address
   {
   public:
-    inline Address();
-    inline Address(const Address & a);
-    inline Address & operator=(const Address & a);
-
-    inline bool operator==(const Address & other) const;
+    Address();
+    Address(const Address & a);
+    Address & operator=(const Address & a);
+    bool operator==(const Address & other) const;
 
     /**
      * Returns the significant part of the address, to be used as a key.

@@ -4,6 +4,42 @@
 
 namespace hefur
 {
+  Address::Address()
+    : family_(AF_UNSPEC)
+  {
+  }
+
+  Address::Address(const Address & a)
+  {
+    *this = a;
+  }
+
+  Address &
+  Address::operator=(const Address & a)
+  {
+    ::memcpy(this, &a, sizeof (a));
+    return *this;
+  }
+
+  bool
+  Address::operator==(const Address & other) const
+  {
+    if (family_ != other.family_)
+      return false;
+
+    switch (family_)
+    {
+    case AF_INET:
+      return !::memcmp(&in_, &other.in_, sizeof (in_));
+
+    case AF_INET6:
+      return !::memcmp(&in6_, &other.in6_, sizeof (in6_));
+
+    default:
+      return false;
+    }
+  }
+
   std::string
   Address::str() const
   {
