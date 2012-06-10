@@ -7,7 +7,31 @@ namespace hefur
   std::string
   Address::str() const
   {
-    return "XXX";
+    char buffer[INET6_ADDRSTRLEN + 2 + 1 + 5 + 1] = "(unknown family)";
+    char *p = buffer;
+
+    switch (family_)
+    {
+    case AF_INET:
+      inet_ntop(AF_INET, in_.addr_, p, sizeof (buffer) + p - buffer);
+      p += strlen(p);
+      snprintf(p, sizeof (buffer) + p - buffer, ":%d", in_.port_);
+      break;
+
+    case AF_INET6:
+      *p = '[';
+      ++p;
+      inet_ntop(AF_INET6, in6_.addr_, p, sizeof (buffer) + p - buffer);
+      p += strlen(p);
+      snprintf(p, sizeof (buffer) + p - buffer, "]:%d", in6_.port_);
+      break;
+
+    default:
+      assert(false);
+      break;
+    }
+
+    return buffer;
   }
 
   std::string
