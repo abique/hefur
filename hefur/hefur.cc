@@ -18,7 +18,7 @@ namespace hefur
       udp_server_(nullptr)
   {
     if (!TORRENT_DIR.empty())
-      wl_ = new FsTreeWhiteList(TORRENT_DIR, SCAN_INTERVAL);
+      wl_ = new FsTreeWhiteList(TORRENT_DIR, SCAN_INTERVAL * m::second);
 
     if (UDP_PORT != 0)
     {

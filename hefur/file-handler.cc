@@ -18,17 +18,19 @@ namespace hefur
   FileHandler::handle(mh::RequestReader &  request,
                       mh::ResponseWriter & response) const
   {
-    std::string info_hash = request.queryGet("info_hash");
-
+    // just get and convert the info_hash query parameter
     ms::StringStream::Ptr ss = new ms::StringStream;
     ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss);
-    dec->write(info_hash.data(), info_hash.size());
+    // XXX probably a gcc bug, change to dec->write(...)
+    static_cast<ms::Stream*>(dec.get())->write(request.queryGet("info_hash"));
 
-    info_hash = ss->str();
+    const std::string info_hash(ss->str());
 
+    // valid sha1 must be 20 bytes
     if (info_hash.size() != 20)
       return false;
 
+    // fetch the torrent path directly from the torrent db
     std::string path;
     {
       TorrentDb & tdb = Hefur::instance().torrentDb();
@@ -36,6 +38,7 @@ namespace hefur
       auto torrent = tdb.torrents_.find(info_hash);
       if (!torrent)
       {
+        // error 404
         response.status_ = mh::kStatusNotFound;
         return true;
       }
@@ -43,6 +46,7 @@ namespace hefur
       path = torrent->path();
     }
 
+    // set the content type and reuse streamFile()
     response.content_type_ = "application/x-bittorrent";
     return mh::FsHandler::streamFile(request, response, path);
   }

@@ -139,8 +139,7 @@ namespace hefur
 
     enc.end(); // doc
 
-    // avoid Chunked-Encoding for old client which only supports
-    // HTTP/1.0
+    // avoid Chunked-Encoding for old client which only supports HTTP/1.0
     response.content_length_ = buf->str().size();
     response.write(buf->str().data(), buf->str().size());
     return true;

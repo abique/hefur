@@ -104,7 +104,7 @@ namespace hefur
   {
     {
       ms::StringStream ss;
-      mf::printDuration(ss, mimosa::uptime());
+      mf::printDuration(ss, m::uptime());
       dict.append("hefur_uptime", ss.str());
     }
     dict.append("hefur_version", HEFUR_VERSION);

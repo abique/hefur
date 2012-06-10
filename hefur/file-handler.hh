@@ -5,6 +5,10 @@
 
 namespace hefur
 {
+  /**
+   * This handler is here to serve local .torrent files.
+   * Sample url is: /file?info_hash=$hex_sha1
+   */
   class FileHandler : public mh::Handler
   {
   public:

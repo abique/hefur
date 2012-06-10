@@ -5,6 +5,9 @@
 
 namespace hefur
 {
+  /**
+   * Hefur's logger.
+   */
   extern ml::Origin * log;
 }
 

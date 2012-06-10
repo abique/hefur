@@ -8,13 +8,16 @@
 
 namespace hefur
 {
+  /**
+   * This is just a pure wrapper around 20 bytes (SHA1 hash).
+   */
   class InfoSha1
   {
   public:
     inline InfoSha1();
     inline InfoSha1(const char *data);
 
-    inline mimosa::StringRef bytes() const;
+    inline m::StringRef bytes() const;
 
     uint8_t bytes_[20];
   };

@@ -23,6 +23,19 @@ namespace hefur
    *   yet this one is deferred and not very useful as we have https support.
    *
    * see @class UdpServer for more documentation.
+   *
+   * The HTTP routing table:
+   * - static files
+   *  - /img/     -> WWW_DIR/img/
+   *  - /js/      -> WWW_DIR/js/
+   *  - /css/     -> WWW_DIR/css/
+   * - torrent handlers
+   *  - /announce -> AnnounceHandler
+   *  - /scrape   -> ScrapeHandler
+   * - web handlers
+   *  - /stat     -> StatHandler
+   *  - /peers    -> PeersHandler
+   *  - /file/    -> FileHandler
    */
   class HttpServer
   {
@@ -47,13 +60,18 @@ namespace hefur
      */
     void stop();
 
+    /**
+     * Sets common variables of the dictionary.
+     * - hefur_version
+     * - hefur_uptime
+     */
     static void commonDict(mt::Dict & dict);
 
   private:
     void run();
 
-    bool                      stop_;
-    mimosa::Thread            thread_;
+    bool            stop_;
+    m::Thread       thread_;
     mh::Server::Ptr server_;
   };
 }

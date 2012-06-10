@@ -15,11 +15,15 @@
 
 namespace hefur
 {
+  /**
+   * This class periodically scans root_ to find torrents, and
+   * add them to the torrent db. It has it owns thread.
+   */
   class FsTreeWhiteList
   {
   public:
     FsTreeWhiteList(const std::string & root,
-                    uint32_t            rescan_interval = 60);
+                    m::Time             rescan_interval = m::minute);
     ~FsTreeWhiteList();
 
     void scan();
@@ -27,10 +31,10 @@ namespace hefur
   private:
     void loopScan();
 
-    const std::string &  root_;
-    uint32_t             rescan_interval_;
-    mimosa::Future<bool> stop_;
-    mimosa::Thread       scan_thread_;
+    const std::string & root_;
+    m::Time             rescan_interval_;
+    m::Future<bool>     stop_;
+    m::Thread           scan_thread_;
   };
 }
 

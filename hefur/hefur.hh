@@ -12,6 +12,11 @@
 
 namespace hefur
 {
+  /**
+   * This is the main class of Hefur (as you've guessed).
+   * It initializes the different components and gracefully
+   * shut them down on exit.
+   */
   class Hefur : public mimosa::Singleton<Hefur>
   {
   public:
