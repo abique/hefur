@@ -1,3 +1,5 @@
+add_definitions(-include ${CMAKE_CURRENT_SOURCE_DIR}/namespace-helper.hh)
+
 add_executable(hefurd
   address.cc
   announce-handler.cc
