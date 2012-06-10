@@ -57,10 +57,9 @@ namespace hefur
 
       for (auto it = torrent->timeouts_.begin(); it != torrent->timeouts_.end(); ++it)
       {
-        auto ip = it->addr_.ipStr();
         auto peer = new mt::Dict("peer");
         peers->append(peer);
-        peer->append("ip", ip);
+        peer->append("address", it->addr_.str());
         peer->append("port", it->addr_.port());
         peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
 
