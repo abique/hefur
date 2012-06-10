@@ -7,23 +7,25 @@ namespace hefur
   std::string
   Address::str() const
   {
+    // ipv4:port or [ipv6]:port
     char buffer[INET6_ADDRSTRLEN + 2 + 1 + 5 + 1] = "(unknown family)";
     char *p = buffer;
+    char * const end = buffer + sizeof (buffer);
 
     switch (family_)
     {
     case AF_INET:
-      inet_ntop(AF_INET, in_.addr_, p, sizeof (buffer) + p - buffer);
+      inet_ntop(AF_INET, in_.addr_, p, end - p);
       p += strlen(p);
-      snprintf(p, sizeof (buffer) + p - buffer, ":%d", in_.port_);
+      snprintf(p, end - p, ":%d", in_.port_);
       break;
 
     case AF_INET6:
       *p = '[';
       ++p;
-      inet_ntop(AF_INET6, in6_.addr_, p, sizeof (buffer) + p - buffer);
+      inet_ntop(AF_INET6, in6_.addr_, p, end - p);
       p += strlen(p);
-      snprintf(p, sizeof (buffer) + p - buffer, "]:%d", in6_.port_);
+      snprintf(p, end - p, "]:%d", in6_.port_);
       break;
 
     default:

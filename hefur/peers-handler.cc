@@ -60,7 +60,6 @@ namespace hefur
         auto peer = new mt::Dict("peer");
         peers->append(peer);
         peer->append("address", it->addr_.str());
-        peer->append("port", it->addr_.port());
         peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
 
         ms::StringStream ss;
