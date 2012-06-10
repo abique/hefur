@@ -27,7 +27,7 @@ namespace hefur
     if (!tpl_body)
       return false;
 
-    mimosa::tpl::Dict dict;
+    mt::Dict dict;
     HttpServer::commonDict(dict);
     dict.append("body", tpl_body);
     dict.append("title", "Torrents");
@@ -36,7 +36,7 @@ namespace hefur
     dict.append("tracker_udp", mf::str(
                   "udp://%v:%v", request.host(), UDP_PORT));
 
-    auto torrents = new mimosa::tpl::List("torrents");
+    auto torrents = new mt::List("torrents");
     dict.append(torrents);
     TorrentDb & tdb = Hefur::instance().torrentDb();
 
@@ -48,7 +48,7 @@ namespace hefur
       uint64_t total_completed = 0;
 
       tdb.torrents_.foreach([&] (Torrent *it) {
-          auto torrent = new mimosa::tpl::Dict("torrent");
+          auto torrent = new mt::Dict("torrent");
           torrents->append(torrent);
           torrent->append("name", it->name());
           {

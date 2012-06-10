@@ -21,6 +21,7 @@ namespace hefur
   namespace ml = mimosa::log;
   namespace mo = mimosa::options;
   namespace ms = mimosa::stream;
+  namespace mt = mimosa::tpl;
 }
 
 #endif /* !HEFUR_NAMESPACE_HELPER_HH */

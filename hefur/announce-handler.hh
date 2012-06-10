@@ -5,6 +5,13 @@
 
 namespace hefur
 {
+  /**
+   * This class handles bittorrent announce request conforming
+   * to the bittorrent specification.
+   *
+   * This class does convert the http request to the internal
+   * representation: AnnounceRequest, and forwards it to TorrentDb.
+   */
   class AnnounceHandler : public mh::Handler
   {
   public:

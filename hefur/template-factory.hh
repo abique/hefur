@@ -6,13 +6,19 @@
 
 namespace hefur
 {
-  class TemplateFactory : public mimosa::Singleton<TemplateFactory>
+  /**
+   * This is factory which caches parsed html template files.
+   */
+  class TemplateFactory : public m::Singleton<TemplateFactory>
   {
   public:
-    mimosa::tpl::Template::ConstPtr create(const char *path);
+    /**
+     * Fetches the template designed by path.
+     */
+    mt::Template::ConstPtr create(const char *path);
 
   private:
-    mimosa::tpl::Cache cache_;
+    mt::Cache cache_;
   };
 }
 

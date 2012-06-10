@@ -47,7 +47,7 @@ namespace hefur
      */
     void stop();
 
-    static void commonDict(mimosa::tpl::Dict & dict);
+    static void commonDict(mt::Dict & dict);
 
   private:
     void run();

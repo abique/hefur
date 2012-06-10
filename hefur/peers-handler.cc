@@ -37,12 +37,12 @@ namespace hefur
     if (!tpl_body)
       return false;
 
-    mimosa::tpl::Dict dict;
+    mt::Dict dict;
     HttpServer::commonDict(dict);
     dict.append("body", tpl_body);
     dict.append("title", "Torrent peers");
 
-    auto peers = new mimosa::tpl::List("peers");
+    auto peers = new mt::List("peers");
     dict.append(peers);
 
     {
@@ -58,7 +58,7 @@ namespace hefur
       for (auto it = torrent->timeouts_.begin(); it != torrent->timeouts_.end(); ++it)
       {
         auto ip = it->addr_.ipStr();
-        auto peer = new mimosa::tpl::Dict("peer");
+        auto peer = new mt::Dict("peer");
         peers->append(peer);
         peer->append("ip", ip);
         peer->append("port", it->addr_.port());

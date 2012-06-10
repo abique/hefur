@@ -100,7 +100,7 @@ namespace hefur
   }
 
   void
-  HttpServer::commonDict(mimosa::tpl::Dict & dict)
+  HttpServer::commonDict(mt::Dict & dict)
   {
     {
       ms::StringStream ss;
