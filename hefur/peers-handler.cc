@@ -64,15 +64,15 @@ namespace hefur
 
         ms::StringStream ss;
         mf::printByteSize(ss, it->downloaded_);
-        dict.append("downloaded", ss.str());
+        peer->append("downloaded", ss.str());
 
         ss.setStr("");
         mf::printByteSize(ss, it->uploaded_);
-        dict.append("uploaded", ss.str());
+        peer->append("uploaded", ss.str());
 
         ss.setStr("");
         mf::printByteSize(ss, it->left_);
-        dict.append("left", ss.str());
+        peer->append("left", ss.str());
       }
     }
 
