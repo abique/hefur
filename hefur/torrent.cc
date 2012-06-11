@@ -1,3 +1,4 @@
+#include <mimosa/mutex.hh>
 #include <mimosa/bencode/copy.hh>
 #include <mimosa/bencode/decoder.hh>
 #include <mimosa/bencode/encoder.hh>
@@ -29,6 +30,7 @@ namespace hefur
 
   Torrent::~Torrent()
   {
+    m::Mutex::Locker locker(lock_);
     while (!timeouts_.empty())
     {
       auto peer = timeouts_.front();
@@ -40,7 +42,8 @@ namespace hefur
   void
   Torrent::cleanup()
   {
-    mimosa::Time now = mimosa::monotonicTimeCoarse();
+    m::Mutex::Locker locker(lock_);
+    m::Time     now = m::monotonicTimeCoarse();
 
     while (!timeouts_.empty())
     {
@@ -50,8 +53,8 @@ namespace hefur
 
       log->debug("remove peer (%v) because %v > %v",
           peer->addr_.ipStr(),
-          now / mimosa::second,
-          peer->timeout_ts_ / mimosa::second);
+          now / m::second,
+          peer->timeout_ts_ / m::second);
       removePeer(peer);
     }
   }
@@ -59,6 +62,8 @@ namespace hefur
   AnnounceResponse::Ptr
   Torrent::announce(AnnounceRequest::Ptr request)
   {
+    m::Mutex::Locker locker(lock_);
+
     // prepare the response
     AnnounceResponse::Ptr response = new AnnounceResponse;
     response->error_      = false;
@@ -151,8 +156,8 @@ namespace hefur
   {
     if (remove)
       timeouts_.erase(peer);
-    peer->timeout_ts_ = mimosa::monotonicTimeCoarse()
-      + mimosa::minute * (ANNOUNCE_INTERVAL + 5);
+    peer->timeout_ts_ = m::monotonicTimeCoarse()
+      + m::minute * (ANNOUNCE_INTERVAL + 5);
     timeouts_.pushBack(peer);
   }
 
@@ -172,7 +177,7 @@ namespace hefur
   Torrent::Ptr
   Torrent::parseFile(const std::string & path)
   {
-    auto        input = ms::FdStream::openFile(path.c_str());
+    auto        input  = ms::FdStream::openFile(path.c_str());
     std::string name;
     uint64_t    length = 0;
 

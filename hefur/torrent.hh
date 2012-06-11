@@ -16,7 +16,7 @@ namespace hefur
 {
   class PeersHandler;
 
-  class Torrent : public mimosa::RefCountable<Torrent>
+  class Torrent : public m::RefCountable<Torrent>
   {
   public:
     Torrent(const InfoSha1 &    info_sha1,
@@ -27,20 +27,21 @@ namespace hefur
 
     /**
      * Handle an announce request and returns an announce response.
+     * Thread safe.
      *
      * The return value should never be null.
      */
     AnnounceResponse::Ptr announce(AnnounceRequest::Ptr request);
 
     /**
-     * Removes timed-out peers.
+     * Removes timed-out peers. Thread safe.
      */
     void cleanup();
 
     /**
      * Return a key of the info sha1 to use in a Trie.
      */
-    inline mimosa::StringRef key() const;
+    inline m::StringRef key() const;
 
     inline const std::string & name() const { return name_; }
     inline const std::string & path() const { return path_; }
@@ -49,6 +50,11 @@ namespace hefur
     inline uint32_t seeders() const { return seeders_; }
     inline uint32_t completed() const { return completed_; }
 
+    /**
+     * Parses a .torrent file, extracts the name, length and info_sha1,
+     * and convert it into a Torrent object.
+     * @return nullptr on parse error.
+     */
     static Torrent::Ptr parseFile(const std::string & path);
 
   private:
@@ -74,10 +80,11 @@ namespace hefur
      */
     void removePeer(Peer * peer);
 
-    typedef mimosa::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
-    typedef mimosa::Trie<Peer *, Peer::addr>                          peers_type;
+    typedef m::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
+    typedef m::Trie<Peer *, Peer::addr>                          peers_type;
 
 
+    m::Mutex      lock_;
     InfoSha1      info_sha1_;   // this is the torrent key
     std::string   name_;        // optional, used by StatHandler
     std::string   path_;        // optional, for later download

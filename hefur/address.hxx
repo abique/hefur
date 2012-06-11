@@ -1,10 +1,10 @@
 namespace hefur
 {
-  inline mimosa::StringRef
+  inline m::StringRef
   Address::key() const
   {
     if (family_ == AF_INET)
-      return mimosa::StringRef((const char *)&in_, sizeof (in_));
-    return mimosa::StringRef((const char *)&in6_, sizeof (in6_));
+      return m::StringRef((const char *)&in_, sizeof (in_));
+    return m::StringRef((const char *)&in6_, sizeof (in6_));
   }
 }

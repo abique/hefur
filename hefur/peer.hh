@@ -11,6 +11,9 @@
 
 namespace hefur
 {
+  /**
+   * Represents a torrent's peer.
+   */
   class Peer
   {
   public:
@@ -20,18 +23,18 @@ namespace hefur
     uint64_t      left_;
     uint64_t      downloaded_;
     uint64_t      uploaded_;
-    mimosa::Time  timeout_ts_; // monotonic coarse clock
+    m::Time  timeout_ts_; // monotonic coarse clock
     uint8_t       peerid_[20];
 
-    mimosa::IntrusiveDListHook<Peer*> timeout_hook_;
+    m::IntrusiveDListHook<Peer*> timeout_hook_;
 
-    static inline mimosa::StringRef peerId(Peer * peer) {
+    static inline m::StringRef peerId(Peer * peer) {
       // don't use the 8 first bytes as they're not really relevant:
       // they represent the peer's client and version.
-      return mimosa::StringRef((const char *)peer->peerid_ + 8, 12);
+      return m::StringRef((const char *)peer->peerid_ + 8, 12);
     }
 
-    static inline mimosa::StringRef addr(Peer * peer) {
+    static inline m::StringRef addr(Peer * peer) {
       return peer->addr_.key();
     }
   };

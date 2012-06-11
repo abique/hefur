@@ -29,7 +29,14 @@ namespace hefur
     ms::StringStream::Ptr buf = new ms::StringStream;
     mb::Encoder enc(buf);
 
-    auto rp = Hefur::instance().torrentDb().scrape(rq);
+    auto tdb = Hefur::instance().torrentDb();
+    if (!tdb)
+    {
+      response.status_ = mh::kStatusServiceUnavailable;
+      return true;
+    }
+
+    auto rp = tdb->scrape(rq);
     if (!rp || rp->error_)
     {
       enc.startDict();

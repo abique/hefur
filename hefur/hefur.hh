@@ -17,7 +17,7 @@ namespace hefur
    * It initializes the different components and gracefully
    * shut them down on exit.
    */
-  class Hefur : public mimosa::Singleton<Hefur>
+  class Hefur : public m::Singleton<Hefur>
   {
   public:
     Hefur();
@@ -26,14 +26,14 @@ namespace hefur
     void run();
     void stop();
 
-    inline TorrentDb & torrentDb() { return tdb_; }
+    inline TorrentDb::Ptr torrentDb() { return tdb_; }
 
   private:
-    mimosa::Mutex     mutex_;
-    mimosa::Condition cond_;
+    m::Mutex     mutex_;
+    m::Condition cond_;
     bool              stop_;
 
-    TorrentDb         tdb_;
+    TorrentDb::Ptr    tdb_;
     FsTreeWhiteList * wl_;
     HttpServer *      http_server_;
     HttpServer *      https_server_;

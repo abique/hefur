@@ -46,9 +46,15 @@ namespace hefur
     dict.append(peers);
 
     {
-      TorrentDb & tdb = Hefur::instance().torrentDb();
-      mimosa::SharedMutex::ReadLocker locker(tdb.torrents_lock_);
-      auto torrent = tdb.torrents_.find(info_hash);
+      auto tdb = Hefur::instance().torrentDb();
+      if (!tdb)
+      {
+        response.status_ = mh::kStatusServiceUnavailable;
+        return true;
+      }
+
+      m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
+      auto torrent = tdb->torrents_.find(info_hash);
       if (!torrent)
       {
         response.status_ = mh::kStatusNotFound;
@@ -60,7 +66,7 @@ namespace hefur
         auto peer = new mt::Dict("peer");
         peers->append(peer);
         peer->append("address", it->addr_.str());
-        peer->append("peerid", mimosa::StringRef((const char *)it->peerid_, 20));
+        peer->append("peerid", m::StringRef((const char *)it->peerid_, 20));
 
         ms::StringStream ss;
         mf::printByteSize(ss, it->downloaded_);

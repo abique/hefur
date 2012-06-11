@@ -5,6 +5,9 @@
 
 namespace hefur
 {
+  /**
+   * This handler generates a web page listing all the torrent's peers.
+   */
   class PeersHandler : public mh::Handler
   {
   public:

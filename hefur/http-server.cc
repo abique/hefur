@@ -61,8 +61,8 @@ namespace hefur
 
     server_ = new mh::Server;
     server_->setHandler(log_handler);
-    server_->setReadTimeout(HTTP_TIMEOUT * mimosa::millisecond);
-    server_->setWriteTimeout(HTTP_TIMEOUT * mimosa::millisecond);
+    server_->setReadTimeout(HTTP_TIMEOUT * m::millisecond);
+    server_->setWriteTimeout(HTTP_TIMEOUT * m::millisecond);
 
     if ((ipv6 && !server_->listenInet6(port)) ||
         (!ipv6 && !server_->listenInet4(port)))

@@ -33,9 +33,15 @@ namespace hefur
     // fetch the torrent path directly from the torrent db
     std::string path;
     {
-      TorrentDb & tdb = Hefur::instance().torrentDb();
-      mimosa::SharedMutex::ReadLocker locker(tdb.torrents_lock_);
-      auto torrent = tdb.torrents_.find(info_hash);
+      TorrentDb::Ptr tdb = Hefur::instance().torrentDb();
+      if (!tdb)
+      {
+        response.status_ = mh::kStatusServiceUnavailable;
+        return true;
+      }
+
+      m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
+      auto torrent = tdb->torrents_.find(info_hash);
       if (!torrent)
       {
         // error 404

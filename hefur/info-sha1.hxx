@@ -11,9 +11,9 @@ namespace hefur
     ::memcpy(bytes_, data, 20);
   }
 
-  inline mimosa::StringRef
+  inline m::StringRef
   InfoSha1::bytes() const
   {
-    return mimosa::StringRef((const char*)bytes_, 20);
+    return m::StringRef((const char*)bytes_, 20);
   }
 }

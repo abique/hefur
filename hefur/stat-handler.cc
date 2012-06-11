@@ -38,16 +38,21 @@ namespace hefur
 
     auto torrents = new mt::List("torrents");
     dict.append(torrents);
-    TorrentDb & tdb = Hefur::instance().torrentDb();
+    auto tdb = Hefur::instance().torrentDb();
+    if (!tdb)
+    {
+      response.status_ = mh::kStatusServiceUnavailable;
+      return true;
+    }
 
     {
-      mimosa::SharedMutex::ReadLocker locker(tdb.torrents_lock_);
+      m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
       uint64_t total_leechers  = 0;
       uint64_t total_seeders   = 0;
       uint64_t total_length    = 0;
       uint64_t total_completed = 0;
 
-      tdb.torrents_.foreach([&] (Torrent *it) {
+      tdb->torrents_.foreach([&] (Torrent *it) {
           auto torrent = new mt::Dict("torrent");
           torrents->append(torrent);
           torrent->append("name", it->name());

@@ -7,7 +7,7 @@ namespace hefur
    * This class represents a scrape response.
    * It is used by both http(s) server and upd server.
    */
-  struct ScrapeResponse : public mimosa::RefCountable<ScrapeResponse>
+  struct ScrapeResponse : public m::RefCountable<ScrapeResponse>
   {
     bool        error_;
     std::string error_msg_;

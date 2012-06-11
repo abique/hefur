@@ -26,9 +26,17 @@ namespace hefur
                     m::Time             rescan_interval = m::minute);
     ~FsTreeWhiteList();
 
+    /**
+     * Scans root_, can be called at anytime, from any thread.
+     * When a .torrent is found, call TorrentDb::addTorrent().
+     */
     void scan();
 
   private:
+    /**
+     * @internal Ran into a dedicated thread, started in the constructor.
+     * Will run until stop_ is set to true.
+     */
     void loopScan();
 
     const std::string & root_;

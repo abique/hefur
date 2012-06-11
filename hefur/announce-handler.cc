@@ -82,9 +82,16 @@ namespace hefur
     ms::StringStream::Ptr buf = new ms::StringStream;
     mb::Encoder           enc(buf);
 
+    auto tdb = Hefur::instance().torrentDb();
+    if (!tdb)
+    {
+      response.status_ = mh::kStatusServiceUnavailable;
+      return true;
+    }
+
     // Now that we have converted the HTTP request into an internal
     // representation, let TorrentDb handle the request.
-    auto rp = Hefur::instance().torrentDb().announce(rq);
+    auto rp = tdb->announce(rq);
     if (!rp || rp->error_)
     {
       // We failed.

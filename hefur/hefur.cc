@@ -12,6 +12,7 @@ namespace hefur
     : mutex_(),
       cond_(),
       stop_(false),
+      tdb_(new TorrentDb),
       wl_(nullptr),
       http_server_(nullptr),
       https_server_(nullptr),
@@ -50,17 +51,17 @@ namespace hefur
   void
   Hefur::run()
   {
-    mimosa::Mutex::Locker locker(mutex_);
-    if (stop_)
-      return;
-    cond_.wait(mutex_);
+    m::Mutex::Locker locker(mutex_);
+    if (!stop_)
+      cond_.wait(mutex_);
   }
 
   void
   Hefur::stop()
   {
-    mimosa::Mutex::Locker locker(mutex_);
+    m::Mutex::Locker locker(mutex_);
     cond_.wakeAll();
     stop_ = true;
+    tdb_  = nullptr;
   }
 }

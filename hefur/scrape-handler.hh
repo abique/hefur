@@ -5,6 +5,13 @@
 
 namespace hefur
 {
+  /**
+   * This class handles bittorrent scrape request conforming
+   * to the bittorrent specification.
+   *
+   * This class does convert the http request into the internal
+   * representation: ScrapeRequest, and forwards it to TorrentDb.
+   */
   class ScrapeHandler : public mh::Handler
   {
   public:

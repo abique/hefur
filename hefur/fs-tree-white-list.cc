@@ -26,11 +26,13 @@ namespace hefur
   void
   FsTreeWhiteList::scan()
   {
-    mimosa::fs::find(root_, true, [&] (const std::string & path) {
+    m::fs::find(root_, true, [&] (const std::string & path) {
         if (::fnmatch("*.torrent", path.c_str(), FNM_CASEFOLD))
           return;
 
-        Hefur::instance().torrentDb().addTorrent(Torrent::parseFile(path));
+        auto tdb = Hefur::instance().torrentDb();
+        if (tdb)
+          tdb->addTorrent(Torrent::parseFile(path));
       });
   }
 
@@ -39,6 +41,6 @@ namespace hefur
   {
     do {
       scan();
-    } while (!stop_.timedWait(mimosa::time() + rescan_interval_));
+    } while (!stop_.timedWait(m::time() + rescan_interval_));
   }
 }
