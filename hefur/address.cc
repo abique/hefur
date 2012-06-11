@@ -53,7 +53,7 @@ namespace hefur
     case AF_INET:
       inet_ntop(AF_INET, in_.addr_, p, end - p);
       p += strlen(p);
-      snprintf(p, end - p, ":%d", in_.port_);
+      snprintf(p, end - p, ":%d", ntohs(in_.port_));
       break;
 
     case AF_INET6:
@@ -61,7 +61,7 @@ namespace hefur
       ++p;
       inet_ntop(AF_INET6, in6_.addr_, p, end - p);
       p += strlen(p);
-      snprintf(p, end - p, "]:%d", in6_.port_);
+      snprintf(p, end - p, "]:%d", ntohs(in6_.port_));
       break;
 
     default:
