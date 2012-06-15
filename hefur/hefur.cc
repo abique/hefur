@@ -9,15 +9,14 @@
 namespace hefur
 {
   Hefur::Hefur()
-    : mutex_(),
-      cond_(),
-      stop_(false),
-      tdb_(new TorrentDb),
+    : tdb_(new TorrentDb),
       wl_(nullptr),
       http_server_(nullptr),
       https_server_(nullptr),
       udp_server_(nullptr)
   {
+    instance_ = this;
+
     if (!TORRENT_DIR.empty())
       wl_ = new FsTreeWhiteList(TORRENT_DIR, SCAN_INTERVAL * m::second);
 
@@ -42,6 +41,7 @@ namespace hefur
 
   Hefur::~Hefur()
   {
+    stop_.get();
     delete udp_server_;
     delete https_server_;
     delete http_server_;
@@ -51,17 +51,12 @@ namespace hefur
   void
   Hefur::run()
   {
-    m::Mutex::Locker locker(mutex_);
-    if (!stop_)
-      cond_.wait(mutex_);
+    stop_.get();
   }
 
   void
   Hefur::stop()
   {
-    m::Mutex::Locker locker(mutex_);
-    cond_.wakeAll();
-    stop_ = true;
-    tdb_  = nullptr;
+    stop_.set(true);
   }
 }

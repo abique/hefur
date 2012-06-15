@@ -95,6 +95,7 @@ namespace hefur
 
     stop_ = true;
     server_->close();
+    thread_.cancel();
     thread_.join();
     server_ = nullptr;
   }

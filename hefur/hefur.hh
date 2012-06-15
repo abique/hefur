@@ -17,7 +17,8 @@ namespace hefur
    * It initializes the different components and gracefully
    * shut them down on exit.
    */
-  class Hefur : public m::Singleton<Hefur>
+  class Hefur : public m::Singleton<Hefur>,
+                private m::NonCopyable
   {
   public:
     Hefur();
@@ -29,10 +30,7 @@ namespace hefur
     inline TorrentDb::Ptr torrentDb() { return tdb_; }
 
   private:
-    m::Mutex     mutex_;
-    m::Condition cond_;
-    bool              stop_;
-
+    m::Future<bool>   stop_;
     TorrentDb::Ptr    tdb_;
     FsTreeWhiteList * wl_;
     HttpServer *      http_server_;
