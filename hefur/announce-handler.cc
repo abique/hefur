@@ -44,32 +44,8 @@ namespace hefur
     rq->downloaded_ = atoll(request.queryGet("downloaded").c_str());
     rq->uploaded_ = atoll(request.queryGet("uploaded").c_str());
     rq->left_ = atoll(request.queryGet("left").c_str());
-
-    const struct ::sockaddr * addr = request.channel().remoteAddr();
-    switch (addr->sa_family)
-    {
-    case AF_INET:
-    {
-      const struct ::sockaddr_in * in = (const struct ::sockaddr_in *)addr;
-      rq->addr_.family_ = AF_INET;
-      rq->addr_.in_.port_ = htons(port);
-      memcpy(rq->addr_.in_.addr_, &in->sin_addr, 4);
-      break;
-    }
-
-    case AF_INET6:
-    {
-      const struct ::sockaddr_in6 * in6 = (const struct ::sockaddr_in6 *)addr;
-      rq->addr_.family_ = AF_INET6;
-      rq->addr_.in6_.port_ = htons(port);
-      memcpy(rq->addr_.in6_.addr_, &in6->sin6_addr, 16);
-      break;
-    }
-
-    default:
-      // XXX set an error message
-      return false;
-    }
+    rq->addr_ = request.channel().remoteAddr();
+    rq->addr_.setPort(port);
 
     // We don't want to keep alive here, because there is no need
     // to let the client queue multiple requests and keep the

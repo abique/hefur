@@ -24,6 +24,9 @@ namespace hefur
     Address & operator=(const Address & a);
     bool operator==(const Address & other) const;
 
+    void setPort(uint16_t port);
+    Address & operator=(const struct ::sockaddr * addr);
+
     /**
      * Returns the significant part of the address, to be used as a key.
      * This is helpful for the trie index. For better performances, we

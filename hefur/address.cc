@@ -109,4 +109,58 @@ namespace hefur
 
     return 0;
   }
+
+  Address &
+  Address::operator=(const struct ::sockaddr * addr)
+  {
+    if (!addr)
+      return *this;
+
+    switch (addr->sa_family)
+    {
+    case AF_INET:
+    {
+      const struct ::sockaddr_in * in = (const struct ::sockaddr_in *)addr;
+      family_   = AF_INET;
+      in_.port_ = in->sin_port;
+      memcpy(in_.addr_, &in->sin_addr, 4);
+      break;
+    }
+
+    case AF_INET6:
+    {
+      const struct ::sockaddr_in6 * in6 = (const struct ::sockaddr_in6 *)addr;
+      // Are we using ipv4 over ipv6
+      if (::memcmp("\0\0\0\0\0\0\0\0\xFF\xFF\xFF\xFF", &in6->sin6_addr, 12))
+      {
+        family_    = AF_INET6;
+        in6_.port_ = in6->sin6_port;
+        memcpy(in6_.addr_, &in6->sin6_addr, 16);
+      }
+      else
+      {
+        family_   = AF_INET;
+        in_.port_ = in6->sin6_port;
+        memcpy(in_.addr_, in6->sin6_addr.s6_addr + 12, 4);
+      }
+      break;
+    }
+    }
+    return *this;
+  }
+
+  void
+  Address::setPort(uint16_t port)
+  {
+    switch (family_)
+    {
+    case AF_INET:
+      in_.port_ = htons(port);
+      break;
+
+    case AF_INET6:
+      in6_.port_ = htons(port);
+      break;
+    }
+  }
 }
