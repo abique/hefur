@@ -4,6 +4,7 @@
 #include <cstring>
 
 #include <mimosa/init.hh>
+#include <mimosa/priviledge-drop.hh>
 
 #include "hefur.hh"
 #include "log.hh"
@@ -23,7 +24,8 @@ static void quit(int)
 
 int main(int argc, char **argv)
 {
-  m::init(argc, argv);
+  mimosa::init(argc, argv);
+  mimosa::priviledgeDrop();
 
   // gracefully quitting
   signal(SIGINT, quit);
@@ -38,6 +40,6 @@ int main(int argc, char **argv)
   hefur::Hefur::release();
   hefur::TemplateFactory::release();
 
-  m::deinit();
+  mimosa::deinit();
   return 0;
 }
