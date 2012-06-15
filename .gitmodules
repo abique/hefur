@@ -1,3 +1,6 @@
 [submodule "www/bootstrap"]
 	path = www/bootstrap
 	url = git://github.com/twitter/bootstrap.git
+[submodule "mimosa"]
+	path = mimosa
+	url = git://github.com/abique/mimosa.git
