@@ -29,9 +29,9 @@ namespace hefur
     "", "ipv6", "bind on ipv6 instead of ipv4");
 
   const std::string & CERT = *mo::addOption<std::string>(
-    "", "cert", "the path to the certificate", "");
+    "", "http-cert", "the path to the certificate", "");
   const std::string & KEY = *mo::addOption<std::string>(
-    "", "key", "the path to the key", "");
+    "", "http-key", "the path to the key", "");
 
   const std::string & TORRENT_DIR = *mo::addOption<std::string>(
     "", "torrent-dir",
