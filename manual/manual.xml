@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://docbook.org/xml/4.3/docbookx.dtd">
+
+<article>
+  <articleinfo>
+    <title>Hefur</title>
+  </articleinfo>
+
+  <sect1>
+    <title>Introduction</title>
+
+    <para>Hefur is a standalone and lightweight BitTorrent tracker written in C++.
+    It does not depend on a database or anything complex to setup. Hefur keeps
+    everything in memory which makes it very easy to run.</para>
+
+    <para>It has not been designed to be an open tracker like opentracker.org, but
+    fits perfectly for a small setup like a Linux distribution sharing its
+    releases or a fansub team.</para>
+
+    <para>The code is very simple so a neophyte could understand it and modify
+    it for its specific needs.</para>
+
+    <sect2>
+      <title>Features</title>
+      <itemizedlist>
+        <listitem>
+          UDP, HTTP and HTTPS announce and scrape.
+        </listitem>
+        <listitem>
+          IPv4 and IPv6 support.
+        </listitem>
+        <listitem>
+          Torrent white list based on directory tree: Hefur will recursively
+          scan a directory and white list every torrents found.
+        </listitem>
+        <listitem>
+          Everything in memory, which leads to faster response time and easier setup.
+        </listitem>
+        <listitem>
+          Stat and Peer HTML pages.
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Setup your own server</title>
+
+    <sect2>
+      <title>Download and build Hefur</title>
+
+      <para>Go to <ulink url="https://github.com/abique/hefur/downloads">
+      https://github.com/abique/hefur/downloads</ulink> and download
+      the last version.</para>
+
+      <para>Then execute the following command:
+      <programlisting language="sh" linenumbering="numbered"><![CDATA[
+      tar xvf hefur-$version.tar.xz &&
+      cd hefur-$version &&
+      mkdir build &&
+      cd build &&
+      cmake .. &&
+      make &&
+      make install]]>
+      </programlisting>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>The white list</title>
+
+      <para>The white list is used defined the set of torrents which
+      are tracked by the tracker. The way it works is pretty simple:
+      you specify a path, and Hefur will periodically scan it recursively
+      to find .torrent files and add them to the tracker.</para>
+
+      <para>The white list is configured by the following options:
+      <itemizedlist>
+        <listitem>
+          -torrent-dir &lt;path&gt;
+        </listitem>
+        <listitem>
+          -scan-interval &lt;interval&gt; (interval is in minutes)
+        </listitem>
+      </itemizedlist>
+      Please ensure that the torrent directory is a finite tree.
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>Resources limits</title>
+
+      <para>On most OS, the maximum number of opened files is 1024,
+      which is probably enough. But if your tracker is going under
+      heavy load, you might consider to increase its resources usage.</para>
+
+      <para>To do so, I recommend you to read ulimit's manual and edit
+      /etc/security/limits.conf.</para>
+    </sect2>
+
+    <sect2>
+      <title>chroot, setuid and setgid</title>
+
+      <para>If you're starting Hefur as root, you will see new options
+      appears to help you dropping privileges:
+      <itemizedlist>
+        <listitem>
+          -chroot &lt;path&gt;
+        </listitem>
+        <listitem>
+          -uid &lt;uid&gt;|&lt;user name&gt;
+        </listitem>
+        <listitem>
+          -gid &lt;gid&gt;|&lt;group name&gt;
+        </listitem>
+      </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>/stat and /peers pages</title>
+
+      <para>These pages are not necessary for the smooth functioning
+      of Hefur, they are just convenient to the user and administrator.</para>
+
+      <para>The /stat page display collected statistics relative to the start
+      time. Which means that every statistics are reset if you restart Hefur.
+      </para>
+
+      <para>There is no arm to let anyone access /stat and /peers, but if
+      you want, you can disable them with
+      <itemizedlist>
+        <listitem>
+          -disable-peers-page
+        </listitem>
+        <listitem>
+          -disable-stat-page
+        </listitem>
+      </itemizedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Security considerations</title>
+
+    <sect2>
+      <title>The white list</title>
+
+      <para>As you can own the directory scanned by Hefur, this is not
+      really a big issue. But if you scan a network file system or simply
+      a virtual file system which you don't control, this file system can
+      arm Hefur by doing:
+      <itemizedlist>
+        <listitem>an infinite tree</listitem>
+        <listitem>an infinite .torrent file</listitem>
+        <listitem>a high number of .torrent with crafted info part to put
+        the torrent index in its worst case</listitem>
+        <listitem>a high number of .torrent with crafted very long name
+        to fill up memory</listitem>
+      </itemizedlist>
+      So if you scan an uncontrolled file system you want to:
+      <itemizedlist>
+        <listitem>set the maximum .torrent file size: -max-torrent-file-size
+        &lt;size in MiB&gt;</listitem>
+        <listitem>truncate torrent's name longer than X:
+        -max-torrent-name-length &lt;length&gt;</listitem>
+        <listitem>limit the scan depth: -max-scan-depth &lt;depth&gt;</listitem>
+        <listitem>limit the number of inodes scanned:
+        -max-scan-inodes &lt;nb&gt;</listitem>
+      </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>The number of peers per torrent</title>
+
+      <para>This problem is very simple, you have an index for all the tracked
+      peers, and you store peers. So it take memory. If you do not have an
+      limit on the number of peers, you can exceed the available memory.</para>
+
+      <para>Our solution is to limit the number of peers per torrent. If we
+      exceed this limit, we simply pop the oldest peer, to push the new one.
+      In fact it is safe as a tracker could only remember the 200 last peers,
+      they'll be able to reach enough peers to achieve good download
+      performances, and they'll all remain connected with PEX
+      (Peer Exchange Protocol).</para>
+
+      <para>You can use the following option to change the maximum number
+      of peers per torrents:
+      <itemizedlist>
+        <listitem>
+          -max-peers &lt;nb&gt;
+        </listitem>
+      </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>The number of peers from the same IP</title>
+
+      <para>As we index the network address plus the port, a single machine
+      could register many times to the tracker which is fine. But we don't
+      want to let it registers too many times. That's why we have the options:
+      <itemizedlist>
+        <listitem>
+          -max-peers-per-ip &lt;nb&gt;
+        </listitem>
+      </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>Proxy considerations</title>
+
+      <para>Hefur is usable through a proxy, but the referenced peer will
+      be the proxy, not the peer itself. The peer will still be able to
+      start downloading because it will gets a list of peers and be able
+      to connect to them (as far as not every body is using a proxy).</para>
+
+      <para>Why do we choose this behavior? Because we use the peer address
+      to index peers and if we let a peer specify it, we let him spawn a lot
+      of announces and then fill up our index.</para>
+
+      <para>If you really want to allow peers to specify their address, you
+      can use the option:
+      <itemizedlist>
+        <listitem>
+          -allow-proxy
+        </listitem>
+      </itemizedlist>
+      I warn you to be sure that you set the option -max-peers to something
+      reasonable if you use -allow-proxy.
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>Timeouts</title>
+
+      <para>Hefur is pretty aggressive on timeouts. By default the peers has
+      only 2 seconds to send its request, which is more than enough for a
+      program. Through you can change this with the option:
+      <itemizedlist>
+        <listitem>
+          -http-timeout &lt;ms timeout&gt;
+        </listitem>
+      </itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>If you discover a hole</title>
+
+      <para>Please report the issue to Alexandre Bique
+      <email>bique.alexandre@gmail.com</email>. I'll do my best to fix it
+      as soon as possible.</para>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Compatibility notes</title>
+
+    <para>
+      As there are some BitTorrent client with pretty simple HTTP client,
+      for /announce and /scrape, the Chunked-Encoding and Keep-Alive are
+    disabled. But it is enabled for /stat and /peers.</para>
+  </sect1>
+
+  <sect1>
+    <title>Internals</title>
+  </sect1>
+</article>
