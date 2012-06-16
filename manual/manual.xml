@@ -67,6 +67,51 @@
     </sect2>
 
     <sect2>
+      <title>Run the server</title>
+
+      <para>To start the server, simply run ./hefurd &lt;options&gt;...</para>
+      <para>Here is a detailed list of available options:
+      <programlisting>
+$ ./hefurd -h
+Usage: ./hefurd [option]...
+  -announce-interval [=15] (the duration in minutes between two announces)
+  -http-cert [=] (the path to the certificate)
+  -http-key [=] (the path to the key)
+  -http-port [=6969] (the port to use, 0 to disable)
+  -http-timeout [=2000] (the number of milliseconds to wait until timeout)
+  -https-port [=6970] (the port to use, 0 to disable)
+  -ipv6 (bind on ipv6 instead of ipv4)
+  -max-peers [=30000] (the maximum number of peers per torrent)
+  -scan-interval [=60] (the duration in seconds between two torrent-dir scans)
+  -scrape-interval [=15] (the duration in minutes between two scrapes)
+  -torrent-dir [=] (the directory containing the allowed torrents, if empty every torrents are allowed)
+  -udp-port [=6969] (the port to use, 0 to disable)
+  -version (display the software's version)
+  -www-dir [=/usr/share/hefurd/www] (the directory containing the web data files (html, css, img))
+
+[log]
+  -log-color (enables colors in log)
+  -log-filter (set the log filtering string: origin:level,... +origin is equivalent to origin:debug, and -origin is equivalent to origin:critical.)
+  -log-level [=warning] (set the minimum log level, possible values are debug, info, warning, error, critical and fatal)
+  -log-origins (lists available origins)
+
+[security]
+  -chroot [=] (the path to chroot)
+  -gid [=] (the new gid)
+  -uid [=] (the new uid)
+
+[tpl]
+  -tpl-debug (helps debugging of template)
+      </programlisting>
+      </para>
+    </sect2>
+
+  </sect1>
+   
+  <sect1>
+    <title>Options</title>
+
+    <sect2>
       <title>The white list</title>
 
       <para>The white list is used defined the set of torrents which
