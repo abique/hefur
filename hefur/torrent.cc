@@ -53,9 +53,9 @@ namespace hefur
         return;
 
       log->debug("remove peer (%v) because %v > %v",
-          peer->addr_.ipStr(),
-          now / m::second,
-          peer->timeout_ts_ / m::second);
+                 peer->addr_.ipStr(),
+                 now / m::second,
+                 peer->timeout_ts_ / m::second);
       removePeer(peer);
     }
   }
@@ -182,8 +182,10 @@ namespace hefur
     uint64_t    length = 0;
     struct stat st;
 
-    if (stat(path.c_str(), &st))
+    if (stat(path.c_str(), &st)) {
+      log->error("stat(%s): %s", path, strerror(errno));
       return nullptr;
+    }
 
     if (st.st_size > 1024 * 1024 * MAX_TORRENT_SIZE) {
       log->error("%s: file too big: %d", path, st.st_size);
@@ -201,14 +203,18 @@ namespace hefur
 
     mb::Decoder dec(lim_input);
     auto token = dec.pull();
-    if (token != mb::kDict)
+    if (token != mb::kDict) {
+      log->error("%s: parse error", path);
       return nullptr;
+    }
 
     while (true)
     {
       token = dec.pull();
-      if (token != mb::kData)
+      if (token != mb::kData) {
+        log->error("%s: parse error", path);
         return nullptr;
+      }
 
       if (dec.getData() != "info")
       {
@@ -221,8 +227,10 @@ namespace hefur
 
       token = dec.pull();
       if (token != mb::kDict ||
-          !mb::copyToken(token, dec, enc))
+          !mb::copyToken(token, dec, enc)) {
+        log->error("%s: parse error", path);
         return nullptr;
+      }
 
       while (true)
       {
@@ -236,8 +244,10 @@ namespace hefur
           {
             token = dec.pull();
             if (token != mb::kData ||
-                !mb::copyToken(token, dec, enc))
+                !mb::copyToken(token, dec, enc)) {
+              log->error("%s: parse error", path);
               return nullptr;
+            }
 
             name = std::move(dec.getData());
             if (name.size() > MAX_TORRENT_NAME) {
@@ -250,8 +260,10 @@ namespace hefur
           {
             token = dec.pull();
             if (token != mb::kInt ||
-                !mb::copyToken(token, dec, enc))
+                !mb::copyToken(token, dec, enc)) {
+              log->error("%s: parse error", path);
               return nullptr;
+            }
 
             length = dec.getInt();
             continue;
@@ -260,8 +272,10 @@ namespace hefur
         else if (token == mb::kEnd)
           break;
 
-        if (!mb::copyValue(dec, enc))
+        if (!mb::copyValue(dec, enc)) {
+          log->error("%s: parse error", path);
           return nullptr;
+        }
       }
 
       InfoSha1 info;
