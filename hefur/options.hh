@@ -7,6 +7,7 @@
 namespace hefur
 {
   extern const uint32_t &    MAX_TORRENT_SIZE;
+  extern const uint32_t &    MAX_SCAN_DEPTH;
   extern const uint32_t &    MAX_PEERS;
   extern const uint32_t &    ANNOUNCE_INTERVAL;
   extern const uint32_t &    SCRAPE_INTERVAL;

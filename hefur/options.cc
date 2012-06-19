@@ -12,6 +12,10 @@ namespace hefur
     "", "max-torrent-size", "the maximum torrent size, in MiB",
     10);
 
+  const uint32_t & MAX_SCAN_DEPTH = *mo::addOption<uint32_t>(
+    "", "max-scan-depth", "the maximum depth while scanning torrent-dir",
+    64);
+
   const uint32_t & ANNOUNCE_INTERVAL = *mo::addOption<uint32_t>(
     "", "announce-interval", "the duration in minutes between two announces",
     15);
