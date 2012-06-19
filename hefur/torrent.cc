@@ -4,6 +4,7 @@
 #include <mimosa/bencode/encoder.hh>
 #include <mimosa/stream/fd-stream.hh>
 #include <mimosa/stream/hash.hh>
+#include <mimosa/stream/limited-stream.hh>
 #include <mimosa/time.hh>
 
 #include "options.hh"
@@ -177,14 +178,28 @@ namespace hefur
   Torrent::Ptr
   Torrent::parseFile(const std::string & path)
   {
-    auto        input  = ms::FdStream::openFile(path.c_str());
     std::string name;
     uint64_t    length = 0;
+    struct stat st;
 
-    if (!input)
+    if (stat(path.c_str(), &st))
       return nullptr;
 
-    mb::Decoder dec(input);
+    if (st.st_size > 1024 * 1024 * MAX_TORRENT_SIZE) {
+      log->error("%s: file too big: %d", path, st.st_size);
+      return nullptr;
+    }
+
+    ms::FdStream::Ptr input = ms::FdStream::openFile(path.c_str());
+    if (!input) {
+      log->error("%s: open error: %s", path, strerror(errno));
+      return nullptr;
+    }
+
+    ms::LimitedStream::Ptr lim_input = new ms::LimitedStream(input);
+    lim_input->setReadLimit(1024 * 1024 * MAX_TORRENT_SIZE);
+
+    mb::Decoder dec(lim_input);
     auto token = dec.pull();
     if (token != mb::kDict)
       return nullptr;
