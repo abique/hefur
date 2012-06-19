@@ -11,7 +11,6 @@
 # include <mimosa/trie.hh>
 
 # include "info-sha1.hh"
-# include "white-list.hh"
 
 namespace hefur
 {
