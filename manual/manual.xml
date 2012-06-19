@@ -206,10 +206,10 @@ Usage: ./hefurd [option]...
       </itemizedlist>
       So if you scan an uncontrolled file system you want to:
       <itemizedlist>
-        <listitem>set the maximum .torrent file size: -max-torrent-file-size
+        <listitem>set the maximum .torrent file size: -max-torrent-size
         &lt;size in MiB&gt;</listitem>
         <listitem>truncate torrent's name longer than X:
-        -max-torrent-name-length &lt;length&gt;</listitem>
+        -max-torrent-name &lt;length&gt;</listitem>
         <listitem>limit the scan depth: -max-scan-depth &lt;depth&gt;</listitem>
         <listitem>limit the number of inodes scanned:
         -max-scan-inodes &lt;nb&gt;</listitem>

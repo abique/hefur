@@ -20,6 +20,10 @@ namespace hefur
     "", "max-scan-depth", "the maximum depth while scanning torrent-dir",
     64);
 
+  const uint32_t & MAX_SCAN_INODES = *mo::addOption<uint32_t>(
+    "", "max-scan-inodes", "the maximum number of inode to scan while scanning torrent-dir",
+    128 * 1024);
+
   const uint32_t & ANNOUNCE_INTERVAL = *mo::addOption<uint32_t>(
     "", "announce-interval", "the duration in minutes between two announces",
     15);
