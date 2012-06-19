@@ -5,6 +5,7 @@
 
 #include "hefur.hh"
 #include "announce-handler.hh"
+#include "options.hh"
 
 namespace hefur
 {
@@ -46,6 +47,17 @@ namespace hefur
     rq->left_ = atoll(request.queryGet("left").c_str());
     rq->addr_ = request.channel().remoteAddr();
     rq->addr_.setPort(port);
+
+    auto & ip = request.queryGet("ip");
+    if (ALLOW_PROXY && !ip.empty()) {
+      struct sockaddr_in  in;
+      struct sockaddr_in6 in6;
+
+      if (inet_pton(AF_INET, ip.c_str(), &in) == 1)
+        rq->addr_ = (const struct ::sockaddr *)&in;
+      else if (inet_pton(AF_INET6, ip.c_str(), &in6) == 1)
+        rq->addr_ = (const struct ::sockaddr *)&in6;
+    }
 
     // We don't want to keep alive here, because there is no need
     // to let the client queue multiple requests and keep the

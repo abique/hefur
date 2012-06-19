@@ -305,10 +305,21 @@ Usage: ./hefurd [option]...
   <sect1>
     <title>Compatibility notes</title>
 
-    <para>
-      As there are some BitTorrent client with pretty simple HTTP client,
+    <sect2>
+      <title>HTTP, Chunked-Encoding and Keep-Alive</title>
+      <para>As there are some BitTorrent client with pretty simple HTTP client,
       for /announce and /scrape, the Chunked-Encoding and Keep-Alive are
-    disabled. But it is enabled for /stat and /peers.</para>
+      disabled. But it is enabled for /stat and /peers.</para>
+    </sect2>
+
+    <sect2>
+      <title>ip set to a DNS name in the HTTP announce request</title>
+      <para>When you use -allow-proxy, the BitTorrent specification says that
+      the peer can set ip to a DNS name in the HTTP announce request. We don't
+      support that, as it requires to send the DNS name back to other peers, and
+      a DNS name can be longuer than an ipv6 address. So to save memory we will
+      just accept IPv4 and IPv6 coded address.</para>
+    </sect2>
   </sect1>
 
   <sect1>

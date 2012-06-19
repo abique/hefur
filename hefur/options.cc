@@ -43,6 +43,8 @@ namespace hefur
     "", "udp-port", "the port to use, 0 to disable", 6969);
   const bool & IPV6 = *mo::addSwitch(
     "", "ipv6", "bind on ipv6 instead of ipv4");
+  const bool & ALLOW_PROXY = *mo::addSwitch(
+    "", "allow-proxy", "allow the peer to specify its address (so usage of proxies)");
 
   const std::string & CERT = *mo::addOption<std::string>(
     "", "http-cert", "the path to the certificate", "");
