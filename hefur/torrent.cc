@@ -239,7 +239,11 @@ namespace hefur
                 !mb::copyToken(token, dec, enc))
               return nullptr;
 
-            name = dec.getData();
+            name = std::move(dec.getData());
+            if (name.size() > MAX_TORRENT_NAME) {
+              name.resize(MAX_TORRENT_NAME);
+              name.append("...", 3);
+            }
             continue;
           }
           else if (!::strcasecmp(dec.getData().c_str(), "length"))
