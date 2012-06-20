@@ -220,7 +220,7 @@ Usage: ./hefurd [option]...
     <sect2>
       <title>The number of peers per torrent</title>
 
-      <para>This problem is very simple, you have an index for all the tracked
+      <para>This problem is very simple: you have an index for all the tracked
       peers, and you store peers. So it take memory. If you do not have an
       limit on the number of peers, you can exceed the available memory.</para>
 
@@ -244,14 +244,18 @@ Usage: ./hefurd [option]...
     <sect2>
       <title>The number of peers from the same IP</title>
 
-      <para>As we index the network address plus the port, a single machine
+      <para>As we index the IP address plus the port, a single machine
       could register many times to the tracker which is fine. But we don't
-      want to let it registers too many times. That's why we have the options:
+      want to let it registers too many times. We could try to use our index
+      to do it, but as with ipv6, users can have a large number of distinct IP
+      address it gets very complicated to find the right network mask. So
+      the simple solution is to do nothing and just rely on the option:
       <itemizedlist>
-        <listitem>
-          -max-peers-per-ip &lt;nb&gt;
-        </listitem>
+        <listitem>-max-peers &lt;nb&gt;</listitem>
       </itemizedlist>
+      Anyway, if someone is going to DDOS your tracker, it may come from a lot
+      of different IPv4 and/or IPv6 address, so using network mask to protect
+      the server is not a final solution.
       </para>
     </sect2>
 
