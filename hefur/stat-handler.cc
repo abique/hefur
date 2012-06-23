@@ -35,10 +35,6 @@ namespace hefur
                   "http://%v:%v/announce", request.host(), request.port()));
     dict.append("tracker_udp", mf::str(
                   "udp://%v:%v", request.host(), UDP_PORT));
-    if (!DISABLE_PEERS_PAGE)
-      dict.append("show_peers", 1);
-    if (!DISABLE_FILE_PAGE)
-      dict.append("show_torrent", 1);
 
     auto torrents = new mt::List("torrents");
     dict.append(torrents);
@@ -69,6 +65,10 @@ namespace hefur
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());
           torrent->append("completed", it->completed());
+          if (!DISABLE_PEERS_PAGE)
+            torrent->append("show_peers", 1);
+          if (!DISABLE_FILE_PAGE)
+            torrent->append("show_torrent", 1);
 
           total_leechers  += it->leechers();
           total_seeders   += it->seeders();

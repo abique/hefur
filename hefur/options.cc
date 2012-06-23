@@ -77,5 +77,5 @@ namespace hefur
   const std::string & WWW_DIR = *mo::addOption<std::string>(
     "", "www-dir",
     "the directory containing the web data files (html, css, img)",
-    "/usr/share/hefurd/www");
+    "/usr/share/hefur/www");
 }
