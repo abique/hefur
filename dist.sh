@@ -12,7 +12,9 @@ rm -rf $DISTDIR
 mkdir $DISTDIR
 
 cp -R $DISTFILES $DISTDIR
-rm $DISTDIR/www/js/{jquery,bootstrap}.js
+rm -rf $DISTDIR/www/bootstrap
+rm -rf $DISTDIR/www/update-bootstrap.sh
+rm -rf $DISTDIR/mimosa/.git*
 
 tar -cvvv $DISTDIR | xz -ze9c >$PROJECT-$VERSION.tar.xz
 rm -rf $DISTDIR
