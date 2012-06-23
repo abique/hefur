@@ -69,12 +69,16 @@
     <sect2>
       <title>Run the server</title>
 
-      <para>To start the server, simply run ./hefurd &lt;options&gt;...</para>
+      <para>To start the server, simply run ./hefurd --torrent-dir my-torrent-dir</para>
       <para>Here is a detailed list of available options:
       <programlisting>
-$ ./hefurd -h
+./hefurd -h
 Usage: ./hefurd [option]...
+  -allow-proxy (allow the peer to specify its address (so usage of proxies))
   -announce-interval [=15] (the duration in minutes between two announces)
+  -disable-file-page (disable the HTTP page /file, which serve .torrent files)
+  -disable-peers-page (disable the HTTP page /peers, which list torrent's peers)
+  -disable-stat-page (disable the HTTP page /stat, which list served torrents)
   -http-cert [=] (the path to the certificate)
   -http-key [=] (the path to the key)
   -http-port [=6969] (the port to use, 0 to disable)
@@ -82,6 +86,10 @@ Usage: ./hefurd [option]...
   -https-port [=6970] (the port to use, 0 to disable)
   -ipv6 (bind on ipv6 instead of ipv4)
   -max-peers [=30000] (the maximum number of peers per torrent)
+  -max-scan-depth [=64] (the maximum depth while scanning torrent-dir)
+  -max-scan-inodes [=131072] (the maximum number of inode to scan while scanning torrent-dir)
+  -max-torrent-name [=64] (the maximum torrent name length to truncate to)
+  -max-torrent-size [=10] (the maximum torrent size, in MiB)
   -scan-interval [=60] (the duration in seconds between two torrent-dir scans)
   -scrape-interval [=15] (the duration in minutes between two scrapes)
   -torrent-dir [=] (the directory containing the allowed torrents, if empty every torrents are allowed)

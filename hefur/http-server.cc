@@ -52,9 +52,12 @@ namespace hefur
         WWW_DIR + "/js/", 1, true));
     dispatch->registerHandler("/announce", new AnnounceHandler);
     dispatch->registerHandler("/scrape", new ScrapeHandler);
-    dispatch->registerHandler("/stat", new StatHandler);
-    dispatch->registerHandler("/peers", new PeersHandler);
-    dispatch->registerHandler("/file/*", new FileHandler);
+    if (!DISABLE_STAT_PAGE)
+      dispatch->registerHandler("/stat", new StatHandler);
+    if (!DISABLE_PEERS_PAGE)
+      dispatch->registerHandler("/peers", new PeersHandler);
+    if (!DISABLE_FILE_PAGE)
+      dispatch->registerHandler("/file/*", new FileHandler);
 
     auto log_handler = new mh::LogHandler;
     log_handler->setHandler(dispatch);

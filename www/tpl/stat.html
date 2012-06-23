@@ -25,12 +25,16 @@
            title="Magnet link">
           <img src="/img/magnet-icon.gif"/>
         </a>
+        {{*show_torrent}}
         <a href="/file/{{name|u}}.torrent?info_hash={{info_sha1|b16}}" title="Torrent">
           <img src="/img/torrent-icon.png"/>
         </a>
+        {{/show_torrent}}
+        {{*show_peers}}
         <a href="/peers?info_hash={{info_sha1|b16}}" title="List peers">
           <img src="/img/peers.png"/>
         </a>
+        {{/show_peers}}
       </td>
       <td>{{info_sha1|b16}}</td>
       <td>{{name}}</td>

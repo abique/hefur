@@ -19,6 +19,9 @@ namespace hefur
   extern const uint16_t &    UDP_PORT;
   extern const bool &        IPV6;
   extern const bool &        ALLOW_PROXY;
+  extern const bool &        DISABLE_PEERS_PAGE;
+  extern const bool &        DISABLE_STAT_PAGE;
+  extern const bool &        DISABLE_FILE_PAGE;
   extern const std::string & CERT;
   extern const std::string & KEY;
   extern const std::string & TORRENT_DIR;

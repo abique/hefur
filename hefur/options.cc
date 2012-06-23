@@ -45,6 +45,12 @@ namespace hefur
     "", "ipv6", "bind on ipv6 instead of ipv4");
   const bool & ALLOW_PROXY = *mo::addSwitch(
     "", "allow-proxy", "allow the peer to specify its address (so usage of proxies)");
+  const bool & DISABLE_PEERS_PAGE = *mo::addSwitch(
+    "", "disable-peers-page", "disable the HTTP page /peers, which list torrent's peers");
+  const bool & DISABLE_STAT_PAGE = *mo::addSwitch(
+    "", "disable-stat-page", "disable the HTTP page /stat, which list served torrents");
+  const bool & DISABLE_FILE_PAGE = *mo::addSwitch(
+    "", "disable-file-page", "disable the HTTP page /file, which serve .torrent files");
 
   const std::string & CERT = *mo::addOption<std::string>(
     "", "http-cert", "the path to the certificate", "");
