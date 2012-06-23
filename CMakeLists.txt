@@ -25,6 +25,4 @@ install(
   DESTINATION share/hefur/www
   PATTERN bootstrap EXCLUDE
   PATTERN *.less EXCLUDE
-  PATTERN update-bootstrap.sh EXCLUDE
-  PATTERN jquery.js EXCLUDE
-  PATTERN bootstrap.js EXCLUDE)
+  PATTERN update-bootstrap.sh EXCLUDE)
