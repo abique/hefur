@@ -26,3 +26,7 @@ install(
   PATTERN bootstrap EXCLUDE
   PATTERN *.less EXCLUDE
   PATTERN update-bootstrap.sh EXCLUDE)
+
+install(
+  FILES manual/manual.html
+  DESTINATION share/doc/hefur/)
