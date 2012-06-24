@@ -106,7 +106,7 @@ namespace hefur
         break;
 
       if ((request->addr_.family_ == AF_INET &&
-           it->addr_.familiy_ == AF_INET6) ||
+           it->addr_.family_ == AF_INET6) ||
           !::memcmp(it->peerid_, request->peerid_, 20) ||
           request->addr_ == it->addr_)
         continue;
