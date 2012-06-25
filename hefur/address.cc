@@ -131,7 +131,7 @@ namespace hefur
     {
       const struct ::sockaddr_in6 * in6 = (const struct ::sockaddr_in6 *)addr;
       // Are we using ipv4 over ipv6
-      if (::memcmp("\0\0\0\0\0\0\0\0\xFF\xFF\xFF\xFF", &in6->sin6_addr, 12))
+      if (::memcmp("\0\0\0\0\0\0\0\0\0\0\xFF\xFF", &in6->sin6_addr, 12))
       {
         family_    = AF_INET6;
         in6_.port_ = in6->sin6_port;
