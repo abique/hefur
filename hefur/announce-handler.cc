@@ -121,7 +121,7 @@ namespace hefur
         if (it->family_ == AF_INET) {
           data.append((const char*)&it->in_.addr_, 4);
           data.append((const char*)&it->in_.port_, 2);
-        } else if (it->family_ != AF_INET6) {
+        } else if (it->family_ == AF_INET6) {
           data6.append((const char*)&it->in6_.addr_, 16);
           data6.append((const char*)&it->in6_.port_, 2);
         }
