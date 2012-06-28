@@ -3,23 +3,23 @@
   <li>Uptime: {{hefur_uptime}}</li>
 </ul>
 
-<table class="table table-striped table-condensed">
+<table class="table table-striped table-condensed" id="torrents-table">
   <thead>
     <tr>
       <th><!-- magnet, torrent, peers --></th>
-      <th>info hash</th>
-      <th>name</th>
-      <th>size</th>
-      <th>seeders</th>
-      <th>leechers</th>
-      <th>completed</th>
+      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 1, function (a, b) { return a > b; })">info hash</th>
+      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 2, function (a, b) { return a > b; })">name</th>
+      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 3, function (a, b) { return parseByteSize(a) < parseByteSize(b); })">size</th>
+      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 4, function (a, b) { return a < b; })">seeders</th>
+      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 5, function (a, b) { return a < b; })">leechers</th>
+      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 6, function (a, b) { return a < b; })">completed</th>
     </tr>
   </thead>
 
-  <tbody>
+  <tbody id="torrents-tbody">
 
     {{*torrents}}
-    <tr>
+    <tr class="torrent-row">
       <td>
         <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&dn={{name|u}}&tr={{tracker_http|u}}&tr={{tracker_udp|u}}"
            title="Magnet link">
@@ -45,6 +45,9 @@
     </tr>
     {{/torrents}}
 
+  </tbody>
+
+  <tfoot>
     <tr>
       <td colspan="3" style="text-align: right;"><strong>Total</strong></td>
       <td>{{total_length}}</td>
@@ -52,6 +55,5 @@
       <td>{{total_leechers}}</td>
       <td>{{total_completed}}</td>
     </tr>
-
-  </tbody>
+  </tfoot>
 </table>
