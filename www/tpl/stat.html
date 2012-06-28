@@ -57,3 +57,8 @@
     </tr>
   </tfoot>
 </table>
+
+<!-- sort torrents by name -->
+<script language="javascript">
+  sortTbody(document.getElementById('torrents-tbody'), 2, function (a, b) { return a > b; })
+</script>
