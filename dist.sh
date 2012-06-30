@@ -3,7 +3,7 @@
 PROJECT=hefur
 VERSION=$(<VERSION)
 DISTDIR=$PROJECT-$VERSION
-DISTFILES='AUTHORS CMakeLists.txt Doxyfile ChangeLog dist.sh LICENSE README hefur VERSION mimosa manual www INSTALL'
+DISTFILES='AUTHORS CMakeLists.txt Doxyfile ChangeLog dist.sh LICENSE README hefur VERSION mimosa manual www INSTALL NEWS'
 
 cd manual && make && cd -
 

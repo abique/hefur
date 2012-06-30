@@ -1,0 +1,21 @@
+Version 0.2
+
+ * sortable table for /stat page
+
+ * add INSTALL file
+
+ * add UDP support
+
+ * add compression support for http pages
+
+ * fix http chunked encoding overhead
+
+Version 0.1
+
+ * http announce and scrape support
+
+ * /stat handler
+
+ * /peers handler
+
+ * white list based on recursive scan of the disk
