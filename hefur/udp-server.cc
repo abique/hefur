@@ -152,7 +152,6 @@ namespace hefur
           return;
         log->error("sendto: unexpected error: %s => dropping packet", strerror(errno));
       }
-      log->debug("sent %d bytes", sbytes);
       sbufs_.pop();
       ::free(sbuf);
     }
@@ -206,7 +205,6 @@ namespace hefur
         break;
 
       default:
-        log->debug("unknown udp action: %d", conn.action_);
         break;
       }
     }
@@ -220,8 +218,6 @@ namespace hefur
   {
     if (size < sizeof (*conn))
       return;
-
-    log->debug("%s", __PRETTY_FUNCTION__);
 
     SendToBuffer * sbuf;
     size_t sbuf_len = sizeof (*sbuf) + sizeof (ConnectResponse);
@@ -244,8 +240,6 @@ namespace hefur
                          socklen_t           addr_len,
                          const std::string & msg)
   {
-    log->debug("%s", __PRETTY_FUNCTION__);
-
     SendToBuffer * sbuf;
     size_t sbuf_len = sizeof (*sbuf) + sizeof (ErrorResponse) + msg.size();
     sbuf = (SendToBuffer *)calloc(sbuf_len, 1);
@@ -298,8 +292,6 @@ namespace hefur
                             struct ::sockaddr * addr,
                             socklen_t           addr_len)
   {
-    log->debug("%s", __PRETTY_FUNCTION__);
-
     if (size < sizeof (*ann) ||
         !checkConnectionId(ann->connection_id_, addr))
       return;
@@ -356,7 +348,6 @@ namespace hefur
         memcpy(&rp2->peers_[i].port_, (const char*)&it->in_.port_, 2);
       }
     }
-    log->info("added %d peers", i);
     sbufs_.push(sbuf);
   }
 
