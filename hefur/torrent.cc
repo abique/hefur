@@ -105,7 +105,8 @@ namespace hefur
       if (response->addrs_.size() >= request->num_want_)
         break;
 
-      if ((request->addr_.family_ == AF_INET &&
+      if (((request->addr_.family_ == AF_INET ||
+            request->skip_ipv6_) &&
            it->addr_.family_ == AF_INET6) ||
           !::memcmp(it->peerid_, request->peerid_, 20) ||
           request->addr_ == it->addr_)

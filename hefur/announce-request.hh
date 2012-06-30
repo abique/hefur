@@ -44,6 +44,7 @@ namespace hefur
     Address       addr_;
     uint16_t      crypto_port_;
     CryptoSupport crypto_support_;
+    bool          skip_ipv6_;
   };
 }
 

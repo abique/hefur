@@ -47,6 +47,7 @@ namespace hefur
     rq->left_ = atoll(request.queryGet("left").c_str());
     rq->addr_ = request.channel().remoteAddr();
     rq->addr_.setPort(port);
+    rq->skip_ipv6_ = false;
 
     auto & ip = request.queryGet("ip");
     if (ALLOW_PROXY && !ip.empty()) {
