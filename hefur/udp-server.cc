@@ -113,7 +113,7 @@ namespace hefur
 
     while (!stop_)
     {
-      timeout = next_timeout_ - m::monotonicTimeCoarse();
+      timeout = (next_timeout_ - m::monotonicTimeCoarse()) / m::millisecond;
       if (timeout <= 0)
       {
         genSecret();
