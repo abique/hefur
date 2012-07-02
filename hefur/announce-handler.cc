@@ -13,6 +13,10 @@ namespace hefur
   AnnounceHandler::handle(mh::RequestReader & request,
                           mh::ResponseWriter & response) const
   {
+    // disable gzip, deflate etc... as some client don't support it
+    // even if they claim to
+    response.content_encoding_ = mh::kCodingIdentity;
+
     AnnounceRequest::Ptr rq = new AnnounceRequest;
 
     auto & peerid = request.queryGet("peer_id");

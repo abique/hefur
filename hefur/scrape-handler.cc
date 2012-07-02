@@ -10,6 +10,10 @@ namespace hefur
   ScrapeHandler::handle(mh::RequestReader & request,
                         mh::ResponseWriter & response) const
   {
+    // disable gzip, deflate etc... as some client don't support it
+    // even if they claim to
+    response.content_encoding_ = mh::kCodingIdentity;
+
     ScrapeRequest::Ptr rq = new ScrapeRequest;
 
     auto & query = request.query();
