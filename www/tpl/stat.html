@@ -7,19 +7,19 @@
   <thead>
     <tr>
       <th><!-- magnet, torrent, peers --></th>
-      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 1, function (a, b) { return a > b; })">info hash</th>
-      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 2, function (a, b) { return a > b; })">name</th>
-      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 3, function (a, b) { return parseByteSize(a) < parseByteSize(b); })">size</th>
-      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 4, function (a, b) { return a < b; })">seeders</th>
-      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 5, function (a, b) { return a < b; })">leechers</th>
-      <th onClick="sortTbody(document.getElementById('torrents-tbody'), 6, function (a, b) { return a < b; })">completed</th>
+      <th onClick="sortTbody('torrents-tbody', sortStr)">info hash</th>
+      <th onClick="sortTbody('torrents-tbody', sortStr)">name</th>
+      <th onClick="sortTbody('torrents-tbody', sortByte)">size</th>
+      <th onClick="sortTbody('torrents-tbody', sortInt)">seeders</th>
+      <th onClick="sortTbody('torrents-tbody', sortInt)">leechers</th>
+      <th onClick="sortTbody('torrents-tbody', sortInt)">completed</th>
     </tr>
   </thead>
 
   <tbody id="torrents-tbody">
 
     {{*torrents}}
-    <tr class="torrent-row">
+    <tr>
       <td>
         <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&dn={{name|u}}&tr={{tracker_udp|u}}&tr={{tracker_http|u}}"
            title="Magnet link">
@@ -60,5 +60,5 @@
 
 <!-- sort torrents by name -->
 <script language="javascript">
-  sortTbody(document.getElementById('torrents-tbody'), 2, function (a, b) { return a > b; })
+  sortTbody2(document.getElementById('torrents-tbody'), 2, sortStr)
 </script>
