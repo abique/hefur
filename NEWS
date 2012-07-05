@@ -1,3 +1,14 @@
+Version 0.3
+
+ * disable compression for /announce and /scrape, as some clients enables
+ HTTP compression but don't support it
+
+ * add built-in log rotation and compression support
+
+ * fix table sorting stuff
+
+ * add table sorting for /peers
+
 Version 0.2
 
  * sortable table for /stat page
