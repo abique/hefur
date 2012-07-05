@@ -15,13 +15,15 @@ function parseByteSize(str) {
     return parseInt(eval(str));
 }
 
-function sortTbody2(tbody, col, lt) {
+function sortTbody2(tbody, col, lt, reverse) {
     rows = []
     for (i = 0; i < tbody.rows.length; ++i)
         rows.push(tbody.rows[i])
     rows = rows.sort(function (a, b) {
         return lt(a.cells[col].textContent, b.cells[col].textContent);
     });
+    if (reverse)
+        rows = rows.reverse();
     while (tbody.rows.length > 0)
         tbody.deleteRow(0);
     for (i in rows)
@@ -30,9 +32,18 @@ function sortTbody2(tbody, col, lt) {
 }
 
 function sortTbody(tbody_id, lt) {
+    src_el = this.event.srcElement;
     tbody = document.getElementById(tbody_id);
-    col = this.event.srcElement.cellIndex;
-    return sortTbody2(tbody, col, lt);
+    col = src_el.cellIndex;
+
+    reverse = false
+    if (tbody.tableSorterCol == col)
+        reverse = tbody.tableSorterReverse ^ true;
+
+    tbody.tableSorterCol     = col;
+    tbody.tableSorterReverse = reverse;
+
+    return sortTbody2(tbody, col, lt, reverse);
 }
 
 function sortStr(a, b) {
@@ -45,15 +56,4 @@ function sortInt(a, b) {
 
 function sortByte(a, b) {
     return parseByteSize(a) < parseByteSize(b);
-}
-
-function getSortMethod(elt) {
-    for (i = 0; i < elt.classList.length; ++i)
-        if (elt.classList.item(i))
-            ;
-}
-
-function tutu() {
-    msg = "col: " + this.event.srcElement.cellIndex;
-    alert(msg);
 }
