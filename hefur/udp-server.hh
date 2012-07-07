@@ -143,7 +143,7 @@ namespace hefur
 
     struct SendToBuffer
     {
-      m::IntrusiveSlistHook<SendToBuffer *> lh_; // list hook
+      m::IntrusiveSlistHook<SendToBuffer> lh_; // list hook
 
       union                     // sendto addr
       {
@@ -183,7 +183,7 @@ namespace hefur
 
     static hefur::AnnounceRequest::Event convert(Event event);
 
-    typedef m::IntrusiveSlist<SendToBuffer, SendToBuffer *, &SendToBuffer::lh_> sbufs_type;
+    typedef m::IntrusiveSlist<SendToBuffer, &SendToBuffer::lh_> sbufs_type;
 
     bool       stop_;
     m::Thread  thread_;
