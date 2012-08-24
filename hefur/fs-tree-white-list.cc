@@ -7,6 +7,14 @@
 #include "options.hh"
 #include "log.hh"
 
+#ifndef FNM_CASEFOLD
+# define FNM_CASEFOLD 0
+#endif
+
+#ifndef FNM_IGNORECASE
+# define FNM_IGNORECASE 0
+#endif
+
 namespace hefur
 {
   FsTreeWhiteList::FsTreeWhiteList(const std::string & root,
@@ -35,7 +43,7 @@ namespace hefur
           return false;
         }
 
-        if (::fnmatch("*.torrent", path.c_str(), FNM_CASEFOLD))
+        if (::fnmatch("*.torrent", path.c_str(), FNM_CASEFOLD | FNM_IGNORECASE))
           return true;
 
         auto tdb = Hefur::instance().torrentDb();

@@ -13,6 +13,10 @@
 #include "log.hh"
 #include "options.hh"
 
+#ifndef MSG_NOSIGNAL
+# define MSG_NOSIGNAL 0
+#endif
+
 namespace hefur
 {
   UdpServer::UdpServer()
@@ -190,7 +194,7 @@ namespace hefur
       if ((size_t)rbytes < sizeof (conn))
         continue;
 
-      conn.action_ = be32toh(conn.action_);
+      conn.action_ = ntohl(conn.action_);
       switch (conn.action_) {
       case kConnect:
         handleConnect(&conn, rbytes, &addr, solen);
@@ -230,7 +234,7 @@ namespace hefur
     ConnectResponse * rp = (ConnectResponse *)sbuf->data_;
     rp->connection_id_   = connectionId(secrets_[0], addr);
     rp->transaction_id_  = conn->transaction_id_;
-    rp->action_          = htobe32(kConnect);
+    rp->action_          = htonl(kConnect);
     sbufs_.push(sbuf);
   }
 
@@ -250,7 +254,7 @@ namespace hefur
     ::memcpy(&sbuf->addr_, addr, addr_len);
     ErrorResponse * rp = (ErrorResponse *)sbuf->data_;
     rp->transaction_id_  = conn->transaction_id_;
-    rp->action_          = htobe32(kError);
+    rp->action_          = htonl(kError);
     ::memcpy(rp->msg_, msg.data(), msg.size());
     sbufs_.push(sbuf);
   }
@@ -300,14 +304,14 @@ namespace hefur
 
     memcpy(rq->peerid_, ann->peer_id_, 20);
     memcpy(rq->info_sha1_.bytes_, ann->info_hash_, 20);
-    rq->downloaded_ = be64toh(ann->downloaded_);
-    rq->uploaded_   = be64toh(ann->uploaded_);
-    rq->left_       = be64toh(ann->left_);
-    rq->event_      = convert((Event)be32toh(ann->event_));
-    rq->num_want_   = be32toh(ann->num_want_);
+    rq->downloaded_ = ntohll(ann->downloaded_);
+    rq->uploaded_   = ntohll(ann->uploaded_);
+    rq->left_       = ntohll(ann->left_);
+    rq->event_      = convert((Event)ntohl(ann->event_));
+    rq->num_want_   = ntohl(ann->num_want_);
     rq->skip_ipv6_  = true;
     rq->addr_       = addr;
-    rq->addr_.setPort(be16toh(ann->port_));
+    rq->addr_.setPort(ntohs(ann->port_));
     if (ALLOW_PROXY)
     {
       rq->addr_.family_ = AF_INET;
@@ -336,10 +340,10 @@ namespace hefur
     ::memcpy(&sbuf->addr_, addr, addr_len);
     AnnounceResponse * rp2 = (AnnounceResponse *)sbuf->data_;
     rp2->transaction_id_   = ann->transaction_id_;
-    rp2->action_           = htobe32(kAnnounce);
-    rp2->interval_         = htobe32(rp->interval_);
-    rp2->leechers_         = htobe32(rp->nleechers_);
-    rp2->seeders_          = htobe32(rp->nseeders_);
+    rp2->action_           = htonl(kAnnounce);
+    rp2->interval_         = htonl(rp->interval_);
+    rp2->leechers_         = htonl(rp->nleechers_);
+    rp2->seeders_          = htonl(rp->nseeders_);
     int i = 0;
     for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it, ++i)
     {
@@ -388,14 +392,14 @@ namespace hefur
     ::memcpy(&sbuf->addr_, addr, addr_len);
     ScrapeResponse * rp2 = (ScrapeResponse *)sbuf->data_;
     rp2->transaction_id_ = scrape->transaction_id_;
-    rp2->action_         = htobe32(kScrape);
+    rp2->action_         = htonl(kScrape);
 
     int i = 0;
     for (auto it = rp->items_.begin(); it != rp->items_.end(); ++it, ++i)
     {
-      rp2->torrents_[i].seeders_   = htobe32(it->nseeders_);
-      rp2->torrents_[i].leechers_  = htobe32(it->nleechers_);
-      rp2->torrents_[i].completed_ = htobe32(it->ndownloaded_);
+      rp2->torrents_[i].seeders_   = htonl(it->nseeders_);
+      rp2->torrents_[i].leechers_  = htonl(it->nleechers_);
+      rp2->torrents_[i].completed_ = htonl(it->ndownloaded_);
     }
     sbufs_.push(sbuf);
   }

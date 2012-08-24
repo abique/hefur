@@ -27,7 +27,7 @@ target_link_libraries(hefurd
   mimosa-fs
   mimosa-bencode
   mimosa
-  gnutls
+  ${GNUTLS_LIBRARY}
   pthread
   rt
 )
