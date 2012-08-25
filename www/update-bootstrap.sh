@@ -6,6 +6,7 @@ LESSC=$HOME/.npm/bin/lessc
 cp hefur.less bootstrap/less/ &&
 cd bootstrap/less &&
 $LESSC hefur.less >../../css/hefur.css &&
-cd ../..
+cd ../.. &&
+rm bootstrap/less/hefur.less
 
 # wget http://code.jquery.com/jquery-1.7.2.min.js -O js/jquery.min.js
