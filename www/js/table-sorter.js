@@ -47,13 +47,17 @@ function sortTbody(tbody_id, lt) {
 }
 
 function sortStr(a, b) {
-    return a > b;
+    if (a < b)
+        return 1;
+    if (a == b)
+        return 0;
+    return -1;
 }
 
 function sortInt(a, b) {
-    return parseInt(a) < parseInt(b);
+    return parseInt(a) - parseInt(b);
 }
 
 function sortByte(a, b) {
-    return parseByteSize(a) < parseByteSize(b);
+    return parseByteSize(a) - parseByteSize(b);
 }
