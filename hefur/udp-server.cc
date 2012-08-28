@@ -1,6 +1,27 @@
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <inttypes.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <poll.h>
+
+#if defined(__linux__)
+# include <endian.h>
+#elif defined(__FreeBSD__) || defined(__NetBSD__)
+# include <sys/endian.h>
+#elif defined(__OpenBSD__)
+# include <sys/types.h>
+# define be16toh(x) betoh16(x)
+# define be32toh(x) betoh32(x)
+# define be64toh(x) betoh64(x)
+#elif defined(_AIX)
+# define be16toh(x) ntohs(x)
+# define be32toh(x) ntohl(x)
+# define be64toh(x) ntohll(x)
+# define htobe16(x) htons(x)
+# define htobe32(x) htonl(x)
+# define htobe64(x) htonll(x)
+#endif
 
 #include <cstring>
 #include <cerrno>
@@ -67,7 +88,7 @@ namespace hefur
       ::memset(&addr, 0, sizeof (addr));
       addr.sin6_addr   = ::in6addr_any;
       addr.sin6_family = AF_INET6;
-      addr.sin6_port   = htons(port);
+      addr.sin6_port   = htobe16(port);
       if (::bind(fd_, (struct ::sockaddr *)&addr, sizeof (addr)))
       {
         log->error("failed to bind udp socket: %s", strerror(errno));
@@ -80,7 +101,7 @@ namespace hefur
       ::memset(&addr, 0, sizeof (addr));
       addr.sin_addr.s_addr = INADDR_ANY;
       addr.sin_family      = AF_INET;
-      addr.sin_port        = htons(port);
+      addr.sin_port        = htobe16(port);
       if (::bind(fd_, (struct ::sockaddr *)&addr, sizeof (addr)))
       {
         log->error("failed to bind udp socket: %s", strerror(errno));
@@ -194,7 +215,7 @@ namespace hefur
       if ((size_t)rbytes < sizeof (conn))
         continue;
 
-      conn.action_ = ntohl(conn.action_);
+      conn.action_ = be32toh(conn.action_);
       switch (conn.action_) {
       case kConnect:
         handleConnect(&conn, rbytes, &addr, solen);
@@ -234,7 +255,7 @@ namespace hefur
     ConnectResponse * rp = (ConnectResponse *)sbuf->data_;
     rp->connection_id_   = connectionId(secrets_[0], addr);
     rp->transaction_id_  = conn->transaction_id_;
-    rp->action_          = htonl(kConnect);
+    rp->action_          = htobe32(kConnect);
     sbufs_.push(sbuf);
   }
 
@@ -254,7 +275,7 @@ namespace hefur
     ::memcpy(&sbuf->addr_, addr, addr_len);
     ErrorResponse * rp = (ErrorResponse *)sbuf->data_;
     rp->transaction_id_  = conn->transaction_id_;
-    rp->action_          = htonl(kError);
+    rp->action_          = htobe32(kError);
     ::memcpy(rp->msg_, msg.data(), msg.size());
     sbufs_.push(sbuf);
   }
@@ -304,14 +325,14 @@ namespace hefur
 
     memcpy(rq->peerid_, ann->peer_id_, 20);
     memcpy(rq->info_sha1_.bytes_, ann->info_hash_, 20);
-    rq->downloaded_ = ntohll(ann->downloaded_);
-    rq->uploaded_   = ntohll(ann->uploaded_);
-    rq->left_       = ntohll(ann->left_);
-    rq->event_      = convert((Event)ntohl(ann->event_));
-    rq->num_want_   = ntohl(ann->num_want_);
+    rq->downloaded_ = be64toh(ann->downloaded_);
+    rq->uploaded_   = be64toh(ann->uploaded_);
+    rq->left_       = be64toh(ann->left_);
+    rq->event_      = convert((Event)be32toh(ann->event_));
+    rq->num_want_   = be32toh(ann->num_want_);
     rq->skip_ipv6_  = true;
     rq->addr_       = addr;
-    rq->addr_.setPort(ntohs(ann->port_));
+    rq->addr_.setPort(be16toh(ann->port_));
     if (ALLOW_PROXY)
     {
       rq->addr_.family_ = AF_INET;
@@ -340,10 +361,10 @@ namespace hefur
     ::memcpy(&sbuf->addr_, addr, addr_len);
     AnnounceResponse * rp2 = (AnnounceResponse *)sbuf->data_;
     rp2->transaction_id_   = ann->transaction_id_;
-    rp2->action_           = htonl(kAnnounce);
-    rp2->interval_         = htonl(rp->interval_);
-    rp2->leechers_         = htonl(rp->nleechers_);
-    rp2->seeders_          = htonl(rp->nseeders_);
+    rp2->action_           = htobe32(kAnnounce);
+    rp2->interval_         = htobe32(rp->interval_);
+    rp2->leechers_         = htobe32(rp->nleechers_);
+    rp2->seeders_          = htobe32(rp->nseeders_);
     int i = 0;
     for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it, ++i)
     {
@@ -392,14 +413,14 @@ namespace hefur
     ::memcpy(&sbuf->addr_, addr, addr_len);
     ScrapeResponse * rp2 = (ScrapeResponse *)sbuf->data_;
     rp2->transaction_id_ = scrape->transaction_id_;
-    rp2->action_         = htonl(kScrape);
+    rp2->action_         = htobe32(kScrape);
 
     int i = 0;
     for (auto it = rp->items_.begin(); it != rp->items_.end(); ++it, ++i)
     {
-      rp2->torrents_[i].seeders_   = htonl(it->nseeders_);
-      rp2->torrents_[i].leechers_  = htonl(it->nleechers_);
-      rp2->torrents_[i].completed_ = htonl(it->ndownloaded_);
+      rp2->torrents_[i].seeders_   = htobe32(it->nseeders_);
+      rp2->torrents_[i].leechers_  = htobe32(it->nleechers_);
+      rp2->torrents_[i].completed_ = htobe32(it->ndownloaded_);
     }
     sbufs_.push(sbuf);
   }
