@@ -31,8 +31,8 @@ function sortTbody2(tbody, col, lt, reverse) {
     return rows;
 }
 
-function sortTbody(tbody_id, lt) {
-    src_el = this.event.srcElement;
+function sortTbody(src_el, tbody_id, lt) {
+    //src_el = this.event.srcElement;
     tbody = document.getElementById(tbody_id);
     col = src_el.cellIndex;
 
@@ -47,7 +47,7 @@ function sortTbody(tbody_id, lt) {
 }
 
 function sortStr(a, b) {
-    if (a < b)
+    if (a > b)
         return 1;
     if (a == b)
         return 0;
