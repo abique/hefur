@@ -4,6 +4,7 @@ add_executable(hefurd
   address.cc
   announce-handler.cc
   announce-request.cc
+  control-server.cc
   file-handler.cc
   fs-tree-white-list.cc
   hefur.cc

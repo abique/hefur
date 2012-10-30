@@ -1,3 +1,9 @@
+Version 0.4
+
+ * do not set SCHED_FIFO, it is up to the user to do it via chrt(1)
+
+ * add a control interface as a unix socket and a new binary: hefurctl
+
 Version 0.3
 
  * disable compression for /announce and /scrape, as some clients enables

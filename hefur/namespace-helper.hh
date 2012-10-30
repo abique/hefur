@@ -7,6 +7,7 @@ namespace mimosa
   namespace format {}
   namespace http {}
   namespace log {}
+  namespace net {}
   namespace options {}
   namespace stream {}
   namespace tpl {}
@@ -19,6 +20,7 @@ namespace hefur
   namespace mf = mimosa::format;
   namespace mh = mimosa::http;
   namespace ml = mimosa::log;
+  namespace mn = mimosa::net;
   namespace mo = mimosa::options;
   namespace ms = mimosa::stream;
   namespace mt = mimosa::tpl;

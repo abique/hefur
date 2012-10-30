@@ -9,6 +9,7 @@
 # include "torrent-db.hh"
 # include "udp-server.hh"
 # include "http-server.hh"
+# include "control-server.hh"
 
 namespace hefur
 {
@@ -30,12 +31,13 @@ namespace hefur
     inline TorrentDb::Ptr torrentDb() { return tdb_; }
 
   private:
-    m::Future<bool>   stop_;
-    TorrentDb::Ptr    tdb_;
-    FsTreeWhiteList * wl_;
-    HttpServer *      http_server_;
-    HttpServer *      https_server_;
-    UdpServer *       udp_server_;
+    m::Future<bool>    stop_;
+    TorrentDb::Ptr     tdb_;
+    FsTreeWhiteList *  wl_;
+    HttpServer *       http_server_;
+    HttpServer *       https_server_;
+    UdpServer *        udp_server_;
+    ControlServer *    control_server_;
   };
 }
 

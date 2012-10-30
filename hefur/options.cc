@@ -78,4 +78,9 @@ namespace hefur
     "", "www-dir",
     "the directory containing the web data files (html, css, img)",
     "/usr/share/hefur/www");
+
+  const std::string & CONTROL_SOCKET = *mo::addOption<std::string>(
+    "", "control-socket",
+    "the path to the control socket",
+    "/var/run/hefur/control");
 }

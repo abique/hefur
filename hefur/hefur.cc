@@ -13,7 +13,8 @@ namespace hefur
       wl_(nullptr),
       http_server_(nullptr),
       https_server_(nullptr),
-      udp_server_(nullptr)
+      udp_server_(nullptr),
+      control_server_(nullptr)
   {
     instance_ = this;
 
@@ -37,11 +38,18 @@ namespace hefur
       https_server_ = new HttpServer;
       https_server_->start(HTTP_PORT, IPV6, CERT, KEY);
     }
+
+    if (!CONTROL_SOCKET.empty())
+    {
+      control_server_ = new ControlServer;
+      control_server_->start(CONTROL_SOCKET);
+    }
   }
 
   Hefur::~Hefur()
   {
     stop_.get();
+    delete control_server_;
     delete udp_server_;
     delete https_server_;
     delete http_server_;

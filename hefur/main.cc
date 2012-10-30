@@ -37,9 +37,11 @@ int main(int argc, char **argv)
   // start hefur
   hefur::TemplateFactory::instance();
   hefur::Hefur::instance().run();
+
+  // release everything
   hefur::Hefur::release();
   hefur::TemplateFactory::release();
-
   mimosa::deinit();
+
   return 0;
 }
