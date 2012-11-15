@@ -125,7 +125,9 @@ Usage: ./hefurd [option]...
       <para>The white list is used defined the set of torrents which
       are tracked by the tracker. The way it works is pretty simple:
       you specify a path, and Hefur will periodically scan it recursively
-      to find .torrent files and add them to the tracker.</para>
+      to find .torrent files and add them to the tracker. When a torrent
+      file is removed from the torrent directory, then it will be removed
+      from the white list.</para>
 
       <para>The white list is configured by the following options:
       <itemizedlist>
