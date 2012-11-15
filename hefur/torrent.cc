@@ -271,6 +271,62 @@ namespace hefur
             length = dec.getInt();
             continue;
           }
+          else if (!::strcasecmp(dec.getData().c_str(), "files"))
+          {
+            token = dec.pull();
+            if (token != mb::kList ||
+                !mb::copyToken(token, dec, enc)) {
+              log->error("%s: parse error5", path);
+              return nullptr;
+            }
+
+            while (true)
+            {
+              token = dec.pull();
+              if (!mb::copyToken(token, dec, enc)) {
+                log->error("%s: parse error6", path);
+                return nullptr;
+              }
+
+              if (token == mb::kEnd)
+                break;
+
+              if (token != mb::kDict) {
+                log->error("%s: parse error4", path);
+                return nullptr;
+              }
+
+              while (true)
+              {
+                token = dec.pull();
+                if (!mb::copyToken(token, dec, enc))
+                  return nullptr;
+
+                if (token == mb::kEnd)
+                  break;
+
+                if (token != mb::kData) {
+                  log->error("%s: parse error3", path);
+                  return nullptr;
+                }
+
+                if (!strcasecmp(dec.getData().c_str(), "length"))
+                {
+                  token = dec.pull();
+                  if (token != mb::kInt ||
+                      !mb::copyToken(token, dec, enc)) {
+                    log->error("%s: parse error2", path);
+                    return nullptr;
+                  }
+                  length += dec.getInt();
+                } else if (!mb::copyValue(dec, enc)) {
+                  log->error("%s: parse error1", path);
+                  return nullptr;
+                }
+              }
+            }
+            continue;
+          }
         }
         else if (token == mb::kEnd)
           break;
