@@ -1,0 +1,33 @@
+package hefur.pb;
+
+enum Status
+{
+  kOk = 0;
+  kNotFound = 1;
+  kInternalError = 2;
+}
+
+message StatusMsg
+{
+  required Status status = 1;
+}
+
+message Void
+{
+}
+
+message Torrent
+{
+  required bytes  info_hash = 1;
+  optional uint64 length    = 2;
+  optional bytes  name      = 3;
+  optional bytes  path      = 4;
+}
+
+service Control
+{
+  rpc addTorrent(Torrent) returns (StatusMsg);
+  rpc removeTorrent(Torrent) returns (StatusMsg);
+  rpc rotateLogs(Void) returns (StatusMsg);
+  rpc quit(Void) returns (StatusMsg);
+}

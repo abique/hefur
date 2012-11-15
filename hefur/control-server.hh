@@ -3,7 +3,7 @@
 
 # include <mimosa/string-ref.hh>
 # include <mimosa/thread.hh>
-# include <mimosa/net/server.hh>
+# include <mimosa/rpc/server.hh>
 
 namespace hefur
 {
@@ -11,11 +11,9 @@ namespace hefur
    * This is a server which accepts commands from a unix socket,
    * making it possible to control Hefur.
    */
-  class ControlServer : public mn::Server
+  class ControlServer : public m::RefCountable<ControlServer>
   {
   public:
-    MIMOSA_DEF_PTR(ControlServer);
-
     ControlServer();
     ~ControlServer();
 
@@ -34,16 +32,17 @@ namespace hefur
     void stop();
 
     void handleCommand(m::StringRef cmd) const;
+    void cmdRemoveTorrent(m::StringRef cmd) const;
+    void cmdCleanupTorrents(m::StringRef cmd) const;
+    void cmdQuit(m::StringRef cmd) const;
 
   private:
     void run();
 
-    virtual void serve(int                fd,
-                       const ::sockaddr * address,
-                       socklen_t          address_len) const override;
-
     bool            stop_;
     m::Thread       thread_;
+    std::string     socket_path_;
+    mr::Server::Ptr server_;
   };
 }
 

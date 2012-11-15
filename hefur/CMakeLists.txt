@@ -1,10 +1,15 @@
 add_definitions(-include ${CMAKE_CURRENT_SOURCE_DIR}/namespace-helper.hh)
 
+mimosa_protoc(hefur)
+
+add_library(hefur-proto hefur.pb.cc)
+
 add_executable(hefurd
   address.cc
   announce-handler.cc
   announce-request.cc
   control-server.cc
+  control-service.cc
   file-handler.cc
   fs-tree-white-list.cc
   hefur.cc
@@ -23,6 +28,8 @@ add_executable(hefurd
 )
 
 target_link_libraries(hefurd
+  hefur-proto
+  mimosa-rpc
   mimosa-tpl
   mimosa-http
   mimosa-fs
@@ -33,7 +40,19 @@ target_link_libraries(hefurd
   rt
 )
 
-install(TARGETS hefurd
+add_executable(hefurctl
+  hefurctl.cc)
+
+target_link_libraries(hefurctl
+  hefur-proto
+  mimosa-rpc
+  mimosa
+  ${GNUTLS_LIBRARY}
+  pthread
+  rt
+)
+
+install(TARGETS hefurd hefurctl
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)

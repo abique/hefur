@@ -9,6 +9,7 @@ namespace mimosa
   namespace log {}
   namespace net {}
   namespace options {}
+  namespace rpc {}
   namespace stream {}
   namespace tpl {}
 }
@@ -22,6 +23,7 @@ namespace hefur
   namespace ml = mimosa::log;
   namespace mn = mimosa::net;
   namespace mo = mimosa::options;
+  namespace mr = mimosa::rpc;
   namespace ms = mimosa::stream;
   namespace mt = mimosa::tpl;
 }

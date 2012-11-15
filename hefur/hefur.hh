@@ -37,7 +37,7 @@ namespace hefur
     HttpServer *       http_server_;
     HttpServer *       https_server_;
     UdpServer *        udp_server_;
-    ControlServer *    control_server_;
+    ControlServer::Ptr control_server_;
   };
 }
 

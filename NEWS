@@ -1,8 +1,20 @@
 Version 0.4
 
- * do not set SCHED_FIFO, it is up to the user to do it via chrt(1)
+ * replace '&' by '&amp;' in stat.html
 
- * add a control interface as a unix socket and a new binary: hefurctl
+ * do not set SCHED_FIFO, it is up to the user to do it via chrt(1), or in
+   systemd with ``CPUSchedulingPolicy=fifo''. Yet batch is now recommended.
+
+ * add a control interface as a unix socket.
+
+ * log an error when we fail to load a template file from the www-dir.
+
+ * check that the torrents added by the directory scan are still on the disk,
+   if not, then remove them from the list of torrents.
+
+ * fix the length of multi-files torrents.
+
+ * update the manual.
 
 Version 0.3
 

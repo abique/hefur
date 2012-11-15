@@ -1,15 +1,20 @@
-#include <mimosa/stream/buffered-stream.hh>
-#include <mimosa/stream/net-fd-stream.hh>
+#include <mimosa/rpc/service-map.hh>
 
 #include "control-server.hh"
+#include "control-service.hh"
+#include "log.hh"
+#include "hefur.pb.h"
 
 namespace hefur
 {
   ControlServer::ControlServer()
-    : mn::Server(),
-      stop_(false),
-      thread_([this] { this->run(); })
+    : stop_(false),
+      thread_([this] { this->run(); }),
+      server_(new mr::Server)
   {
+    mr::ServiceMap::Ptr sm = new mr::ServiceMap;
+    sm->add(new ControlService);
+    server_->setServiceMap(sm.get());
   }
 
   ControlServer::~ControlServer()
@@ -20,9 +25,12 @@ namespace hefur
   bool
   ControlServer::start(const std::string & socket_path)
   {
-    if (!listenUnix(socket_path))
+    socket_path_ = socket_path;
+
+    if (!server_->listenUnix(socket_path))
       return false;
 
+    stop_ = false;
     thread_.start();
     return true;
   }
@@ -31,40 +39,16 @@ namespace hefur
   ControlServer::run()
   {
     while (!stop_)
-      serveOne(0, true);
-  }
-
-  void
-  ControlServer::serve(int                fd,
-                       const ::sockaddr * /*address*/,
-                       socklen_t          /*address_len*/) const
-  {
-    ms::NetFdStream::Ptr    net_stream      = new ms::NetFdStream(fd, true);
-    ms::BufferedStream::Ptr buffered_stream = new ms::BufferedStream(net_stream);
-
-    while (true) {
-      bool            found  = false;
-      ms::Buffer::Ptr buffer = buffered_stream->readUntil("\n", 8192, &found);
-
-      if (!buffer || !found)
-        return;
-
-      handleCommand(m::StringRef(buffer->data(), buffer->size()));
-    }
+      server_->serveOne(0, false);
   }
 
   void
   ControlServer::stop()
   {
     stop_ = true;
-    close();
+    server_->close();
+    ::unlink(socket_path_.c_str());
     thread_.cancel();
     thread_.join();
-  }
-
-  void
-  ControlServer::handleCommand(m::StringRef cmd) const
-  {
-    // XXX
   }
 }

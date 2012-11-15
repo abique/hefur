@@ -49,7 +49,6 @@ namespace hefur
   Hefur::~Hefur()
   {
     stop_.get();
-    delete control_server_;
     delete udp_server_;
     delete https_server_;
     delete http_server_;
