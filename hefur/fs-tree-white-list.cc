@@ -54,10 +54,30 @@ namespace hefur
   }
 
   void
+  FsTreeWhiteList::check()
+  {
+    std::vector<m::StringRef> keys;
+    auto db = Hefur::instance().torrentDb();
+    m::SharedMutex::Locker locker(db->torrents_lock_);
+    db->torrents_.foreach([this, &keys] (Torrent::Ptr torrent) {
+        if (::strncmp(torrent->path().c_str(), root_.c_str(), root_.size()))
+          return;
+
+        struct ::stat st;
+        if (::stat(torrent->path().c_str(), &st) && errno == ENOENT)
+          keys.push_back(torrent->key());
+      });
+
+    for (auto it = keys.begin(); it != keys.end(); ++it)
+      db->torrents_.erase(*it);
+  }
+
+  void
   FsTreeWhiteList::loopScan()
   {
     do {
       scan();
+      check();
     } while (!stop_.timedWait(m::time() + rescan_interval_));
   }
 }

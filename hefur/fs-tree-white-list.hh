@@ -30,6 +30,7 @@ namespace hefur
      * When a .torrent is found, call TorrentDb::addTorrent().
      */
     void scan();
+    void check();
 
   private:
     /**

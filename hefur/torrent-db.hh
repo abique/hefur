@@ -17,6 +17,7 @@ namespace hefur
 {
   class StatHandler;
   class PeersHandler;
+  class FsTreeWhiteList;
 
   /**
    * This is the "in memory" torrent database.
@@ -63,6 +64,7 @@ namespace hefur
     friend class StatHandler;
     friend class PeersHandler;
     friend class FileHandler;
+    friend class FsTreeWhiteList;
 
     /** helper to use torrent->key() as a key for the trie */
     static inline m::StringRef torrentKey(Torrent::Ptr torrent) {
@@ -77,7 +79,7 @@ namespace hefur
     m::Future<bool> cleanup_stop_;
     m::Thread       cleanup_thread_;
     m::SharedMutex  torrents_lock_;
-    torrents_type        torrents_;
+    torrents_type   torrents_;
   };
 }
 
