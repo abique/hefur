@@ -6,6 +6,7 @@
 #include <mimosa/stream/hash.hh>
 #include <mimosa/stream/limited-stream.hh>
 #include <mimosa/time.hh>
+#include <mimosa/bittorrent/torrent-parser.hh>
 
 #include "options.hh"
 #include "torrent.hh"
@@ -181,165 +182,14 @@ namespace hefur
   Torrent::Ptr
   Torrent::parseFile(const std::string & path)
   {
-    std::string name;
-    uint64_t    length = 0;
-    struct stat st;
+    m::bittorrent::TorrentParser p;
 
-    if (stat(path.c_str(), &st)) {
-      log->error("stat(%s): %s", path, strerror(errno));
+    if (!p.parseFile(path))
       return nullptr;
-    }
 
-    if (st.st_size > 1024 * 1024 * MAX_TORRENT_SIZE) {
-      log->error("%s: file too big: %d", path, st.st_size);
-      return nullptr;
-    }
-
-    ms::FdStream::Ptr input = ms::FdStream::openFile(path.c_str());
-    if (!input) {
-      log->error("%s: open error: %s", path, strerror(errno));
-      return nullptr;
-    }
-
-    ms::LimitedStream::Ptr lim_input = new ms::LimitedStream(input);
-    lim_input->setReadLimit(1024 * 1024 * MAX_TORRENT_SIZE);
-
-    mb::Decoder dec(lim_input);
-    auto token = dec.pull();
-    if (token != mb::kDict) {
-      log->error("%s: parse error", path);
-      return nullptr;
-    }
-
-    while (true)
-    {
-      token = dec.pull();
-      if (token != mb::kData) {
-        log->error("%s: parse error", path);
-        return nullptr;
-      }
-
-      if (dec.getData() != "info")
-      {
-        dec.eatValue();
-        continue;
-      }
-
-      ms::Sha1::Ptr sha1(new ms::Sha1);
-      mb::Encoder enc(sha1);
-
-      token = dec.pull();
-      if (token != mb::kDict ||
-          !mb::copyToken(token, dec, enc)) {
-        log->error("%s: parse error", path);
-        return nullptr;
-      }
-
-      while (true)
-      {
-        token = dec.pull();
-        if (!mb::copyToken(token, dec, enc))
-          return nullptr;
-
-        if (token == mb::kData)
-        {
-          if (!::strcasecmp(dec.getData().c_str(), "name"))
-          {
-            token = dec.pull();
-            if (token != mb::kData ||
-                !mb::copyToken(token, dec, enc)) {
-              log->error("%s: parse error", path);
-              return nullptr;
-            }
-
-            name = std::move(dec.getData());
-            if (name.size() > MAX_TORRENT_NAME) {
-              name.resize(MAX_TORRENT_NAME);
-              name.append("...", 3);
-            }
-            continue;
-          }
-          else if (!::strcasecmp(dec.getData().c_str(), "length"))
-          {
-            token = dec.pull();
-            if (token != mb::kInt ||
-                !mb::copyToken(token, dec, enc)) {
-              log->error("%s: parse error", path);
-              return nullptr;
-            }
-
-            length = dec.getInt();
-            continue;
-          }
-          else if (!::strcasecmp(dec.getData().c_str(), "files"))
-          {
-            token = dec.pull();
-            if (token != mb::kList ||
-                !mb::copyToken(token, dec, enc)) {
-              log->error("%s: parse error5", path);
-              return nullptr;
-            }
-
-            while (true)
-            {
-              token = dec.pull();
-              if (!mb::copyToken(token, dec, enc)) {
-                log->error("%s: parse error6", path);
-                return nullptr;
-              }
-
-              if (token == mb::kEnd)
-                break;
-
-              if (token != mb::kDict) {
-                log->error("%s: parse error4", path);
-                return nullptr;
-              }
-
-              while (true)
-              {
-                token = dec.pull();
-                if (!mb::copyToken(token, dec, enc))
-                  return nullptr;
-
-                if (token == mb::kEnd)
-                  break;
-
-                if (token != mb::kData) {
-                  log->error("%s: parse error3", path);
-                  return nullptr;
-                }
-
-                if (!strcasecmp(dec.getData().c_str(), "length"))
-                {
-                  token = dec.pull();
-                  if (token != mb::kInt ||
-                      !mb::copyToken(token, dec, enc)) {
-                    log->error("%s: parse error2", path);
-                    return nullptr;
-                  }
-                  length += dec.getInt();
-                } else if (!mb::copyValue(dec, enc)) {
-                  log->error("%s: parse error1", path);
-                  return nullptr;
-                }
-              }
-            }
-            continue;
-          }
-        }
-        else if (token == mb::kEnd)
-          break;
-
-        if (!mb::copyValue(dec, enc)) {
-          log->error("%s: parse error", path);
-          return nullptr;
-        }
-      }
-
-      InfoSha1 info;
-      memcpy(info.bytes_, sha1->digest(), 20);
-      return new Torrent(info, name, path, length);
-    }
+    auto desc = p.result();
+    InfoSha1 info;
+    memcpy(info.bytes_, desc->info_hash_.bytes_, 20);
+    return new Torrent(info, desc->name_, path, desc->length_);
   }
 }

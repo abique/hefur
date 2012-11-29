@@ -33,6 +33,7 @@ target_link_libraries(hefurd
   mimosa-tpl
   mimosa-http
   mimosa-fs
+  mimosa-bittorrent
   mimosa-bencode
   mimosa
   ${GNUTLS_LIBRARY}
