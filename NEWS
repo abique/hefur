@@ -7,6 +7,8 @@ Version 0.4
 
  * add a control interface as a unix socket.
 
+ * add hefurctl, a control program.
+
  * log an error when we fail to load a template file from the www-dir.
 
  * check that the torrents added by the directory scan are still on the disk,
