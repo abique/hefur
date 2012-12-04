@@ -18,7 +18,7 @@ namespace hefur
                                ::hefur::pb::Torrent,
                                ::hefur::pb::StatusMsg>::Ptr call) override;
 
-    virtual void rotateLogs(::mimosa::rpc::Call<
+    virtual void releaseLogs(::mimosa::rpc::Call<
                             ::hefur::pb::Void,
                             ::hefur::pb::StatusMsg>::Ptr call) override;
 

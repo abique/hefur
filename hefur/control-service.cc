@@ -17,9 +17,9 @@ namespace hefur
   }
 
   void
-  ControlService::rotateLogs(::mimosa::rpc::Call<
-                             ::hefur::pb::Void,
-                             ::hefur::pb::StatusMsg>::Ptr call)
+  ControlService::releaseLogs(::mimosa::rpc::Call<
+                              ::hefur::pb::Void,
+                              ::hefur::pb::StatusMsg>::Ptr call)
   {
   }
 

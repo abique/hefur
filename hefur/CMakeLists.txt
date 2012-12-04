@@ -46,6 +46,7 @@ add_executable(hefurctl
 
 target_link_libraries(hefurctl
   hefur-proto
+  mimosa-bittorrent
   mimosa-rpc
   mimosa
   ${GNUTLS_LIBRARY}

@@ -28,6 +28,6 @@ service Control
 {
   rpc addTorrent(Torrent) returns (StatusMsg);
   rpc removeTorrent(Torrent) returns (StatusMsg);
-  rpc rotateLogs(Void) returns (StatusMsg);
+  rpc releaseLogs(Void) returns (StatusMsg);
   rpc quit(Void) returns (StatusMsg);
 }
