@@ -27,7 +27,7 @@
           UDP, HTTP and HTTPS announce and scrape.
         </listitem>
         <listitem>
-          IPv4 and IPv6 support.
+          Both IPv4 and IPv6 are supported.
         </listitem>
         <listitem>
           Torrent white list based on directory tree: Hefur will recursively
@@ -38,6 +38,9 @@
         </listitem>
         <listitem>
           Stat and Peer HTML pages.
+        </listitem>
+        <listitem>
+          Control interface. A control client: hefurctl is provided.
         </listitem>
       </itemizedlist>
     </sect2>
@@ -63,6 +66,12 @@
       make &&
       make install]]>
       </programlisting>
+
+      If you like to disable the control interface and so hefurctl, run
+      cmake with:
+      <programlisting language="sh" linenumbering="numbered"><![CDATA[
+      cmake -DHEFUR_CONTROL_INTERFACE=OFF ..]]>
+      </programlisting>
       </para>
     </sect2>
 
@@ -76,6 +85,7 @@
 Usage: ./hefurd [option]...
   -allow-proxy (allow the peer to specify its address (so usage of proxies))
   -announce-interval [=15] (the duration in minutes between two announces)
+  -control-socket [=/var/run/hefur/control] (the path to the control socket)
   -disable-file-page (disable the HTTP page /file, which serve .torrent files)
   -disable-peers-page (disable the HTTP page /peers, which list torrent's peers)
   -disable-stat-page (disable the HTTP page /stat, which list served torrents)
@@ -95,13 +105,16 @@ Usage: ./hefurd [option]...
   -torrent-dir [=] (the directory containing the allowed torrents, if empty every torrents are allowed)
   -udp-port [=6969] (the port to use, 0 to disable)
   -version (display the software's version)
-  -www-dir [=/usr/share/hefurd/www] (the directory containing the web data files (html, css, img))
+  -www-dir [=/usr/share/hefur/www] (the directory containing the web data files (html, css, img))
 
 [log]
   -log-color (enables colors in log)
+  -log-compression [=xz] (selection the compression method: identity, gzip, xz)
+  -log-file [=] (the path to the log file, it will be passed to strftime(3), ie: my-app-%Y-%m-%d.%H:%M:%S.log)
   -log-filter (set the log filtering string: origin:level,... +origin is equivalent to origin:debug, and -origin is equivalent to origin:critical.)
   -log-level [=warning] (set the minimum log level, possible values are debug, info, warning, error, critical and fatal)
   -log-origins (lists available origins)
+  -log-rotation-interval [=0] (enables log file rotation based on interval in seconds)
 
 [security]
   -chroot [=] (the path to chroot)
