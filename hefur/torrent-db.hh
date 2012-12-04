@@ -59,6 +59,11 @@ namespace hefur
      */
     void addTorrent(Torrent::Ptr torrent);
 
+    /**
+     * Removes a torrent by its info hash.
+     */
+    void removeTorrent(const m::StringRef & info_hash);
+
   private:
 
     friend class StatHandler;

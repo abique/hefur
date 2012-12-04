@@ -92,9 +92,16 @@ namespace hefur
     if (!torrent)
       return;
 
-    // this is the only part which requires exclusive locking as we
-    // modify the trie
+    // requires exclusive locking as we modify the trie
     m::SharedMutex::Locker locker(torrents_lock_);
     torrents_.insert(torrent);
+  }
+
+  void
+  TorrentDb::removeTorrent(const m::StringRef & info_hash)
+  {
+    // requires exclusive locking as we modify the trie
+    m::SharedMutex::Locker locker(torrents_lock_);
+    torrents_.erase(info_hash);
   }
 }
