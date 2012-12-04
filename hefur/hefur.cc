@@ -13,8 +13,7 @@ namespace hefur
       wl_(nullptr),
       http_server_(nullptr),
       https_server_(nullptr),
-      udp_server_(nullptr),
-      control_server_(nullptr)
+      udp_server_(nullptr)
   {
     instance_ = this;
 
@@ -39,11 +38,13 @@ namespace hefur
       https_server_->start(HTTP_PORT, IPV6, CERT, KEY);
     }
 
+#ifdef HEFUR_CONTROL_INTERFACE
     if (!CONTROL_SOCKET.empty())
     {
       control_server_ = new ControlServer;
       control_server_->start(CONTROL_SOCKET);
     }
+#endif
   }
 
   Hefur::~Hefur()

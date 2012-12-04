@@ -9,7 +9,10 @@
 # include "torrent-db.hh"
 # include "udp-server.hh"
 # include "http-server.hh"
-# include "control-server.hh"
+
+# ifdef HEFUR_CONTROL_INTERFACE
+#  include "control-server.hh"
+# endif
 
 namespace hefur
 {
@@ -37,7 +40,10 @@ namespace hefur
     HttpServer *       http_server_;
     HttpServer *       https_server_;
     UdpServer *        udp_server_;
+
+# ifdef HEFUR_CONTROL_INTERFACE
     ControlServer::Ptr control_server_;
+# endif
   };
 }
 

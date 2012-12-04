@@ -4,10 +4,14 @@ project(hefur C CXX)
 
 enable_testing()
 
+option(HEFUR_CONTROL_INTERFACE "enables Hefur's control interface and hefurctl" ON)
+
 find_package(GnuTLS REQUIRED)
 
 file(STRINGS VERSION HEFUR_VERSION)
+
 message("hefur version: ${HEFUR_VERSION}")
+message("control interface: ${HEFUR_CONTROL_INTERFACE}")
 
 add_definitions(
   -std=c++11
@@ -15,6 +19,10 @@ add_definitions(
   -Wall -Wextra -Werror=return-type
   -DHEFUR_VERSION=\"${HEFUR_VERSION}\"
   ${GNUTLS_DEFINITIONS})
+
+if(HEFUR_CONTROL_INTERFACE)
+  add_definitions(-DHEFUR_CONTROL_INTERFACE)
+endif()
 
 add_subdirectory(mimosa EXCLUDE_FROM_ALL)
 include_directories(mimosa)
