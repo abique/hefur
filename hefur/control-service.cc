@@ -5,6 +5,7 @@
 
 #include "hefur.hh"
 #include "control-service.hh"
+#include "log.hh"
 
 namespace hefur
 {

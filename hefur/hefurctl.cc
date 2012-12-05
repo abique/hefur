@@ -132,39 +132,44 @@ namespace hefur
 
     m::init(argc, argv);
 
-    /* connect to hefur */
-    int fd = mn::connectToUnixSocket(PATH, 0);
-    if (fd < 0) {
-      ml::error("%s: %s", PATH, ::strerror(errno));
-      return 1;
+    {
+      /* connect to hefur */
+      int fd = mn::connectToUnixSocket(PATH, 0);
+      if (fd < 0) {
+        ml::error("%s: %s", PATH, ::strerror(errno));
+        return 1;
+      }
+
+      /* establish the rpc channel */
+      ms::FdStream::Ptr stream(new ms::FdStream(fd));
+      mr::Channel::Ptr channel(new mr::Channel(stream));
+      channel->start();
+
+      /* create our service client */
+      pb::Control::Client control(channel);
+
+      // add torrents
+      for (auto it = ADD_TORRENT.begin(); it != ADD_TORRENT.end(); ++it)
+        succeed = addTorrent(control, *it) & succeed;
+
+      // remove torrents
+      for (auto it = REMOVE_TORRENT.begin(); it != REMOVE_TORRENT.end(); ++it)
+        succeed = removeTorrent(control, *it) & succeed;
+
+      // remove torrents by hash
+      for (auto it = REMOVE_TORRENT_HASH.begin(); it != REMOVE_TORRENT_HASH.end(); ++it)
+        succeed = removeTorrentHash(control, *it) & succeed;
+
+      // release logs
+      if (RELEASE_LOGS)
+        succeed = releaseLogs(control) & succeed;
+
+      // quit hefurd
+      if (QUIT)
+        succeed = quit(control) & succeed;
+
+      channel->close();
     }
-
-    /* establish the rpc channel */
-    ms::FdStream::Ptr stream(new ms::FdStream(fd));
-    mr::Channel::Ptr channel(new mr::Channel(stream));
-
-    /* create our service client */
-    pb::Control::Client control(channel);
-
-    // add torrents
-    for (auto it = ADD_TORRENT.begin(); it != ADD_TORRENT.end(); ++it)
-      succeed = addTorrent(control, *it) & succeed;
-
-    // remove torrents
-    for (auto it = REMOVE_TORRENT.begin(); it != REMOVE_TORRENT.end(); ++it)
-      succeed = removeTorrent(control, *it) & succeed;
-
-    // remove torrents by hash
-    for (auto it = REMOVE_TORRENT_HASH.begin(); it != REMOVE_TORRENT_HASH.end(); ++it)
-      succeed = removeTorrentHash(control, *it) & succeed;
-
-    // release logs
-    if (RELEASE_LOGS)
-      succeed = releaseLogs(control) & succeed;
-
-    // quit hefurd
-    if (QUIT)
-      succeed = quit(control) & succeed;
 
     /* deinit */
     m::deinit();
