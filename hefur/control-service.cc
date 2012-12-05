@@ -9,43 +9,43 @@
 
 namespace hefur
 {
-  void
-  ControlService::addTorrent(::mimosa::rpc::Call<
-                             ::hefur::pb::Torrent,
-                             ::hefur::pb::StatusMsg>::Ptr call)
+  bool
+  ControlService::addTorrent(pb::Torrent & request,
+                             pb::StatusMsg & response)
   {
-    auto torrent = new Torrent(call->request().info_hash().c_str(),
-                               call->request().name(),
-                               call->request().path(),
-                               call->request().length());
+    auto torrent = new Torrent(request.info_hash().c_str(),
+                               request.name(),
+                               request.path(),
+                               request.length());
     Hefur::instance().torrentDb()->addTorrent(torrent);
-    call->response().set_status(pb::kOk);
+    response.set_status(pb::kOk);
+    return true;
   }
 
-  void
-  ControlService::removeTorrent(::mimosa::rpc::Call<
-                                ::hefur::pb::Torrent,
-                                ::hefur::pb::StatusMsg>::Ptr call)
+  bool
+  ControlService::removeTorrent(pb::Torrent & request,
+                                pb::StatusMsg & response)
   {
-    Hefur::instance().torrentDb()->removeTorrent(call->request().info_hash());
-    call->response().set_status(pb::kOk);
+    Hefur::instance().torrentDb()->removeTorrent(request.info_hash());
+    response.set_status(pb::kOk);
+    return true;
   }
 
-  void
-  ControlService::releaseLogs(::mimosa::rpc::Call<
-                              ::hefur::pb::Void,
-                              ::hefur::pb::StatusMsg>::Ptr call)
+  bool
+  ControlService::releaseLogs(pb::Void & request,
+                              pb::StatusMsg & response)
   {
     ml::release();
-    call->response().set_status(pb::kOk);
+    response.set_status(pb::kOk);
+    return true;
   }
 
-  void
-  ControlService::quit(::mimosa::rpc::Call<
-                       ::hefur::pb::Void,
-                       ::hefur::pb::StatusMsg>::Ptr call)
+  bool
+  ControlService::quit(pb::Void & request,
+                       pb::StatusMsg & response)
   {
     ::kill(::getpid(), SIGQUIT);
-    call->response().set_status(pb::kOk);
+    response.set_status(pb::kOk);
+    return true;
   }
 }

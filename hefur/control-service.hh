@@ -10,21 +10,17 @@ namespace hefur
   public:
     MIMOSA_DEF_PTR(ControlService);
 
-    virtual void addTorrent(::mimosa::rpc::Call<
-                            ::hefur::pb::Torrent,
-                            ::hefur::pb::StatusMsg>::Ptr call) override;
+    virtual bool addTorrent(pb::Torrent & request,
+                            pb::StatusMsg & response) override;
 
-    virtual void removeTorrent(::mimosa::rpc::Call<
-                               ::hefur::pb::Torrent,
-                               ::hefur::pb::StatusMsg>::Ptr call) override;
+    virtual bool removeTorrent(pb::Torrent & request,
+                               pb::StatusMsg & response) override;
 
-    virtual void releaseLogs(::mimosa::rpc::Call<
-                            ::hefur::pb::Void,
-                            ::hefur::pb::StatusMsg>::Ptr call) override;
+    virtual bool releaseLogs(pb::Void & request,
+                             pb::StatusMsg & response) override;
 
-    virtual void quit(::mimosa::rpc::Call<
-                      ::hefur::pb::Void,
-                      ::hefur::pb::StatusMsg>::Ptr call) override;
+    virtual bool quit(pb::Void & request,
+                      pb::StatusMsg & response) override;
   };
 }
 
