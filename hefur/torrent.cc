@@ -184,8 +184,10 @@ namespace hefur
   {
     m::bittorrent::TorrentParser p;
 
-    if (!p.parseFile(path))
+    if (!p.parseFile(path)) {
+      log->error("%s: parse error", path);
       return nullptr;
+    }
 
     auto desc = p.result();
     InfoSha1 info;
