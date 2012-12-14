@@ -281,7 +281,7 @@ namespace hefur
   }
 
   AnnounceRequest::Event
-  UdpServer::convert(UdpServer::Event event)
+  UdpServer::convert(Event event)
   {
     switch (event)
     {
@@ -331,13 +331,14 @@ namespace hefur
     rq->event_      = convert((Event)be32toh(ann->event_));
     rq->num_want_   = be32toh(ann->num_want_);
     rq->skip_ipv6_  = true;
-    rq->addr_       = addr;
-    rq->addr_.setPort(be16toh(ann->port_));
     if (ALLOW_PROXY)
     {
       rq->addr_.family_ = AF_INET;
       memcpy(rq->addr_.in_.addr_, &ann->ip_, 4);
     }
+    else
+      rq->addr_ = addr;
+    rq->addr_.setPort(be16toh(ann->port_));
 
     auto tdb = Hefur::instance().torrentDb();
     if (!tdb)
