@@ -21,22 +21,24 @@ namespace hefur
      * This method is thread safe.
      * @return true on success, false otherwise.
      */
-    virtual bool extractKey(mimosa::http::RequestReader & request,
-                            std::string *                 key);
+    virtual bool extractKey(const std::string & url,
+                            std::string *       key);
 
     /**
      * Check if the peer identified by key is allowed to access
      * to the Torrent referenced by info_hash.
+     * This method is thread safe.
      * @return true if allowed, false otherwise.
      */
     virtual bool isAllowed(const std::string & key,
-                           const InfoSha1 &    info_hash);
+                           const InfoHash &    info_hash);
 
     /**
      * Log peer's stats.
+     * This method is thread safe.
      */
     virtual void logPeerStats(const std::string & key,
-                              const InfoSha1 &    info_hash,
+                              const InfoHash &    info_hash,
                               const Address &     address,
                               uint64_t            tx,
                               uint64_t            rx);
