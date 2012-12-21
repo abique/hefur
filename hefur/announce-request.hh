@@ -7,7 +7,7 @@
 # include <mimosa/non-copyable.hh>
 
 # include "address.hh"
-# include "info-sha1.hh"
+# include "info-hash.hh"
 # include "crypto-support.hh"
 
 namespace hefur
@@ -35,7 +35,7 @@ namespace hefur
     static Event parseEvent(const char *str);
 
     char          peerid_[20];
-    InfoSha1      info_sha1_;
+    InfoHash      info_hash_;
     uint32_t      num_want_; // the number of peers wanted
     Event         event_;
     uint64_t      downloaded_;

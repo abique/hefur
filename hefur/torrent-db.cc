@@ -28,7 +28,7 @@ namespace hefur
   {
     m::SharedMutex::Locker locker(torrents_lock_);
 
-    Torrent * torrent = torrents_.find(request->info_sha1_.bytes());
+    Torrent * torrent = torrents_.find(request->info_hash_.bytes());
     if (!torrent)
     {
       // we didn't find the torrent, so let's answer an error
@@ -50,14 +50,14 @@ namespace hefur
     response->error_             = false;
 
     m::SharedMutex::ReadLocker locker(torrents_lock_);
-    for (auto it = request->info_sha1s_.begin(); it != request->info_sha1s_.end(); ++it)
+    for (auto it = request->info_hashs_.begin(); it != request->info_hashs_.end(); ++it)
     {
       ScrapeResponse::Item item;
       Torrent * torrent = torrents_.find(it->bytes());
       if (!torrent)
         continue;
 
-      item.info_sha1_   = *it;
+      item.info_hash_   = *it;
       item.nleechers_   = torrent->leechers();
       item.nseeders_    = torrent->seeders();
       item.ndownloaded_ = torrent->completed();

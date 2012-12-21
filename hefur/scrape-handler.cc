@@ -24,7 +24,7 @@ namespace hefur
     {
       if (it->second.size() != 20)
         continue;
-      rq->info_sha1s_.push_back(InfoSha1(it->second.data()));
+      rq->info_hashs_.push_back(InfoHash(it->second.data()));
     }
 
     response.content_type_ = "text/plain";
@@ -67,7 +67,7 @@ namespace hefur
 
     for (auto it = rp->items_.begin(); it != rp->items_.end(); ++it)
     {
-      enc.pushData((const char*)it->info_sha1_.bytes_, 20);
+      enc.pushData((const char*)it->info_hash_.bytes_, 20);
       enc.startDict();
       enc.pushData("complete", 8);
       enc.pushInt(it->nseeders_);

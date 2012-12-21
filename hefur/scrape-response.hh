@@ -14,7 +14,7 @@ namespace hefur
 
     struct Item
     {
-      InfoSha1 info_sha1_;
+      InfoHash info_hash_;
       uint32_t nleechers_;
       uint32_t nseeders_;
       uint32_t ndownloaded_;

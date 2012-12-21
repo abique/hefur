@@ -9,7 +9,7 @@ namespace hefur
    */
   struct ScrapeRequest : public m::RefCountable<ScrapeRequest>
   {
-    std::vector<InfoSha1> info_sha1s_;
+    std::vector<InfoHash> info_hashs_;
   };
 }
 

@@ -1,5 +1,5 @@
-#ifndef HEFUR_INFO_SHA1_HH
-# define HEFUR_INFO_SHA1_HH
+#ifndef HEFUR_INFO_HASH_HH
+# define HEFUR_INFO_HASH_HH
 
 # include <cstdint>
 # include <cstring>
@@ -11,11 +11,11 @@ namespace hefur
   /**
    * This is just a pure wrapper around 20 bytes (SHA1 hash).
    */
-  class InfoSha1
+  class InfoHash
   {
   public:
-    inline InfoSha1();
-    inline InfoSha1(const char *data);
+    inline InfoHash();
+    inline InfoHash(const char *data);
 
     inline m::StringRef bytes() const;
 
@@ -23,6 +23,6 @@ namespace hefur
   };
 }
 
-# include "info-sha1.hxx"
+# include "info-hash.hxx"
 
-#endif /* !HEFUR_INFO_SHA1_HH */
+#endif /* !HEFUR_INFO_HASH_HH */

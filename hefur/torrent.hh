@@ -7,7 +7,7 @@
 # include <mimosa/ref-countable.hh>
 # include <mimosa/trie.hh>
 
-# include "info-sha1.hh"
+# include "info-hash.hh"
 # include "peer.hh"
 # include "announce-request.hh"
 # include "announce-response.hh"
@@ -19,7 +19,7 @@ namespace hefur
   class Torrent : public m::RefCountable<Torrent>
   {
   public:
-    Torrent(const InfoSha1 &    info_sha1,
+    Torrent(const InfoHash &    info_hash,
             const std::string & name = "",
             const std::string & path = "",
             uint64_t            length = 0);
@@ -39,7 +39,7 @@ namespace hefur
     void cleanup();
 
     /**
-     * Return a key of the info sha1 to use in a Trie.
+     * Return a key of the info hash to use in a Trie.
      */
     inline m::StringRef key() const;
 
@@ -51,7 +51,7 @@ namespace hefur
     inline uint32_t completed() const { return completed_; }
 
     /**
-     * Parses a .torrent file, extracts the name, length and info_sha1,
+     * Parses a .torrent file, extracts the name, length and info_hash,
      * and convert it into a Torrent object.
      * @return nullptr on parse error.
      */
@@ -85,7 +85,7 @@ namespace hefur
 
 
     m::Mutex      lock_;
-    InfoSha1      info_sha1_;   // this is the torrent key
+    InfoHash      info_hash_;   // this is the torrent key
     std::string   name_;        // optional, used by StatHandler
     std::string   path_;        // optional, for later download
     uint64_t      length_;

@@ -14,11 +14,11 @@
 
 namespace hefur
 {
-  Torrent::Torrent(const InfoSha1 &    info_sha1,
+  Torrent::Torrent(const InfoHash &    info_hash,
                    const std::string & name,
                    const std::string & path,
                    uint64_t            length)
-    : info_sha1_(info_sha1),
+    : info_hash_(info_hash),
       name_(name),
       path_(path),
       length_(length),
@@ -190,7 +190,7 @@ namespace hefur
     }
 
     auto desc = p.result();
-    InfoSha1 info;
+    InfoHash info;
     memcpy(info.bytes_, desc->info_hash_.bytes_, 20);
     return new Torrent(info, desc->name_, path, desc->length_);
   }

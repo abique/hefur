@@ -26,7 +26,7 @@ namespace hefur
     if (peerid.size() != 20 || info_hash.size() != 20)
       return false;
     memcpy(rq->peerid_, peerid.data(), 20);
-    memcpy(rq->info_sha1_.bytes_, info_hash.data(), 20);
+    memcpy(rq->info_hash_.bytes_, info_hash.data(), 20);
 
     // as numwant is optional, we need to check if the key
     // is provided

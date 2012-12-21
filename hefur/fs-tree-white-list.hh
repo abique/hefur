@@ -10,7 +10,7 @@
 # include <mimosa/thread.hh>
 # include <mimosa/trie.hh>
 
-# include "info-sha1.hh"
+# include "info-hash.hh"
 
 namespace hefur
 {
