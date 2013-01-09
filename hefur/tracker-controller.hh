@@ -1,5 +1,5 @@
-#ifndef HEFUR_PRIVATE_TRACKER_CONTROLLER_HH
-# define HEFUR_PRIVATE_TRACKER_CONTROLLER_HH
+#ifndef HEFUR_TRACKER_CONTROLLER_HH
+# define HEFUR_TRACKER_CONTROLLER_HH
 
 # include <string>
 
@@ -8,11 +8,10 @@ namespace hefur
   class Address;
   class InfoHash;
 
-  class PrivateTrackerController
+  class TrackerController
   {
   public:
-    PrivateTrackerController();
-    virtual ~PrivateTrackerController();
+    virtual ~TrackerController() = 0;
 
     inline const std::string & name() const { return name_; }
 
@@ -22,7 +21,7 @@ namespace hefur
      * @return true on success, false otherwise.
      */
     virtual bool extractKey(const std::string & url,
-                            std::string *       key);
+                            std::string *       key) = 0;
 
     /**
      * Check if the peer identified by key is allowed to access
@@ -31,7 +30,7 @@ namespace hefur
      * @return true if allowed, false otherwise.
      */
     virtual bool isAllowed(const std::string & key,
-                           const InfoHash &    info_hash);
+                           const InfoHash &    info_hash) = 0;
 
     /**
      * Log peer's stats.
@@ -41,11 +40,11 @@ namespace hefur
                               const InfoHash &    info_hash,
                               const Address &     address,
                               uint64_t            tx,
-                              uint64_t            rx);
+                              uint64_t            rx) = 0;
 
   protected:
     std::string name_;
   };
 }
 
-#endif /* !HEFUR_PRIVATE_TRACKER_CONTROLLER_HH */
+#endif /* !HEFUR_PRIVATE_CONTROLLER_HH */
