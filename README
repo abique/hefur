@@ -9,7 +9,7 @@
 '(_,_) '---'    `'-..-'  '---'       ``-'`-'' ''-'   `'-'
 
 
-Hefur is a torrent tracker.
+Hefur is a standalone C++ BitTorrent tracker.
 
 Features:
  - support HTTP, HTTPS and UPD announce and scrape
