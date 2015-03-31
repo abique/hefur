@@ -12,7 +12,7 @@ namespace hefur
   {
     // disable gzip, deflate etc... as some client don't support it
     // even if they claim to
-    response.content_encoding_ = mh::kCodingIdentity;
+    response.setContentEncoding(mh::kCodingIdentity);
 
     ScrapeRequest::Ptr rq = new ScrapeRequest;
 
@@ -27,16 +27,16 @@ namespace hefur
       rq->info_hashs_.push_back(InfoHash(it->second.data()));
     }
 
-    response.content_type_ = "text/plain";
-    response.keep_alive_   = false;
+    response.setContentType("text/plain");
+    response.setKeepAlive(false);
 
     ms::StringStream::Ptr buf = new ms::StringStream;
-    mb::Encoder enc(buf);
+    mb::Encoder enc(buf.get());
 
     auto tdb = Hefur::instance().torrentDb();
     if (!tdb)
     {
-      response.status_ = mh::kStatusServiceUnavailable;
+      response.setStatus(mh::kStatusServiceUnavailable);
       return true;
     }
 
@@ -49,7 +49,7 @@ namespace hefur
       enc.end();
 
       // avoid Chunked-Encoding for old client
-      response.content_length_ = buf->str().size();
+      response.setContentLength(buf->str().size());
       response.write(buf->str().data(), buf->str().size());
       return true;
     }
@@ -82,7 +82,7 @@ namespace hefur
     enc.end(); // doc
 
     // avoid Chunked-Encoding for old client
-    response.content_length_ = buf->str().size();
+    response.setContentLength(buf->str().size());
     response.write(buf->str().data(), buf->str().size());
     return true;
   }

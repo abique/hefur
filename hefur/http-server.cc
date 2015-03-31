@@ -43,13 +43,13 @@ namespace hefur
     auto dispatch = new mh::DispatchHandler;
     dispatch->registerHandler(
       "/img/*", new mh::FsHandler(
-        WWW_DIR + "/img/", 1, true));
+        WWW_DIR + "/img/", 1));
     dispatch->registerHandler(
       "/css/*", new mh::FsHandler(
-        WWW_DIR + "/css/", 1, true));
+        WWW_DIR + "/css/", 1));
     dispatch->registerHandler(
       "/js/*", new mh::FsHandler(
-        WWW_DIR + "/js/", 1, true));
+        WWW_DIR + "/js/", 1));
     dispatch->registerHandler("/announce", new AnnounceHandler);
     dispatch->registerHandler("/scrape", new ScrapeHandler);
     if (!DISABLE_STAT_PAGE)

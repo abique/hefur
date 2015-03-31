@@ -13,6 +13,6 @@ namespace hefur
     auto value = cache_.get(real_path);
     if (!value->get())
       log->error("failed to load template file %s", real_path);
-    return value->get();
+    return mt::Template::ConstPtr(value->get());
   }
 }

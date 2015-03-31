@@ -20,7 +20,7 @@ namespace hefur
   {
     // just get and convert the info_hash query parameter
     ms::StringStream::Ptr ss = new ms::StringStream;
-    ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss);
+    ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss.get());
     // XXX probably a gcc bug, change to dec->write(...)
     static_cast<ms::Stream*>(dec.get())->write(request.queryGet("info_hash"));
 
@@ -36,7 +36,7 @@ namespace hefur
       TorrentDb::Ptr tdb = Hefur::instance().torrentDb();
       if (!tdb)
       {
-        response.status_ = mh::kStatusServiceUnavailable;
+        response.setStatus(mh::kStatusServiceUnavailable);
         return true;
       }
 
@@ -45,7 +45,7 @@ namespace hefur
       if (!torrent)
       {
         // error 404
-        response.status_ = mh::kStatusNotFound;
+        response.setStatus(mh::kStatusNotFound);
         return true;
       }
 
@@ -53,7 +53,7 @@ namespace hefur
     }
 
     // set the content type and reuse streamFile()
-    response.content_type_ = "application/x-bittorrent";
+    response.setContentType("application/x-bittorrent");
     return mh::FsHandler::streamFile(request, response, path);
   }
 }

@@ -21,7 +21,7 @@ namespace hefur
     std::string info_hash = request.queryGet("info_hash");
 
     ms::StringStream::Ptr ss = new ms::StringStream;
-    ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss);
+    ms::Base16Decoder::Ptr dec = new ms::Base16Decoder(ss.get());
     dec->write(info_hash.data(), info_hash.size());
 
     info_hash = ss->str();
@@ -49,7 +49,7 @@ namespace hefur
       auto tdb = Hefur::instance().torrentDb();
       if (!tdb)
       {
-        response.status_ = mh::kStatusServiceUnavailable;
+        response.setStatus(mh::kStatusServiceUnavailable);
         return true;
       }
 
@@ -57,7 +57,7 @@ namespace hefur
       auto torrent = tdb->torrents_.find(info_hash);
       if (!torrent)
       {
-        response.status_ = mh::kStatusNotFound;
+        response.setStatus(mh::kStatusNotFound);
         return true;
       }
 

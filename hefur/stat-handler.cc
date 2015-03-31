@@ -41,7 +41,7 @@ namespace hefur
     auto tdb = Hefur::instance().torrentDb();
     if (!tdb)
     {
-      response.status_ = mh::kStatusServiceUnavailable;
+      response.setStatus(mh::kStatusServiceUnavailable);
       return true;
     }
 
