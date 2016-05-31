@@ -107,12 +107,15 @@ namespace hefur
     if (!compact)
     {
       enc.pushData("peers", 5);
+      enc.startList();
       for (auto it = rp->addrs_.begin(); it != rp->addrs_.end(); ++it)
       {
+        enc.startDict();
         enc.pushData("ip", 2);
         enc.pushData(it->ipStr());
         enc.pushData("port", 4);
         enc.pushInt(port);
+        enc.end();
       }
       enc.end(); // peers
     }
