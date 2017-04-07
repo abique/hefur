@@ -3,7 +3,7 @@ add_definitions(-include ${CMAKE_CURRENT_SOURCE_DIR}/namespace-helper.hh)
 if(HEFUR_CONTROL_INTERFACE)
   mimosa_protoc(hefur)
 
-  add_library(hefur-proto hefur.pb.cc)
+  add_library(hefur-proto STATIC hefur.pb.cc)
 
   add_executable(hefurctl
     hefurctl.cc)
