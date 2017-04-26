@@ -83,4 +83,9 @@ namespace hefur
     "", "control-socket",
     "the path to the control socket",
     "/var/run/hefur/control");
+
+  const std::string & BIND_ADDR = *mo::addOption<std::string>(
+    "", "bind-addr",
+    "the address to bind to",
+    "0.0.0.0");
 }

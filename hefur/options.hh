@@ -28,6 +28,7 @@ namespace hefur
   extern const uint32_t &    SCAN_INTERVAL;
   extern const std::string & WWW_DIR;
   extern const std::string & CONTROL_SOCKET;
+  extern const std::string & BIND_ADDR;
 }
 
 #endif /* !HEFUR_OPTIONS_HH */

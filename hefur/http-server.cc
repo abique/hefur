@@ -67,8 +67,10 @@ namespace hefur
     server_->setReadTimeout(HTTP_TIMEOUT * m::millisecond);
     server_->setWriteTimeout(HTTP_TIMEOUT * m::millisecond);
 
-    if ((ipv6 && !server_->listenInet6(port)) ||
-        (!ipv6 && !server_->listenInet4(port)))
+    unsigned char buf[sizeof(struct in6_addr)];
+    inet_pton(ipv6 ? AF_INET6 : AF_INET, BIND_ADDR.c_str(), buf);
+    if ((ipv6 && !server_->listenInet6(port, (in6_addr*)buf)) ||
+        (!ipv6 && !server_->listenInet4(port, (in_addr*)buf)))
     {
       log->fatal("failed to listen on the port %d: %s",
                  port, ::strerror(errno));
