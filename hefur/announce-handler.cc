@@ -114,7 +114,7 @@ namespace hefur
         enc.pushData("ip", 2);
         enc.pushData(it->ipStr());
         enc.pushData("port", 4);
-        enc.pushInt(port);
+        enc.pushInt(it->port());
         enc.end();
       }
       enc.end(); // peers
