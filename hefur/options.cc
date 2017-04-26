@@ -88,4 +88,9 @@ namespace hefur
     "", "bind-addr",
     "the address to bind to",
     "0.0.0.0");
+
+  const std::string & REVERSE_PROXY_HEADER = *mo::addOption<std::string>(
+    "", "reverse-proxy-header",
+    "HTTP header to parse ip from when behind a reverse proxy",
+    "");
 }

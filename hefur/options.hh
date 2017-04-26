@@ -29,6 +29,7 @@ namespace hefur
   extern const std::string & WWW_DIR;
   extern const std::string & CONTROL_SOCKET;
   extern const std::string & BIND_ADDR;
+  extern const std::string & REVERSE_PROXY_HEADER;
 }
 
 #endif /* !HEFUR_OPTIONS_HH */

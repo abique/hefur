@@ -6,6 +6,7 @@
 #include "hefur.hh"
 #include "announce-handler.hh"
 #include "options.hh"
+#include "log.hh"
 
 namespace hefur
 {
@@ -43,26 +44,43 @@ namespace hefur
         rq->num_want_ = 100;
     }
 
-    uint16_t port = atoi(request.queryGet("port").c_str());
     bool compact = request.query().count("compact");
     rq->event_ = AnnounceRequest::parseEvent(request.queryGet("event").data());
     rq->downloaded_ = atoll(request.queryGet("downloaded").c_str());
     rq->uploaded_ = atoll(request.queryGet("uploaded").c_str());
     rq->left_ = atoll(request.queryGet("left").c_str());
-    rq->addr_ = request.channel().remoteAddr();
-    rq->addr_.setPort(port);
     rq->skip_ipv6_ = false;
 
+    const char *ipaddr_cstr = NULL;
+    // Check for reverse proxy
+    if (!REVERSE_PROXY_HEADER.empty() && request.unparsedHeaders().find(REVERSE_PROXY_HEADER) != request.unparsedHeaders().end()) {
+      ipaddr_cstr = request.unparsedHeaders().find(REVERSE_PROXY_HEADER)->second.c_str();
+    }
+
+    // Check for proxy
     auto & ip = request.queryGet("ip");
     if (ALLOW_PROXY && !ip.empty()) {
-      struct sockaddr_in  in;
-      struct sockaddr_in6 in6;
-
-      if (inet_pton(AF_INET, ip.c_str(), &in) == 1)
-        rq->addr_ = (const struct ::sockaddr *)&in;
-      else if (inet_pton(AF_INET6, ip.c_str(), &in6) == 1)
-        rq->addr_ = (const struct ::sockaddr *)&in6;
+      ipaddr_cstr = ip.c_str();
     }
+
+    // Set addr_ (from reverse proxy or proxy if existent else the request)
+    if (ipaddr_cstr) {
+      struct sockaddr_in ip4addr;
+      struct sockaddr_in6 ip6addr;
+
+      if (inet_pton(AF_INET, ipaddr_cstr, &(ip4addr.sin_addr)) == 1) {
+        ip4addr.sin_family = AF_INET;
+        rq->addr_ = (sockaddr*)&ip4addr;
+      } else if (inet_pton(AF_INET6, ip.c_str(), &(ip6addr.sin6_addr)) == 1) {
+        ip6addr.sin6_family = AF_INET6;
+        rq->addr_ = (sockaddr*)&ip6addr;
+      }
+    } else {
+      rq->addr_ = request.channel().remoteAddr();
+    }
+    rq->addr_.setPort(atoi(request.queryGet("port").c_str()));
+
+    log->info("Got announce from %s", rq->addr_.str());
 
     // We don't want to keep alive here, because there is no need
     // to let the client queue multiple requests and keep the
