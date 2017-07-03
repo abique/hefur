@@ -25,6 +25,8 @@ namespace hefur
     bool operator==(const Address & other) const;
 
     void setPort(uint16_t port);
+    Address & operator=(const struct ::sockaddr_in * in);
+    Address & operator=(const struct ::sockaddr_in6 * in6);
     Address & operator=(const struct ::sockaddr * addr);
 
     /**
