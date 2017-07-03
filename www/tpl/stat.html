@@ -21,7 +21,7 @@
     {{*torrents}}
     <tr>
       <td>
-        <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&amp;dn={{name|u}}&amp;tr={{tracker_udp|u}}&amp;tr={{tracker_http|u}}"
+        <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&amp;dn={{name|u}}{{*tracker_udp}}&amp;tr={{tracker_udp|u}}{{/tracker_udp}}&amp;tr={{tracker_http|u}}"
            title="Magnet link">
           <img src="/img/magnet-icon.gif"/>
         </a>

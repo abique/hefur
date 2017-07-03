@@ -33,8 +33,9 @@ namespace hefur
     dict.append("title", "Torrents");
     dict.append("tracker_http", mf::str(
                   "http://%v:%v/announce", request.host(), request.port()));
-    dict.append("tracker_udp", mf::str(
-                  "udp://%v:%v", request.host(), UDP_PORT));
+    if (UDP_PORT)
+      dict.append("tracker_udp", mf::str(
+                    "udp://%v:%v", request.host(), UDP_PORT));
 
     auto torrents = new mt::List("torrents");
     dict.append(torrents);
