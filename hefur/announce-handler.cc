@@ -6,6 +6,7 @@
 #include "hefur.hh"
 #include "announce-handler.hh"
 #include "options.hh"
+#include "log.hh"
 
 namespace hefur
 {
@@ -43,26 +44,30 @@ namespace hefur
         rq->num_want_ = 100;
     }
 
-    uint16_t port = atoi(request.queryGet("port").c_str());
     bool compact = request.query().count("compact");
     rq->event_ = AnnounceRequest::parseEvent(request.queryGet("event").data());
     rq->downloaded_ = atoll(request.queryGet("downloaded").c_str());
     rq->uploaded_ = atoll(request.queryGet("uploaded").c_str());
     rq->left_ = atoll(request.queryGet("left").c_str());
-    rq->addr_ = request.channel().remoteAddr();
-    rq->addr_.setPort(port);
     rq->skip_ipv6_ = false;
 
+    // Check for proxy
     auto & ip = request.queryGet("ip");
     if (ALLOW_PROXY && !ip.empty()) {
-      struct sockaddr_in  in;
+      struct sockaddr_in in;
       struct sockaddr_in6 in6;
 
-      if (inet_pton(AF_INET, ip.c_str(), &in) == 1)
-        rq->addr_ = (const struct ::sockaddr *)&in;
-      else if (inet_pton(AF_INET6, ip.c_str(), &in6) == 1)
-        rq->addr_ = (const struct ::sockaddr *)&in6;
+      if (inet_pton(AF_INET, ip.c_str(), &in.sin_addr.s_addr) == 1)
+        rq->addr_ = &in;
+      else if (inet_pton(AF_INET6, ip.c_str(), &in6.sin6_addr.s6_addr) == 1)
+        rq->addr_ = &in6;
     }
+    else
+      rq->addr_ = request.channel().remoteAddr();
+
+    rq->addr_.setPort(atoi(request.queryGet("port").c_str()));
+
+    log->info("Got announce from %s", rq->addr_.str());
 
     // We don't want to keep alive here, because there is no need
     // to let the client queue multiple requests and keep the
@@ -114,7 +119,7 @@ namespace hefur
         enc.pushData("ip", 2);
         enc.pushData(it->ipStr());
         enc.pushData("port", 4);
-        enc.pushInt(port);
+        enc.pushInt(it->port());
         enc.end();
       }
       enc.end(); // peers
