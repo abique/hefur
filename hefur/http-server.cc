@@ -4,7 +4,6 @@
 #include <mimosa/format/print.hh>
 #include <mimosa/http/dispatch-handler.hh>
 #include <mimosa/http/fs-handler.hh>
-#include <mimosa/http/log-handler.hh>
 #include <mimosa/stream/string-stream.hh>
 #include <mimosa/uptime.hh>
 
@@ -16,6 +15,7 @@
 #include "log.hh"
 #include "options.hh"
 #include "file-handler.hh"
+#include "log-handler.hh"
 
 namespace hefur
 {
@@ -59,7 +59,7 @@ namespace hefur
     if (!DISABLE_FILE_PAGE)
       dispatch->registerHandler("/file/*", new FileHandler);
 
-    auto log_handler = new mh::LogHandler;
+    auto log_handler = new LogHandler;
     log_handler->setHandler(dispatch);
 
     server_ = new mh::Server;

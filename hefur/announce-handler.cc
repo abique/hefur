@@ -51,33 +51,20 @@ namespace hefur
     rq->left_ = atoll(request.queryGet("left").c_str());
     rq->skip_ipv6_ = false;
 
-    const char *ipaddr_cstr = NULL;
-    // Check for reverse proxy
-    if (!REVERSE_PROXY_HEADER.empty() && request.unparsedHeaders().find(REVERSE_PROXY_HEADER) != request.unparsedHeaders().end()) {
-      ipaddr_cstr = request.unparsedHeaders().find(REVERSE_PROXY_HEADER)->second.c_str();
-    }
-
     // Check for proxy
     auto & ip = request.queryGet("ip");
     if (ALLOW_PROXY && !ip.empty()) {
-      ipaddr_cstr = ip.c_str();
+      struct sockaddr_in in;
+      struct sockaddr_in6 in6;
+
+      if (inet_pton(AF_INET, ip.c_str(), &in.sin_addr.s_addr) == 1)
+        rq->addr_ = &in;
+      else if (inet_pton(AF_INET6, ip.c_str(), &in6.sin6_addr.s6_addr) == 1)
+        rq->addr_ = &in6;
     }
-
-    // Set addr_ (from reverse proxy or proxy if existent else the request)
-    if (ipaddr_cstr) {
-      struct sockaddr_in ip4addr;
-      struct sockaddr_in6 ip6addr;
-
-      if (inet_pton(AF_INET, ipaddr_cstr, &(ip4addr.sin_addr)) == 1) {
-        ip4addr.sin_family = AF_INET;
-        rq->addr_ = (sockaddr*)&ip4addr;
-      } else if (inet_pton(AF_INET6, ip.c_str(), &(ip6addr.sin6_addr)) == 1) {
-        ip6addr.sin6_family = AF_INET6;
-        rq->addr_ = (sockaddr*)&ip6addr;
-      }
-    } else {
+    else
       rq->addr_ = request.channel().remoteAddr();
-    }
+
     rq->addr_.setPort(atoi(request.queryGet("port").c_str()));
 
     log->info("Got announce from %s", rq->addr_.str());

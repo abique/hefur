@@ -37,6 +37,7 @@ add_executable(hefurd
   hefur.cc
   http-server.cc
   log.cc
+  log-handler.cc
   main.cc
   options.cc
   peer.cc
