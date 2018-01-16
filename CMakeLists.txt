@@ -26,6 +26,12 @@ endif()
 
 include(GNUInstallDirs)
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  set(RT_LIB "rt")
+else()
+  set(RT_LIB "")
+endif()
+
 add_subdirectory(mimosa EXCLUDE_FROM_ALL)
 include_directories(mimosa)
 add_subdirectory(hefur)

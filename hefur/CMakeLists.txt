@@ -15,7 +15,7 @@ if(HEFUR_CONTROL_INTERFACE)
     mimosa
     ${GNUTLS_LIBRARY}
     pthread
-    rt)
+    ${RT_LIB})
 
   install(TARGETS hefurctl
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -64,7 +64,7 @@ target_link_libraries(hefurd
   mimosa
   ${GNUTLS_LIBRARY}
   pthread
-  rt)
+  ${RT_LIB})
 
 install(TARGETS hefurd
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
