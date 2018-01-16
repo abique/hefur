@@ -24,17 +24,25 @@ if(HEFUR_CONTROL_INTERFACE)
   add_definitions(-DHEFUR_CONTROL_INTERFACE)
 endif()
 
+include(GNUInstallDirs)
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  set(RT_LIB "rt")
+else()
+  set(RT_LIB "")
+endif()
+
 add_subdirectory(mimosa EXCLUDE_FROM_ALL)
 include_directories(mimosa)
 add_subdirectory(hefur)
 
 install(
   DIRECTORY www/
-  DESTINATION share/hefur/www
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/hefur/www
   PATTERN bootstrap EXCLUDE
   PATTERN *.less EXCLUDE
   PATTERN update-bootstrap.sh EXCLUDE)
 
 install(
   FILES manual/manual.html
-  DESTINATION share/doc/hefur/)
+  DESTINATION ${CMAKE_INSTALL_DOCDIR}/hefur/)
