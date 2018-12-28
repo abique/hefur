@@ -1,0 +1,14 @@
+[Unit]
+Description=Hefur BitTorrent tracker
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/hefurd -torrent-dir /var/lib/hefurd
+User=hefur
+Group=hefur
+CPUSchedulingPolicy=batch
+Restart=on-failure
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
