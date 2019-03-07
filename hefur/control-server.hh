@@ -1,9 +1,8 @@
-#ifndef HEFUR_CONTROL_SERVER_HH
-# define HEFUR_CONTROL_SERVER_HH
+#pragma once
 
-# include <mimosa/string-ref.hh>
-# include <mimosa/thread.hh>
-# include <mimosa/rpc/server.hh>
+#include <mimosa/string-ref.hh>
+#include <mimosa/thread.hh>
+#include <mimosa/rpc/server.hh>
 
 namespace hefur
 {
@@ -14,6 +13,8 @@ namespace hefur
   class ControlServer : public m::RefCountable<ControlServer>
   {
   public:
+    MIMOSA_DEF_PTR(ControlServer);
+
     ControlServer();
     ~ControlServer();
 
@@ -45,5 +46,3 @@ namespace hefur
     mr::Server::Ptr server_;
   };
 }
-
-#endif /* !HEFUR_CONTROL_SERVER_HH */

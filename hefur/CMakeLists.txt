@@ -30,8 +30,16 @@ endif(HEFUR_CONTROL_INTERFACE)
 
 add_executable(hefurd
   address.cc
+  address.hh
+
   announce-handler.cc
+  announce-handler.hh
+
   announce-request.cc
+  announce-request.hh
+
+  announce-response.hh
+
   file-handler.cc
   fs-tree-white-list.cc
   hefur.cc

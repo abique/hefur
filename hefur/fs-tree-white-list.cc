@@ -22,9 +22,9 @@ namespace hefur
     : root_(root),
       rescan_interval_(rescan_interval),
       stop_(),
-      scan_thread_([this] { this->loopScan(); })
+      scan_thread_()
   {
-    scan_thread_.start();
+    scan_thread_.start([this] { this->loopScan(); });
   }
 
   FsTreeWhiteList::~FsTreeWhiteList()

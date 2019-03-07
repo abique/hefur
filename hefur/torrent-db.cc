@@ -5,12 +5,8 @@
 namespace hefur
 {
   TorrentDb::TorrentDb()
-    : cleanup_stop_(),
-      cleanup_thread_([this] { this->cleanupLoop(); }),
-      torrents_lock_(),
-      torrents_()
   {
-    cleanup_thread_.start();
+    cleanup_thread_.start([this] { this->cleanupLoop(); });
   }
 
   TorrentDb::~TorrentDb()

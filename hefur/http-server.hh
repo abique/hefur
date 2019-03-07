@@ -1,9 +1,10 @@
-#ifndef HEFUR_HTTP_SERVER_HH
-# define HEFUR_HTTP_SERVER_HH
+#pragma once
 
-# include <mimosa/thread.hh>
-# include <mimosa/http/server.hh>
-# include <mimosa/tpl/dict.hh>
+#include <mimosa/thread.hh>
+#include <mimosa/http/server.hh>
+#include <mimosa/tpl/dict.hh>
+
+#include "namespace-helper.hh"
 
 namespace hefur
 {
@@ -40,7 +41,7 @@ namespace hefur
   class HttpServer
   {
   public:
-    HttpServer();
+    HttpServer() = default;
     ~HttpServer();
 
     /**
@@ -70,10 +71,8 @@ namespace hefur
   private:
     void run();
 
-    bool            stop_;
+    bool            stop_ = false;
     m::Thread       thread_;
     mh::Server::Ptr server_;
   };
 }
-
-#endif /* !HEFUR_HTTP_SERVER_HH */

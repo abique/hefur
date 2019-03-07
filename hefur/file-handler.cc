@@ -11,6 +11,7 @@
 #include "torrent-db.hh"
 #include "hefur.hh"
 #include "template-factory.hh"
+#include "torrent.hxx"
 
 namespace hefur
 {

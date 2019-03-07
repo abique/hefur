@@ -1,13 +1,12 @@
-#ifndef HEFUR_ADDRESS_HH
-# define HEFUR_ADDRESS_HH
+#pragma once
 
-# include <cstring>
-# include <string>
+#include <cstring>
+#include <string>
 
-# include <sys/socket.h>
-# include <netinet/in.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
-# include <mimosa/string-ref.hh>
+#include <mimosa/string-ref.hh>
 
 namespace hefur
 {
@@ -70,7 +69,3 @@ namespace hefur
 
   } __attribute__((packed));
 }
-
-# include "address.hxx"
-
-#endif /* !HEFUR_ADDRESS_HH */

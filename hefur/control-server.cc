@@ -1,5 +1,6 @@
 #include <mimosa/rpc/service-map.hh>
 
+#include "namespace-helper.hh"
 #include "control-server.hh"
 #include "control-service.hh"
 #include "log.hh"
@@ -9,7 +10,7 @@ namespace hefur
 {
   ControlServer::ControlServer()
     : stop_(false),
-      thread_([this] { this->run(); }),
+      thread_(),
       server_(new mr::Server)
   {
     mr::ServiceMap::Ptr sm = new mr::ServiceMap;
@@ -31,7 +32,7 @@ namespace hefur
       return false;
 
     stop_ = false;
-    thread_.start();
+    thread_.start([this] { this->run(); });
     return true;
   }
 

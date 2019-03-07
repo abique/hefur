@@ -1,14 +1,14 @@
-#ifndef HEFUR_ANNOUNCE_RESPONSE_HH
-# define HEFUR_ANNOUNCE_RESPONSE_HH
+#pragma once
 
-# include <cstdint>
-# include <string>
-# include <vector>
+#include <cstdint>
+#include <string>
+#include <vector>
 
-# include <mimosa/ref-countable.hh>
-# include <mimosa/non-copyable.hh>
+#include <mimosa/ref-countable.hh>
+#include <mimosa/non-copyable.hh>
 
-# include "address.hh"
+#include "namespace-helper.hh"
+#include "address.hh"
 
 namespace hefur
 {
@@ -19,6 +19,8 @@ namespace hefur
   struct AnnounceResponse : public m::RefCountable<AnnounceResponse>,
                             private m::NonCopyable // should not be copied
   {
+    MIMOSA_DEF_PTR(AnnounceResponse);
+
     bool                 error_;
     std::string          error_msg_;
 
@@ -29,5 +31,3 @@ namespace hefur
     std::vector<Address> addrs_;
   };
 }
-
-#endif /* !HEFUR_ANNOUNCE_RESPONSE_HH */

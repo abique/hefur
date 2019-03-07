@@ -1,16 +1,16 @@
-#ifndef HEFUR_FS_TREE_WHITE_LIST_HH
-# define HEFUR_FS_TREE_WHITE_LIST_HH
+#pragma once
 
-# include <string>
-# include <functional>
-# include <unordered_set>
+#include <string>
+#include <functional>
+#include <unordered_set>
 
-# include <mimosa/future.hh>
-# include <mimosa/shared-mutex.hh>
-# include <mimosa/thread.hh>
-# include <mimosa/trie.hh>
+#include <mimosa/future.hh>
+#include <mimosa/shared-mutex.hh>
+#include <mimosa/thread.hh>
+#include <mimosa/trie.hh>
 
-# include "info-hash.hh"
+#include "namespace-helper.hh"
+#include "info-hash.hh"
 
 namespace hefur
 {
@@ -42,8 +42,6 @@ namespace hefur
     const std::string & root_;
     m::Time             rescan_interval_;
     m::Future<bool>     stop_;
-    m::Thread           scan_thread_;
+    m::Thread         scan_thread_;
   };
 }
-
-#endif /* !HEFUR_FS_TREE_WHITE_LIST_HH */

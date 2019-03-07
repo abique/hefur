@@ -19,13 +19,6 @@
 
 namespace hefur
 {
-  HttpServer::HttpServer()
-    : stop_(false),
-      thread_([this] { this->run(); }),
-      server_(nullptr)
-  {
-  }
-
   HttpServer::~HttpServer()
   {
     stop();
@@ -80,7 +73,7 @@ namespace hefur
     if (!cert.empty() && !key.empty())
       server_->setSecure(cert, key);
 
-    thread_.start();
+    thread_.start([this] { this->run(); });
 
     return true;
   }

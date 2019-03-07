@@ -1,3 +1,7 @@
+#pragma once
+
+#include "address.hh"
+
 namespace hefur
 {
   inline m::StringRef

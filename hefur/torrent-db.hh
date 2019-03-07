@@ -1,17 +1,16 @@
-#ifndef HEFUR_TORRENT_DB_HH
-# define HEFUR_TORRENT_DB_HH
+#pragma once
 
-# include <mimosa/future.hh>
-# include <mimosa/thread.hh>
-# include <mimosa/shared-mutex.hh>
-# include <mimosa/trie.hh>
-# include <mimosa/ref-countable.hh>
+#include <mimosa/future.hh>
+#include <mimosa/thread.hh>
+#include <mimosa/shared-mutex.hh>
+#include <mimosa/trie.hxx>
+#include <mimosa/ref-countable.hh>
 
-# include "torrent.hh"
-# include "announce-request.hh"
-# include "announce-response.hh"
-# include "scrape-request.hh"
-# include "scrape-response.hh"
+#include "torrent.hh"
+#include "announce-request.hh"
+#include "announce-response.hh"
+#include "scrape-request.hh"
+#include "scrape-response.hh"
 
 namespace hefur
 {
@@ -87,5 +86,3 @@ namespace hefur
     torrents_type   torrents_;
   };
 }
-
-#endif /* !HEFUR_TORRENT_DB_HH */

@@ -42,7 +42,7 @@ namespace hefur
 {
   UdpServer::UdpServer()
     : stop_(false),
-      thread_([this] { this->run(); }),
+      thread_(),
       fd_(-1),
       secrets_(),
       sbufs_(),
@@ -113,7 +113,7 @@ namespace hefur
     for (unsigned i = 0; i < sizeof (secrets_) / sizeof (*secrets_); ++i)
       genSecret();
 
-    thread_.start();
+    thread_.start([this] { this->run(); });
 
     return true;
   }

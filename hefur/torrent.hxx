@@ -1,3 +1,7 @@
+#pragma once
+
+#include "torrent.hh"
+
 namespace hefur
 {
   inline m::StringRef

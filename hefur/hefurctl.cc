@@ -143,7 +143,6 @@ namespace hefur
       /* establish the rpc channel */
       ms::FdStream::Ptr stream(new ms::FdStream(fd));
       mr::Channel::Ptr channel(new mr::Channel(stream.get()));
-      channel->start();
 
       /* create our service client */
       pb::Control::Client control(channel);

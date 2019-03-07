@@ -1,14 +1,13 @@
-#ifndef HEFUR_ANNOUNCE_REQUEST_HH
-# define HEFUR_ANNOUNCE_REQUEST_HH
+#pragma once
 
-# include <cstdint>
+#include <cstdint>
 
-# include <mimosa/ref-countable.hh>
-# include <mimosa/non-copyable.hh>
+#include <mimosa/ref-countable.hh>
+#include <mimosa/non-copyable.hh>
 
-# include "address.hh"
-# include "info-hash.hh"
-# include "crypto-support.hh"
+#include "address.hh"
+#include "info-hash.hh"
+#include "crypto-support.hh"
 
 namespace hefur
 {
@@ -47,5 +46,3 @@ namespace hefur
     bool          skip_ipv6_;
   };
 }
-
-#endif /* !HEFUR_ANNOUNCE_REQUEST_HH */

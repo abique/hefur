@@ -1,16 +1,15 @@
-#ifndef HEFUR_TORRENT_HH
-# define HEFUR_TORRENT_HH
+#pragma once
 
-# include <string>
+#include <string>
 
-# include <mimosa/intrusive-dlist.hh>
-# include <mimosa/ref-countable.hh>
-# include <mimosa/trie.hh>
+#include <mimosa/intrusive-dlist.hh>
+#include <mimosa/ref-countable.hh>
+#include <mimosa/trie.hxx>
 
-# include "info-hash.hh"
-# include "peer.hh"
-# include "announce-request.hh"
-# include "announce-response.hh"
+#include "info-hash.hh"
+#include "peer.hh"
+#include "announce-request.hh"
+#include "announce-response.hh"
 
 namespace hefur
 {
@@ -80,8 +79,8 @@ namespace hefur
      */
     void removePeer(Peer * peer);
 
-    typedef m::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_> timeouts_type;
-    typedef m::Trie<Peer *, Peer::addr>                          peers_type;
+    using timeouts_type = m::IntrusiveDList<Peer, Peer*, &Peer::timeout_hook_>;
+    using peers_type = m::Trie<Peer *, Peer::addr>;
 
 
     m::Mutex      lock_;
@@ -98,7 +97,3 @@ namespace hefur
     uint32_t completed_;        // the number of times a peer completed the download
   };
 }
-
-# include "torrent.hxx"
-
-#endif /* !HEFUR_TORRENT_HH */
