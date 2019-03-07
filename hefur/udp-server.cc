@@ -33,6 +33,7 @@
 #include "udp-server.hh"
 #include "log.hh"
 #include "options.hh"
+#include "info-hash.hxx"
 
 #ifndef MSG_NOSIGNAL
 # define MSG_NOSIGNAL 0

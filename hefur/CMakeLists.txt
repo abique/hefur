@@ -1,5 +1,3 @@
-add_definitions(-include ${CMAKE_CURRENT_SOURCE_DIR}/namespace-helper.hh)
-
 if(HEFUR_CONTROL_INTERFACE)
   mimosa_protoc(hefur)
 
@@ -24,7 +22,11 @@ if(HEFUR_CONTROL_INTERFACE)
 
   set(HEFURD_CONTROL_SOURCES
     control-server.cc
-    control-service.cc)
+    control-server.hh
+
+    control-service.cc
+    control-service.hh
+    )
 
 endif(HEFUR_CONTROL_INTERFACE)
 
@@ -40,22 +42,66 @@ add_executable(hefurd
 
   announce-response.hh
 
+  crypto-support.hh
+
   file-handler.cc
+  file-handler.hh
+
   fs-tree-white-list.cc
+  fs-tree-white-list.hh
+
   hefur.cc
+  hefur.hh
+
   http-server.cc
-  log.cc
+  http-server.hh
+
+  info-hash.hh
+  info-hash.hxx
+
   log-handler.cc
+  log-handler.hh
+
+  log.cc
+  log.hh
+
   main.cc
+
+  namespace-helper.hh
+
   options.cc
+  options.hh
+
   peer.cc
+  peer.hh
+
   peers-handler.cc
+  peers-handler.hh
+
   scrape-handler.cc
+  scrape-handler.hh
+
+  scrape-request.hh
+
+  scrape-response.hh
+
   stat-handler.cc
+  stat-handler.hh
+
   template-factory.cc
-  torrent.cc
+  template-factory.hh
+
   torrent-db.cc
+  torrent-db.hh
+
+  torrent.cc
+  torrent.hh
+  torrent.hxx
+
+  tracker-controller.hh
+
   udp-server.cc
+  udp-server.hh
 
   ${HEFURD_CONTROL_SOURCES})
 
@@ -69,6 +115,7 @@ target_link_libraries(hefurd
   mimosa-fs
   mimosa-bittorrent
   mimosa-bencode
+  mimosa-json
   mimosa
   ${GNUTLS_LIBRARY}
   pthread

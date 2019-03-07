@@ -1,5 +1,4 @@
-#ifndef HEFUR_CRYPTO_SUPPORT_HH
-# define HEFUR_CRYPTO_SUPPORT_HH
+#pragma once
 
 namespace hefur
 {
@@ -18,5 +17,3 @@ namespace hefur
     kRequired,
   };
 }
-
-#endif /* !HEFUR_CRYPTO_SUPPORT_HH */

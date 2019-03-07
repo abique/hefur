@@ -1,6 +1,7 @@
 #include "torrent-db.hh"
 #include "log.hh"
 #include "options.hh"
+#include "info-hash.hxx"
 
 namespace hefur
 {

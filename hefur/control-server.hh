@@ -4,6 +4,8 @@
 #include <mimosa/thread.hh>
 #include <mimosa/rpc/server.hh>
 
+#include "namespace-helper.hh"
+
 namespace hefur
 {
   /**

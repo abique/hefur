@@ -3,6 +3,7 @@
 
 #include "hefur.hh"
 #include "scrape-handler.hh"
+#include "info-hash.hxx"
 
 namespace hefur
 {

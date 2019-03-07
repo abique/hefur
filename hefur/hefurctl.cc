@@ -10,6 +10,7 @@
 #include <mimosa/stream/base16-decoder.hh>
 #include <mimosa/bittorrent/torrent-parser.hh>
 
+#include "namespace-helper.hh"
 #include "hefur.pb.h"
 
 namespace hefur

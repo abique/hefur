@@ -21,8 +21,7 @@ namespace hefur
   class FsTreeWhiteList
   {
   public:
-    FsTreeWhiteList(const std::string & root,
-                    m::Time             rescan_interval = m::minute);
+    explicit FsTreeWhiteList(const std::string & root, m::Time rescan_interval = m::minute);
     ~FsTreeWhiteList();
 
     /**

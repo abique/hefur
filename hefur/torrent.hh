@@ -4,8 +4,10 @@
 
 #include <mimosa/intrusive-dlist.hh>
 #include <mimosa/ref-countable.hh>
-#include <mimosa/trie.hxx>
+#include <mimosa/trie.hh>
+#include <mimosa/mutex.hh>
 
+#include "address.hh"
 #include "info-hash.hh"
 #include "peer.hh"
 #include "announce-request.hh"
@@ -97,3 +99,5 @@ namespace hefur
     uint32_t completed_;        // the number of times a peer completed the download
   };
 }
+
+#include "torrent.hxx"

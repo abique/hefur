@@ -1,8 +1,7 @@
-#ifndef HEFUR_OPTIONS_HH
-# define HEFUR_OPTIONS_HH
+#pragma once
 
-# include <cstdint>
-# include <string>
+#include <cstdint>
+#include <string>
 
 namespace hefur
 {
@@ -32,5 +31,3 @@ namespace hefur
   extern const std::string & REVERSE_PROXY_HEADER;
   extern const std::string & REVERSE_PROXY_FROM;
 }
-
-#endif /* !HEFUR_OPTIONS_HH */

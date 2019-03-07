@@ -12,6 +12,7 @@
 #include "hefur.hh"
 #include "template-factory.hh"
 #include "torrent.hxx"
+#include "info-hash.hxx"
 
 namespace hefur
 {

@@ -1,5 +1,12 @@
-#ifndef HEFUR_SCRAPE_RESPONSE_HH
-# define HEFUR_SCRAPE_RESPONSE_HH
+#pragma once
+
+#include <vector>
+#include <string>
+
+#include <mimosa/ref-countable.hh>
+
+#include "namespace-helper.hh"
+#include "info-hash.hh"
 
 namespace hefur
 {
@@ -9,6 +16,8 @@ namespace hefur
    */
   struct ScrapeResponse : public m::RefCountable<ScrapeResponse>
   {
+    MIMOSA_DEF_PTR(ScrapeResponse);
+
     bool        error_;
     std::string error_msg_;
 
@@ -24,5 +33,3 @@ namespace hefur
     std::vector<Item> items_;
   };
 }
-
-#endif /* !HEFUR_SCRAPE_RESPONSE_HH */

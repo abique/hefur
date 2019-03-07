@@ -1,8 +1,9 @@
-#ifndef HEFUR_TEMPLATE_FACTORY_HH
-# define HEFUR_TEMPLATE_FACTORY_HH
+#pragma once
 
-# include <mimosa/singleton.hh>
-# include <mimosa/tpl/cache.hh>
+#include <mimosa/singleton.hh>
+#include <mimosa/tpl/cache.hh>
+
+#include "namespace-helper.hh"
 
 namespace hefur
 {
@@ -21,5 +22,3 @@ namespace hefur
     mt::Cache cache_;
   };
 }
-
-#endif /* !HEFUR_TEMPLATE_FACTORY_HH */

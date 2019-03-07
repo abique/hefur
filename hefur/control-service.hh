@@ -1,7 +1,6 @@
-#ifndef HEFUR_CONTROL_SERVICE_HH
-# define HEFUR_CONTROL_SERVICE_HH
+#pragma once
 
-# include "hefur.pb.h"
+#include "hefur.pb.h"
 
 namespace hefur
 {
@@ -23,5 +22,3 @@ namespace hefur
                       pb::StatusMsg & response) override;
   };
 }
-
-#endif /* !HEFUR_CONTROL_SERVICE_HH */

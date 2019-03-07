@@ -1,5 +1,6 @@
 #pragma once
 
+#include "namespace-helper.hh"
 #include "address.hh"
 
 namespace hefur

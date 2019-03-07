@@ -7,10 +7,14 @@
 #include <mimosa/stream/limited-stream.hh>
 #include <mimosa/time.hh>
 #include <mimosa/bittorrent/torrent-parser.hh>
+#include <mimosa/trie.hxx>
 
 #include "options.hh"
 #include "torrent.hh"
 #include "log.hh"
+#include "announce-request.hh"
+#include "info-hash.hxx"
+#include "address.hxx"
 
 namespace hefur
 {

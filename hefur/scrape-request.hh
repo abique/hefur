@@ -1,5 +1,8 @@
-#ifndef HEFUR_SCRAPE_REQUEST_HH
-# define HEFUR_SCRAPE_REQUEST_HH
+#pragma once
+
+#include <mimosa/ref-countable.hh>
+
+#include "info-hash.hh"
 
 namespace hefur
 {
@@ -9,8 +12,8 @@ namespace hefur
    */
   struct ScrapeRequest : public m::RefCountable<ScrapeRequest>
   {
+    MIMOSA_DEF_PTR(ScrapeRequest);
+
     std::vector<InfoHash> info_hashs_;
   };
 }
-
-#endif /* !HEFUR_SCRAPE_REQUEST_HH */

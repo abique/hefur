@@ -1,6 +1,7 @@
 #pragma once
 
 #include "torrent.hh"
+#include "info-hash.hxx"
 
 namespace hefur
 {

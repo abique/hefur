@@ -1,18 +1,17 @@
-#ifndef HEFUR_HEFUR_HH
-# define HEFUR_HEFUR_HH
+#pragma once
 
-# include <mimosa/singleton.hh>
-# include <mimosa/mutex.hh>
-# include <mimosa/condition.hh>
+#include <mimosa/singleton.hh>
+#include <mimosa/mutex.hh>
+#include <mimosa/condition.hh>
 
-# include "fs-tree-white-list.hh"
-# include "torrent-db.hh"
-# include "udp-server.hh"
-# include "http-server.hh"
+#include "fs-tree-white-list.hh"
+#include "torrent-db.hh"
+#include "udp-server.hh"
+#include "http-server.hh"
 
-# ifdef HEFUR_CONTROL_INTERFACE
-#  include "control-server.hh"
-# endif
+#ifdef HEFUR_CONTROL_INTERFACE
+# include "control-server.hh"
+#endif
 
 namespace hefur
 {
@@ -41,10 +40,8 @@ namespace hefur
     HttpServer *       https_server_;
     UdpServer *        udp_server_;
 
-# ifdef HEFUR_CONTROL_INTERFACE
+#ifdef HEFUR_CONTROL_INTERFACE
     ControlServer::Ptr control_server_;
-# endif
+#endif
   };
 }
-
-#endif /* !HEFUR_HEFUR_HH */

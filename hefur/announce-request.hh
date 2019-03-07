@@ -5,6 +5,7 @@
 #include <mimosa/ref-countable.hh>
 #include <mimosa/non-copyable.hh>
 
+#include "namespace-helper.hh"
 #include "address.hh"
 #include "info-hash.hh"
 #include "crypto-support.hh"
@@ -18,6 +19,8 @@ namespace hefur
   struct AnnounceRequest : public m::RefCountable<AnnounceRequest>,
                            private m::NonCopyable // should not be copied
   {
+    MIMOSA_DEF_PTR(AnnounceRequest);
+
     enum Event
     {
       kNone,

@@ -1,13 +1,13 @@
-#ifndef HEFUR_PEER_HH
-# define HEFUR_PEER_HH
+#pragma once
 
-# include <cstdint>
+#include <cstdint>
 
-# include <mimosa/intrusive-dlist.hh>
-# include <mimosa/time.hh>
+#include <mimosa/intrusive-dlist.hh>
+#include <mimosa/time.hh>
 
-# include "address.hh"
-# include "crypto-support.hh"
+#include "namespace-helper.hh"
+#include "address.hh"
+#include "crypto-support.hh"
 
 namespace hefur
 {
@@ -23,7 +23,7 @@ namespace hefur
     uint64_t      left_;
     uint64_t      downloaded_;
     uint64_t      uploaded_;
-    m::Time  timeout_ts_; // monotonic coarse clock
+    m::Time       timeout_ts_; // monotonic coarse clock
     uint8_t       peerid_[20];
 
     m::IntrusiveDListHook<Peer*> timeout_hook_;
@@ -39,5 +39,3 @@ namespace hefur
     }
   };
 }
-
-#endif /* !HEFUR_PEER_HH */

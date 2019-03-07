@@ -1,10 +1,11 @@
-#ifndef HEFUR_INFO_HASH_HH
-# define HEFUR_INFO_HASH_HH
+#pragma once
 
-# include <cstdint>
-# include <cstring>
+#include <cstdint>
+#include <cstring>
 
-# include <mimosa/string-ref.hh>
+#include <mimosa/string-ref.hh>
+
+#include "namespace-helper.hh"
 
 namespace hefur
 {
@@ -22,7 +23,3 @@ namespace hefur
     uint8_t bytes_[20];
   };
 }
-
-# include "info-hash.hxx"
-
-#endif /* !HEFUR_INFO_HASH_HH */

@@ -1,3 +1,7 @@
+#pragma once
+
+#include "info-hash.hh"
+
 namespace hefur
 {
   inline

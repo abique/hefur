@@ -1,5 +1,4 @@
-#ifndef HEFUR_NAMESPACE_HELPER_HH
-# define HEFUR_NAMESPACE_HELPER_HH
+#pragma once
 
 namespace mimosa
 {
@@ -27,5 +26,3 @@ namespace hefur
   namespace ms = mimosa::stream;
   namespace mt = mimosa::tpl;
 }
-
-#endif /* !HEFUR_NAMESPACE_HELPER_HH */

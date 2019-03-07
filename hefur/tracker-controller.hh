@@ -1,7 +1,6 @@
-#ifndef HEFUR_TRACKER_CONTROLLER_HH
-# define HEFUR_TRACKER_CONTROLLER_HH
+#pragma once
 
-# include <string>
+#include <string>
 
 namespace hefur
 {
@@ -46,5 +45,3 @@ namespace hefur
     std::string name_;
   };
 }
-
-#endif /* !HEFUR_PRIVATE_CONTROLLER_HH */

@@ -1,6 +1,7 @@
 #include <mimosa/options/options.hh>
 
 #include "options.hh"
+#include "namespace-helper.hh"
 
 namespace hefur
 {

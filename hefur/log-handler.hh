@@ -1,9 +1,10 @@
-#ifndef HEFUR_LOG_HANDLER_HH
-# define HEFUR_LOG_HANDLER_HH
+#pragma once
 
 #include <mimosa/http/log-handler.hh>
 #include <mimosa/http/request-reader.hh>
 #include <mimosa/http/request-writer.hh>
+
+#include "namespace-helper.hh"
 
 namespace hefur {
   class LogHandler : public mh::LogHandler
@@ -17,4 +18,3 @@ namespace hefur {
     mh::Handler::ConstPtr handler_;
   };
 }
-#endif //HEFUR_LOG_HANDLER_HH

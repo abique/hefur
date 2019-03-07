@@ -1,14 +1,13 @@
-#ifndef HEFUR_LOG_HH
-# define HEFUR_LOG_HH
+#pragma once
 
-# include <mimosa/log/origin.hh>
+#include <mimosa/log/origin.hh>
+
+#include "namespace-helper.hh"
 
 namespace hefur
 {
   /**
    * Hefur's logger.
    */
-  extern ml::Origin * log;
+  extern ml::Origin *log;
 }
-
-#endif /* !HEFUR_LOG_HH */

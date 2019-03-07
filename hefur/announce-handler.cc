@@ -7,6 +7,7 @@
 #include "announce-handler.hh"
 #include "options.hh"
 #include "log.hh"
+#include "info-hash.hxx"
 
 namespace hefur
 {

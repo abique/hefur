@@ -1,7 +1,8 @@
-#ifndef HEFUR_SCRAPE_HANDLER_HH
-# define HEFUR_SCRAPE_HANDLER_HH
+#pragma once
 
-# include <mimosa/http/handler.hh>
+#include <mimosa/http/handler.hh>
+
+#include "namespace-helper.hh"
 
 namespace hefur
 {
@@ -21,5 +22,3 @@ namespace hefur
                         mh::ResponseWriter & response) const override;
   };
 }
-
-#endif /* !HEFUR_SCRAPE_HANDLER_HH */
