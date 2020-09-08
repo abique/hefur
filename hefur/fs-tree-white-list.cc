@@ -59,17 +59,30 @@ namespace hefur
     std::vector<m::StringRef> keys;
     auto db = Hefur::instance().torrentDb();
     m::SharedMutex::Locker locker(db->torrents_lock_);
-    db->torrents_.foreach([this, &keys] (Torrent::Ptr torrent) {
-        if (::strncmp(torrent->path().c_str(), root_.c_str(), root_.size()))
-          return;
+    db->torrents_v1_.foreach([this, &keys] (Torrent::Ptr torrent) {
+        checkTorrent(torrent, keys);
+      });
 
-        struct ::stat st;
-        if (::stat(torrent->path().c_str(), &st) && errno == ENOENT)
-          keys.push_back(torrent->key());
+    db->torrents_v2_.foreach([this, &keys] (Torrent::Ptr torrent) {
+        checkTorrent(torrent, keys);
       });
 
     for (auto it = keys.begin(); it != keys.end(); ++it)
       db->torrents_.erase(*it);
+  }
+
+  void
+  FsTreeWhiteList::checkTorrent(Torrent::Ptr torrent, std::vector<m::StringRef> &keys) const
+  {
+    if (::strncmp(torrent->path().c_str(), root_.c_str(), root_.size()))
+      return;
+
+    struct ::stat st;
+    if (::stat(torrent->path().c_str(), &st) && errno == ENOENT)
+    {
+      if (torrent->keyV1())
+        keys.push_back(torrent->keyV1());
+    }
   }
 
   void

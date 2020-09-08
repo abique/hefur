@@ -11,6 +11,7 @@
 
 #include "namespace-helper.hh"
 #include "info-hash.hh"
+#include "torrent.hh"
 
 namespace hefur
 {
@@ -37,6 +38,7 @@ namespace hefur
      * Will run until stop_ is set to true.
      */
     void loopScan();
+    void checkTorrent(Torrent::Ptr torrent, std::vector<m::StringRef> &keys) const;
 
     const std::string & root_;
     m::Time             rescan_interval_;

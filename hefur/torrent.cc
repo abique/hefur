@@ -18,11 +18,13 @@
 
 namespace hefur
 {
-  Torrent::Torrent(const InfoHash &    info_hash,
+  Torrent::Torrent(const InfoHash &    info_hash_v1,
+                   const InfoHash &    info_hash_v2,
                    const std::string & name,
                    const std::string & path,
                    uint64_t            length)
-    : info_hash_(info_hash),
+    : info_hash_v1_(info_hash_v1),
+      info_hash_v2_(info_hash_v2),
       name_(name),
       path_(path),
       length_(length),

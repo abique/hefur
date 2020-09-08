@@ -42,13 +42,28 @@ namespace hefur
         return true;
       }
 
-      m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
-      auto torrent = tdb->torrents_.find(info_hash);
-      if (!torrent)
+      Torrent *torrent = nullptr;
+      if (info_hash.size() == 20)
       {
-        // error 404
-        response.setStatus(mh::kStatusNotFound);
-        return true;
+        m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
+        torrent = tdb->torrents_v1_.find(info_hash);
+        if (!torrent)
+        {
+          // error 404
+          response.setStatus(mh::kStatusNotFound);
+          return true;
+        }
+      }
+      else if (info_hash.size() == 32)
+      {
+        m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
+        torrent = tdb->torrents_v2_.find(info_hash);
+        if (!torrent)
+        {
+          // error 404
+          response.setStatus(mh::kStatusNotFound);
+          return true;
+        }
       }
 
       path = torrent->path();
