@@ -17,10 +17,11 @@ namespace hefur
 {
   class PeersHandler;
 
-  class Torrent : public m::RefCountable<Torrent>
+  class Torrent final : public m::RefCountable<Torrent>
   {
   public:
-    Torrent(const InfoHash &    info_hash,
+    Torrent(const InfoHash &    info_hash_v1,
+            const InfoHash &    info_hash_v2,
             const std::string & name = "",
             const std::string & path = "",
             uint64_t            length = 0);
@@ -42,7 +43,8 @@ namespace hefur
     /**
      * Return a key of the info hash to use in a Trie.
      */
-    inline m::StringRef key() const;
+    inline m::StringRef keyV1() const;
+    inline m::StringRef keyV2() const;
 
     inline const std::string & name() const { return name_; }
     inline const std::string & path() const { return path_; }
@@ -86,7 +88,8 @@ namespace hefur
 
 
     m::Mutex      lock_;
-    InfoHash      info_hash_;   // this is the torrent key
+    InfoHash      info_hash_v1_;   // this is the torrent key
+    InfoHash      info_hash_v2_;   // this is the torrent key
     std::string   name_;        // optional, used by StatHandler
     std::string   path_;        // optional, for later download
     uint64_t      length_;

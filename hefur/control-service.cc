@@ -14,7 +14,8 @@ namespace hefur
   ControlService::addTorrent(pb::Torrent & request,
                              pb::StatusMsg & response)
   {
-    auto torrent = new Torrent(InfoHash(InfoHash::SHA1, request.info_hash().c_str()),
+    auto torrent = new Torrent(InfoHash(InfoHash::SHA1, request.info_hash_v1().c_str()),
+                               InfoHash(InfoHash::SHA256, request.info_hash_v2().c_str()),
                                request.name(),
                                request.path(),
                                request.length());
@@ -27,7 +28,12 @@ namespace hefur
   ControlService::removeTorrent(pb::Torrent & request,
                                 pb::StatusMsg & response)
   {
-    Hefur::instance().torrentDb()->removeTorrent(request.info_hash());
+    auto db = Hefur::instance().torrentDb();
+    if (request.has_info_hash_v1())
+      db->removeTorrent(request.info_hash_v1());
+    if (request.has_info_hash_v2())
+      db->removeTorrent(request.info_hash_v2());
+
     response.set_status(pb::kOk);
     return true;
   }

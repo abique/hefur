@@ -1,3 +1,5 @@
+syntax = "proto2";
+
 package hefur.pb;
 
 enum Status
@@ -18,10 +20,11 @@ message Void
 
 message Torrent
 {
-  required bytes  info_hash = 1;
-  optional uint64 length    = 2;
-  optional bytes  name      = 3;
-  optional bytes  path      = 4;
+  optional bytes  info_hash_v1 = 1;
+  optional bytes  info_hash_v2 = 5;
+  optional uint64 length       = 2;
+  optional bytes  name         = 3;
+  optional bytes  path         = 4;
 }
 
 service Control

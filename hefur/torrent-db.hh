@@ -71,11 +71,16 @@ namespace hefur
     friend class FsTreeWhiteList;
 
     /** helper to use torrent->key() as a key for the trie */
-    static inline m::StringRef torrentKey(Torrent::Ptr torrent) {
-      return m::StringRef(torrent->key());
+    static inline m::StringRef torrentKeyV1(Torrent::Ptr torrent) {
+      return m::StringRef(torrent->keyV1());
     }
 
-    typedef m::Trie<Torrent::Ptr, torrentKey> torrents_type;
+    static inline m::StringRef torrentKeyV2(Torrent::Ptr torrent) {
+      return m::StringRef(torrent->keyV2());
+    }
+
+    typedef m::Trie<Torrent::Ptr, torrentKeyV1> torrents_type;
+    typedef m::Trie<Torrent::Ptr, torrentKeyV2> torrents_type;
 
     void cleanup();
     void cleanupLoop();
@@ -83,6 +88,7 @@ namespace hefur
     m::Future<bool> cleanup_stop_;
     m::Thread       cleanup_thread_;
     m::SharedMutex  torrents_lock_;
-    torrents_type   torrents_;
+    torrents_type   torrents_v1_;
+    torrents_type   torrents_v2_;
   };
 }

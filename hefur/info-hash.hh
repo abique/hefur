@@ -13,7 +13,7 @@ namespace hefur
   class InfoHash
   {
   public:
-    enum Type : uint8_t { SHA1, SHA256 };
+    enum Type : uint8_t { NONE, SHA1, SHA256 };
 
     constexpr InfoHash() = default;
     inline InfoHash(Type type, const char *data);
@@ -23,6 +23,6 @@ namespace hefur
     static constexpr size_t hashSize(Type type) noexcept;
 
     uint8_t bytes_[32] = {0};
-    Type    type_ = SHA1;
+    Type    type_ = NONE;
   };
 }

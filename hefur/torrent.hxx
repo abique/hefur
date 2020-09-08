@@ -6,8 +6,14 @@
 namespace hefur
 {
   inline m::StringRef
-  Torrent::key() const
+  Torrent::keyV1() const
   {
-    return info_hash_.bytes();
+    return info_hash_v1_.bytes();
+  }
+
+  inline m::StringRef
+  Torrent::keyV2() const
+  {
+    return info_hash_v2_.bytes();
   }
 }

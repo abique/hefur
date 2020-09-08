@@ -38,6 +38,7 @@ namespace hefur
 
     char          peerid_[20];
     InfoHash      info_hash_;
+    InfoHash      info_hash_v2_;
     uint32_t      num_want_; // the number of peers wanted
     Event         event_;
     uint64_t      downloaded_;
