@@ -3,8 +3,7 @@ if(HEFUR_CONTROL_INTERFACE)
 
   add_library(hefur-proto STATIC hefur.pb.cc)
 
-  add_executable(hefurctl
-    hefurctl.cc)
+  add_executable(hefurctl hefurctl.cc)
 
   target_link_libraries(hefurctl
     hefur-proto

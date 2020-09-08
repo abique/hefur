@@ -14,7 +14,7 @@ namespace hefur
   ControlService::addTorrent(pb::Torrent & request,
                              pb::StatusMsg & response)
   {
-    auto torrent = new Torrent(request.info_hash().c_str(),
+    auto torrent = new Torrent(InfoHash(InfoHash::SHA1, request.info_hash().c_str()),
                                request.name(),
                                request.path(),
                                request.length());

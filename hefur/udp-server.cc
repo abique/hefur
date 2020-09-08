@@ -390,7 +390,7 @@ namespace hefur
 
     hefur::ScrapeRequest::Ptr rq = new hefur::ScrapeRequest;
     for (size_t i = 0; i < (size - sizeof (*scrape)) / 20; ++i)
-      rq->info_hashs_.push_back(InfoHash((const char *)scrape->info_hash_ + i * 20));
+      rq->info_hashs_.push_back(InfoHash(InfoHash::SHA1, (const char *)scrape->info_hash_ + i * 20));
 
     auto tdb = Hefur::instance().torrentDb();
     if (!tdb)

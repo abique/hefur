@@ -25,7 +25,7 @@ namespace hefur
     {
       if (it->second.size() != 20)
         continue;
-      rq->info_hashs_.push_back(InfoHash(it->second.data()));
+      rq->info_hashs_.push_back(InfoHash(InfoHash::SHA1, it->second.data()));
     }
 
     response.setContentType("text/plain");

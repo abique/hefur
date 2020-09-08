@@ -14,7 +14,7 @@ message("hefur version: ${HEFUR_VERSION}")
 message("control interface: ${HEFUR_CONTROL_INTERFACE}")
 
 add_definitions(
-  -std=c++14
+  -std=c++17
   -D_GNU_SOURCE -D_LARGEFILE64_SOURCE
   -Wall -Wextra -Werror=return-type
   -DHEFUR_VERSION=\"${HEFUR_VERSION}\"
