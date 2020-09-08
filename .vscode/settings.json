@@ -1,0 +1,6 @@
+{
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/cmake-builds/code"
+    ]
+}
