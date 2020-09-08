@@ -49,7 +49,7 @@ namespace hefur
   Torrent::cleanup()
   {
     m::Mutex::Locker locker(lock_);
-    m::Time     now = m::monotonicTimeCoarse();
+    m::Time now = m::monotonicTimeCoarse();
 
     while (!timeouts_.empty())
     {
@@ -146,7 +146,7 @@ namespace hefur
     peer->left_       = request->left_;
     peer->downloaded_ = request->downloaded_;
     peer->uploaded_   = request->uploaded_;
-    memcpy(&peer->addr_, &request->addr_, sizeof (request->addr_));
+    peer->addr_ = request->addr_;
     memcpy(peer->peerid_, request->peerid_, 20);
 
     // increments the counters

@@ -1,5 +1,7 @@
 #include <arpa/inet.h>
 
+#include <cassert>
+
 #include "address.hh"
 
 namespace hefur
@@ -12,13 +14,6 @@ namespace hefur
   Address::Address(const Address & a)
   {
     *this = a;
-  }
-
-  Address &
-  Address::operator=(const Address & a)
-  {
-    ::memcpy(this, &a, sizeof (a));
-    return *this;
   }
 
   bool

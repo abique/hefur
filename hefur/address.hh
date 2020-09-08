@@ -15,12 +15,12 @@ namespace hefur
    *
    * @internal move constructor has no interest as there is no pointers.
    */
-  struct Address
+  struct Address final
   {
   public:
     Address();
     Address(const Address & a);
-    Address & operator=(const Address & a);
+    Address & operator=(const Address & a) = default;
     bool operator==(const Address & other) const;
 
     void setPort(uint16_t port);
