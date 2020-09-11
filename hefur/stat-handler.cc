@@ -62,7 +62,8 @@ namespace hefur
             mf::printByteSize(ss, it->length());
             torrent->append("length", ss.str());
           }
-          torrent->append("info_sha1", it.version == 1 ? it->keyV1() : it->keyV2().substr(0, 20));
+          torrent->append("info_sha1", it->keyV1());
+          torrent->append("info_sha2", it->keyV2());
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());
           torrent->append("completed", it->completed());

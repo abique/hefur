@@ -21,7 +21,7 @@
     {{*torrents}}
     <tr>
       <td>
-        <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&amp;dn={{name|u}}{{*tracker_udp}}&amp;tr={{tracker_udp|u}}{{/tracker_udp}}&amp;tr={{tracker_http|u}}"
+        <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&amp;urn:btmh:1220{{info_sha2|b16}}&amp;dn={{name|u}}{{*tracker_udp}}&amp;tr={{tracker_udp|u}}{{/tracker_udp}}&amp;tr={{tracker_http|u}}"
            title="Magnet link">
           <img src="/img/magnet-icon.gif"/>
         </a>
@@ -37,6 +37,7 @@
         {{/show_peers}}
       </td>
       <td>{{info_sha1|b16}}</td>
+      <td>{{info_sha2|b16}}</td>
       <td>{{name}}</td>
       <td>{{length}}</td>
       <td>{{seeders}}</td>

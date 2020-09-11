@@ -95,8 +95,6 @@ add_executable(hefurd
   torrent.cc
   torrent.hh
 
-  tracker-controller.hh
-
   udp-server.cc
   udp-server.hh
 
