@@ -9,10 +9,8 @@
 
 #include "file-handler.hh"
 #include "hefur.hh"
-#include "info-hash.hxx"
 #include "template-factory.hh"
 #include "torrent-db.hh"
-#include "torrent.hxx"
 
 namespace hefur {
 bool FileHandler::handle(mh::RequestReader &request, mh::ResponseWriter &response) const {

@@ -44,6 +44,5 @@ namespace hefur {
       const m::Time rescan_interval_;
       m::Future<bool> stop_;
       std::thread scan_thread_;
-      std::unordered_set<InfoHash> info_hashes_;
    };
 } // namespace hefur

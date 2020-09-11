@@ -1,6 +1,5 @@
 #include "torrent-db.hh"
 #include "info-hash.hh"
-#include "info-hash.hxx"
 #include "log.hh"
 #include "options.hh"
 
@@ -21,7 +20,10 @@ namespace hefur {
    AnnounceResponse::Ptr TorrentDb::announce(AnnounceRequest::Ptr request) {
       m::SharedMutex::Locker locker(torrents_lock_);
 
-      Torrent *torrent = torrents_.find(request->info_hash_.bytes());
+      Torrent *torrent = torrents_v1_.find(request->info_hash_v1_.bytes());
+      if (!torrent)
+         torrent = torrents_v2_.find(request->info_hash_v2_.bytes());
+
       if (!torrent) {
          // we didn't find the torrent, so let's answer an error
          AnnounceResponse::Ptr response = new AnnounceResponse;
@@ -42,7 +44,14 @@ namespace hefur {
       m::SharedMutex::ReadLocker locker(torrents_lock_);
       for (auto it = request->info_hashs_.begin(); it != request->info_hashs_.end(); ++it) {
          ScrapeResponse::Item item;
-         Torrent *torrent = torrents_.find(it->bytes());
+
+         Torrent *torrent = nullptr;
+
+         if (it->bytes().size() == InfoHash::hashSize(InfoHash::SHA1))
+            torrent = torrents_v1_.find(it->bytes());
+         else if (it->bytes().size() == InfoHash::hashSize(InfoHash::SHA256))
+            torrent = torrents_v2_.find(it->bytes());
+
          if (!torrent)
             continue;
 
@@ -60,7 +69,8 @@ namespace hefur {
       // as we are not modifying the trie, we can use shared locking
       // the torrent, will do exclusive locking for itself
       m::SharedMutex::ReadLocker locker(torrents_lock_);
-      torrents_.foreach ([](Torrent::Ptr torrent) { torrent->cleanup(); });
+      torrents_v1_.foreach ([](Torrent::Ptr torrent) { torrent->cleanup(); });
+      torrents_v2_.foreach ([](Torrent::Ptr torrent) { torrent->cleanup(); });
    }
 
    void TorrentDb::cleanupLoop() {
