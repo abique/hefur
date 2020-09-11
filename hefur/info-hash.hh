@@ -10,7 +10,7 @@ namespace hefur {
       enum Type : uint8_t { NONE, SHA1, SHA256 };
 
       constexpr InfoHash() = default;
-      inline InfoHash(Type type, const char *data);
+      InfoHash(Type type, const char *data);
 
       friend bool operator==(const InfoHash &a, const InfoHash &b) noexcept {
          if (a.type_ != b.type_)

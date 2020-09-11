@@ -55,27 +55,24 @@ namespace hefur {
    }
 
    void FsTreeWhiteList::check() {
-      std::vector<m::StringRef> keys;
+      std::vector<std::string_view> keys;
       auto db = Hefur::instance().torrentDb();
       m::SharedMutex::Locker locker(db->torrents_lock_);
-      db->torrents_v1_.foreach (
-         [this, &keys](Torrent::Ptr torrent) { checkTorrent(torrent, keys); });
-
-      db->torrents_v2_.foreach (
-         [this, &keys](Torrent::Ptr torrent) { checkTorrent(torrent, keys); });
+      db->torrents_.foreach(
+         [this, &keys](TorrentDb::TorrentEntry torrent) { checkTorrent(torrent.torrent, keys); });
 
       for (auto it = keys.begin(); it != keys.end(); ++it)
          db->torrents_.erase(*it);
    }
 
-   void FsTreeWhiteList::checkTorrent(Torrent::Ptr torrent, std::vector<m::StringRef> &keys) const {
+   void FsTreeWhiteList::checkTorrent(Torrent::Ptr torrent, std::vector<std::string_view> &keys) const {
       if (::strncmp(torrent->path().c_str(), root_.c_str(), root_.size()))
          return;
 
       struct ::stat st;
       if (::stat(torrent->path().c_str(), &st) && errno == ENOENT) {
-         if (torrent->keyV1())
-            keys.push_back(torrent->keyV1());
+         keys.emplace_back(torrent->keyV1());
+         keys.emplace_back(torrent->keyV2());
       }
    }
 } // namespace hefur

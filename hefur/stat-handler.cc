@@ -53,7 +53,7 @@ namespace hefur
       uint64_t total_length    = 0;
       uint64_t total_completed = 0;
 
-      tdb->torrents_.foreach([&] (Torrent *it) {
+      tdb->torrents_.foreach([&] (auto it) {
           auto torrent = new mt::Dict("torrent");
           torrents->append(torrent);
           torrent->append("name", it->name());
@@ -62,7 +62,7 @@ namespace hefur
             mf::printByteSize(ss, it->length());
             torrent->append("length", ss.str());
           }
-          torrent->append("info_sha1", it->key());
+          torrent->append("info_sha1", it.version == 1 ? it->keyV1() : it->keyV2().substr(0, 20));
           torrent->append("leechers", it->leechers());
           torrent->append("seeders", it->seeders());
           torrent->append("completed", it->completed());

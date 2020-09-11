@@ -30,7 +30,6 @@
 #include <gnutls/gnutls.h>
 
 #include "hefur.hh"
-#include "info-hash.hxx"
 #include "log.hh"
 #include "options.hh"
 #include "udp-server.hh"

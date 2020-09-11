@@ -38,7 +38,7 @@ namespace hefur {
        * Will run until stop_ is set to true.
        */
       void loopScan();
-      void checkTorrent(Torrent::Ptr torrent, std::vector<m::StringRef> &keys) const;
+      void checkTorrent(Torrent::Ptr torrent, std::vector<std::string_view> &keys) const;
 
       const std::string &root_;
       const m::Time rescan_interval_;

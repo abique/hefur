@@ -2,7 +2,6 @@
 #include <mimosa/stream/string-stream.hh>
 
 #include "hefur.hh"
-#include "info-hash.hxx"
 #include "scrape-handler.hh"
 
 namespace hefur {
@@ -18,7 +17,7 @@ namespace hefur {
       for (auto it = query.find("info_hash"); it != query.end() && it->first == "info_hash"; ++it) {
          if (it->second.size() != 20)
             continue;
-         rq->info_hashs_.push_back(InfoHash(InfoHash::SHA1, it->second.data()));
+         rq->info_hashs_.emplace_back(InfoHash::SHA1, it->second.data());
       }
 
       response.setContentType("text/plain");

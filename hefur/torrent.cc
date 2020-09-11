@@ -11,7 +11,6 @@
 
 #include "address.hxx"
 #include "announce-request.hh"
-#include "info-hash.hxx"
 #include "log.hh"
 #include "options.hh"
 #include "torrent.hh"
@@ -158,8 +157,8 @@ namespace hefur {
       }
 
       auto desc = p.result();
-      InfoHash info;
-      memcpy(info.bytes_, desc->info_hash_.bytes_, 20);
-      return new Torrent(info, desc->name_, path, desc->length_);
+      InfoHash info_v1(InfoHash::SHA1, reinterpret_cast<const char *>(desc->info_hash_v1_.bytes_));
+      InfoHash info_v2(InfoHash::SHA256, reinterpret_cast<const char *>(desc->info_hash_v2_.bytes_));
+      return new Torrent(info_v1, info_v2, desc->name_, path, desc->length_);
    }
 } // namespace hefur

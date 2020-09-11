@@ -16,7 +16,7 @@ namespace hefur {
       }
    }
 
-   inline InfoHash::InfoHash(Type type, const char *data) : type_(type) {
+   InfoHash::InfoHash(Type type, const char *data) : type_(type) {
       std::memcpy(bytes_, data, hashSize(type));
    }
 } // namespace hefur

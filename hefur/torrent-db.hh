@@ -72,7 +72,7 @@ namespace hefur {
          TorrentEntry(Torrent::Ptr t = nullptr, int v = 1) : torrent(t), version(v) {}
          TorrentEntry(std::nullptr_t) {}
          operator bool() const noexcept { return torrent; }
-         Torrent& operator->() const noexcept { return *torrent; }
+         Torrent* operator->() const noexcept { return torrent.get(); }
 
          Torrent::Ptr torrent;
          int version = 0;
