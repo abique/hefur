@@ -7,6 +7,19 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "hefurd",
+            "program": "${workspaceFolder}/cmake-builds/code/hefur/hefurd",
+            "args": [
+                "-torrent-dir", "torrents",
+                "-www-dir", "../www",
+                "-control-socket", "control",
+                "-log-color", "-log-level", "debug"
+            ],
+            "cwd": "${workspaceFolder}/testing"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "tst-mimosa",
             "program": "${workspaceFolder}/cmake-builds/code/mimosa/mimosa/tests/tst-mimosa",
             "args": [],

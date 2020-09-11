@@ -7,88 +7,87 @@
 #include <mimosa/tpl/template.hh>
 #include <mimosa/tpl/value.hh>
 
-#include "torrent-db.hh"
 #include "hefur.hh"
+#include "options.hh"
 #include "stat-handler.hh"
 #include "template-factory.hh"
-#include "options.hh"
+#include "torrent-db.hh"
 
-namespace hefur
-{
-  bool
-  StatHandler::handle(mh::RequestReader &  request,
-                      mh::ResponseWriter & response) const
-  {
-    auto tpl = TemplateFactory::instance().create("page.html");
-    if (!tpl)
-      return false;
+namespace hefur {
+   bool StatHandler::handle(mh::RequestReader &request, mh::ResponseWriter &response) const {
+      auto tpl = TemplateFactory::instance().create("page.html");
+      if (!tpl)
+         return false;
 
-    auto tpl_body = TemplateFactory::instance().create("stat.html");
-    if (!tpl_body)
-      return false;
+      auto tpl_body = TemplateFactory::instance().create("stat.html");
+      if (!tpl_body)
+         return false;
 
-    mt::Dict dict;
-    HttpServer::commonDict(dict);
-    dict.append("body", tpl_body);
-    dict.append("title", "Torrents");
-    dict.append("tracker_http", mf::str(
-                  "http://%v:%v/announce", request.host(), request.port()));
-    if (UDP_PORT)
-      dict.append("tracker_udp", mf::str(
-                    "udp://%v:%v", request.host(), UDP_PORT));
+      mt::Dict dict;
+      HttpServer::commonDict(dict);
+      dict.append("body", tpl_body);
+      dict.append("title", "Torrents");
+      dict.append("tracker_http", mf::str("http://%v:%v/announce", request.host(), request.port()));
+      if (UDP_PORT)
+         dict.append("tracker_udp", mf::str("udp://%v:%v", request.host(), UDP_PORT));
 
-    auto torrents = new mt::List("torrents");
-    dict.append(torrents);
-    auto tdb = Hefur::instance().torrentDb();
-    if (!tdb)
-    {
-      response.setStatus(mh::kStatusServiceUnavailable);
-      return true;
-    }
-
-    {
-      m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
-      uint64_t total_leechers  = 0;
-      uint64_t total_seeders   = 0;
-      uint64_t total_length    = 0;
-      uint64_t total_completed = 0;
-
-      tdb->torrents_.foreach([&] (auto it) {
-          auto torrent = new mt::Dict("torrent");
-          torrents->append(torrent);
-          torrent->append("name", it->name());
-          {
-            ms::StringStream ss;
-            mf::printByteSize(ss, it->length());
-            torrent->append("length", ss.str());
-          }
-          torrent->append("info_sha1", it->keyV1());
-          torrent->append("info_sha2", it->keyV2());
-          torrent->append("leechers", it->leechers());
-          torrent->append("seeders", it->seeders());
-          torrent->append("completed", it->completed());
-          if (!DISABLE_PEERS_PAGE)
-            torrent->append("show_peers", 1);
-          if (!DISABLE_FILE_PAGE)
-            torrent->append("show_torrent", 1);
-
-          total_leechers  += it->leechers();
-          total_seeders   += it->seeders();
-          total_length    += it->length();
-          total_completed += it->completed();
-        });
-
-      dict.append("total_leechers", total_leechers);
-      dict.append("total_seeders", total_seeders);
-      dict.append("total_completed", total_completed);
-      {
-        ms::StringStream ss;
-        mf::printByteSize(ss, total_length);
-        dict.append("total_length", ss.str());
+      auto torrents = new mt::List("torrents");
+      dict.append(torrents);
+      auto tdb = Hefur::instance().torrentDb();
+      if (!tdb) {
+         response.setStatus(mh::kStatusServiceUnavailable);
+         return true;
       }
-    }
 
-    tpl->execute(&response, dict);
-    return true;
-  }
-}
+      {
+         m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
+         uint64_t total_leechers = 0;
+         uint64_t total_seeders = 0;
+         uint64_t total_length = 0;
+         uint64_t total_completed = 0;
+
+         std::unordered_set<void *> seen;
+         tdb->torrents_.foreach ([&](auto it) {
+            /* Avoid duplicates as we might have the same torrent twice (v1 and v2) */
+            if (seen.count(it.torrent.get()) > 0)
+               return;
+            seen.insert(it.torrent.get());
+
+            auto torrent = new mt::Dict("torrent");
+            torrents->append(torrent);
+            torrent->append("name", it->name());
+            {
+               ms::StringStream ss;
+               mf::printByteSize(ss, it->length());
+               torrent->append("length", ss.str());
+            }
+            torrent->append("info_sha1", it->keyV1());
+            torrent->append("info_sha2", it->keyV2());
+            torrent->append("leechers", it->leechers());
+            torrent->append("seeders", it->seeders());
+            torrent->append("completed", it->completed());
+            if (!DISABLE_PEERS_PAGE)
+               torrent->append("show_peers", 1);
+            if (!DISABLE_FILE_PAGE)
+               torrent->append("show_torrent", 1);
+
+            total_leechers += it->leechers();
+            total_seeders += it->seeders();
+            total_length += it->length();
+            total_completed += it->completed();
+         });
+
+         dict.append("total_leechers", total_leechers);
+         dict.append("total_seeders", total_seeders);
+         dict.append("total_completed", total_completed);
+         {
+            ms::StringStream ss;
+            mf::printByteSize(ss, total_length);
+            dict.append("total_length", ss.str());
+         }
+      }
+
+      tpl->execute(&response, dict);
+      return true;
+   }
+} // namespace hefur
