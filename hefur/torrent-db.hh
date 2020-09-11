@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+#include <exception>
 #include <mimosa/future.hh>
 #include <mimosa/ref-countable.hh>
 #include <mimosa/shared-mutex.hh>
@@ -66,17 +68,29 @@ namespace hefur {
       friend class FileHandler;
       friend class FsTreeWhiteList;
 
+      struct TorrentEntry {
+         TorrentEntry(Torrent::Ptr t = nullptr, int v = 1) : torrent(t), version(v) {}
+         TorrentEntry(std::nullptr_t) {}
+         operator bool() const noexcept { return torrent; }
+         Torrent& operator->() const noexcept { return *torrent; }
+
+         Torrent::Ptr torrent;
+         int version = 0;
+      };
+
       /** helper to use torrent->key() as a key for the trie */
-      static inline m::StringRef torrentKeyV1(Torrent::Ptr torrent) {
-         return m::StringRef(torrent->keyV1());
+      static inline m::StringRef torrentKey(TorrentEntry torrent) {
+         switch (torrent.version) {
+         case 1:
+            return torrent.torrent->keyV1();
+         case 2:
+            return torrent.torrent->keyV2().substr(0, 20);
+         default:
+            std::terminate();
+         }
       }
 
-      static inline m::StringRef torrentKeyV2(Torrent::Ptr torrent) {
-         return m::StringRef(torrent->keyV2());
-      }
-
-      typedef m::Trie<Torrent::Ptr, torrentKeyV1> torrents_v1_type;
-      typedef m::Trie<Torrent::Ptr, torrentKeyV2> torrents_v2_type;
+      typedef m::Trie<TorrentEntry, torrentKey> torrents_type;
 
       void cleanup();
       void cleanupLoop();
@@ -84,7 +98,6 @@ namespace hefur {
       m::Future<bool> cleanup_stop_;
       m::Thread cleanup_thread_;
       m::SharedMutex torrents_lock_;
-      torrents_v1_type torrents_v1_;
-      torrents_v2_type torrents_v2_;
+      torrents_type torrents_;
    };
 } // namespace hefur

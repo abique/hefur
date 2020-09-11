@@ -20,11 +20,8 @@ namespace hefur {
    AnnounceResponse::Ptr TorrentDb::announce(AnnounceRequest::Ptr request) {
       m::SharedMutex::Locker locker(torrents_lock_);
 
-      Torrent *torrent = torrents_v1_.find(request->info_hash_v1_.bytes());
-      if (!torrent)
-         torrent = torrents_v2_.find(request->info_hash_v2_.bytes());
-
-      if (!torrent) {
+      auto entry = torrents_.find(request->info_hash_.bytes());
+      if (!entry.torrent) {
          // we didn't find the torrent, so let's answer an error
          AnnounceResponse::Ptr response = new AnnounceResponse;
          response->error_ = true;
@@ -32,7 +29,7 @@ namespace hefur {
          return response;
       }
       // forward the request to the torrent
-      auto response = torrent->announce(request);
+      auto response = entry.torrent->announce(request);
       response->interval_ = ANNOUNCE_INTERVAL * 60;
       return response;
    }
@@ -45,20 +42,14 @@ namespace hefur {
       for (auto it = request->info_hashs_.begin(); it != request->info_hashs_.end(); ++it) {
          ScrapeResponse::Item item;
 
-         Torrent *torrent = nullptr;
-
-         if (it->bytes().size() == InfoHash::hashSize(InfoHash::SHA1))
-            torrent = torrents_v1_.find(it->bytes());
-         else if (it->bytes().size() == InfoHash::hashSize(InfoHash::SHA256))
-            torrent = torrents_v2_.find(it->bytes());
-
-         if (!torrent)
+         auto entry = torrents_.find(it->bytes());
+         if (!entry.torrent)
             continue;
 
          item.info_hash_ = *it;
-         item.nleechers_ = torrent->leechers();
-         item.nseeders_ = torrent->seeders();
-         item.ndownloaded_ = torrent->completed();
+         item.nleechers_ = entry.torrent->leechers();
+         item.nseeders_ = entry.torrent->seeders();
+         item.ndownloaded_ = entry.torrent->completed();
          response->items_.push_back(item);
       }
       response->interval_ = SCRAPE_INTERVAL * 60;
@@ -69,8 +60,7 @@ namespace hefur {
       // as we are not modifying the trie, we can use shared locking
       // the torrent, will do exclusive locking for itself
       m::SharedMutex::ReadLocker locker(torrents_lock_);
-      torrents_v1_.foreach ([](Torrent::Ptr torrent) { torrent->cleanup(); });
-      torrents_v2_.foreach ([](Torrent::Ptr torrent) { torrent->cleanup(); });
+      torrents_.foreach ([](TorrentEntry entry) { entry.torrent->cleanup(); });
    }
 
    void TorrentDb::cleanupLoop() {
@@ -86,20 +76,15 @@ namespace hefur {
       m::SharedMutex::Locker locker(torrents_lock_);
 
       if (!torrent->keyV1().empty())
-         torrents_v1_.insert(torrent);
+         torrents_.insert({torrent, 1});
 
       if (!torrent->keyV2().empty())
-         torrents_v2_.insert(torrent);
+         torrents_.insert({torrent, 2});
    }
 
    void TorrentDb::removeTorrent(const m::StringRef &info_hash) {
       // requires exclusive locking as we modify the trie
       m::SharedMutex::Locker locker(torrents_lock_);
-
-      if (info_hash.size() == InfoHash::hashSize(InfoHash::SHA1))
-         torrents_v1_.erase(info_hash);
-
-      if (info_hash.size() == InfoHash::hashSize(InfoHash::SHA256))
-         torrents_v2_.erase(info_hash);
+      torrents_.erase(info_hash);
    }
 } // namespace hefur

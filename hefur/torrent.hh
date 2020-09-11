@@ -95,4 +95,5 @@ namespace hefur {
       uint32_t seeders_;   // the number of seeders
       uint32_t completed_; // the number of times a peer completed the download
    };
+
 } // namespace hefur
