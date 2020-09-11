@@ -21,12 +21,10 @@ digraph Hefur
         ScrapeHandler;
         StatHandler;
         UdpServer;
-        WhiteList;
         FsTreeWhiteList;
-        UserWhiteList;
 
         Hefur -> TorrentDb [arrowhead=diamond];
-        Hefur -> WhiteList [arrowhead=diamond];
+        Hefur -> FsTreeWhiteList [arrowhead=diamond];
         Hefur -> HttpServer [arrowhead=diamond];
         Hefur -> UdpServer [arrowhead=diamond];
 
@@ -38,8 +36,6 @@ digraph Hefur
         HttpServer -> ScrapeHandler [arrowhead=diamond];
         HttpServer -> StatHandler [arrowhead=diamond];
 
-        FsTreeWhiteList -> WhiteList [arrowhead=onormal];
-
         AnnounceHandler -> AnnounceRequest;
         ScrapeHandler -> ScrapeRequest;
         UdpServer -> AnnounceRequest;
@@ -47,4 +43,6 @@ digraph Hefur
 
         AnnounceRequest -> AnnounceResponse;
         ScrapeRequest -> ScrapeResponse;
+
+        FsTreeWhiteList -> TorrentDb;
 }
