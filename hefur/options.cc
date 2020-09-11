@@ -7,7 +7,7 @@ namespace hefur
 {
   const uint32_t & MAX_PEERS = *mo::addOption<uint32_t>(
     "", "max-peers", "the maximum number of peers per torrent",
-    30000);
+    1024);
 
   const uint32_t & MAX_TORRENT_SIZE = *mo::addOption<uint32_t>(
     "", "max-torrent-size", "the maximum torrent size, in MiB",

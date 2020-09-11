@@ -48,6 +48,10 @@ add_executable(hefurd
 
   fs-tree-white-list.cc
   fs-tree-white-list.hh
+  master-white-list.cc
+  master-white-list.hh
+  control-white-list.cc
+  control-white-list.hh
 
   hefur.cc
   hefur.hh
@@ -56,7 +60,7 @@ add_executable(hefurd
   http-server.hh
 
   info-hash.hh
-  info-hash.hxx
+  info-hash.cc
 
   log-handler.cc
   log-handler.hh
@@ -71,7 +75,6 @@ add_executable(hefurd
   options.cc
   options.hh
 
-  peer.cc
   peer.hh
 
   peers-handler.cc
@@ -95,7 +98,6 @@ add_executable(hefurd
 
   torrent.cc
   torrent.hh
-  torrent.hxx
 
   tracker-controller.hh
 

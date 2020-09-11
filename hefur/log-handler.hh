@@ -7,14 +7,13 @@
 #include "namespace-helper.hh"
 
 namespace hefur {
-  class LogHandler : public mh::LogHandler
-  {
-  public:
-    virtual bool handle(mh::RequestReader &request, mh::ResponseWriter &response) const;
+   class LogHandler : public mh::LogHandler {
+   public:
+      virtual bool handle(mh::RequestReader &request, mh::ResponseWriter &response) const;
 
-    inline void setHandler(Handler::ConstPtr handler) { handler_ = handler; }
+      inline void setHandler(Handler::ConstPtr handler) { handler_ = handler; }
 
-  private:
-    mh::Handler::ConstPtr handler_;
-  };
-}
+   private:
+      mh::Handler::ConstPtr handler_;
+   };
+} // namespace hefur

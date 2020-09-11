@@ -1,6 +1,6 @@
 # dot -T png design.dot >design.png && xv design.png
 
-digraph Twinit
+digraph Hefur
 {
         fontname="monospace";
         fontsize=8;
@@ -23,6 +23,7 @@ digraph Twinit
         UdpServer;
         WhiteList;
         FsTreeWhiteList;
+        UserWhiteList;
 
         Hefur -> TorrentDb [arrowhead=diamond];
         Hefur -> WhiteList [arrowhead=diamond];
