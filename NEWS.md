@@ -1,5 +1,13 @@
 Please check git history for the list of changes
 
+Version 1.0
+
+ * Support to BitTorrent v2
+
+ * Remove support for hefurctl add and remove torrent commands
+
+ * Modernize a bit the source code
+
 Version 0.4
 
  * replace '&' by '&amp;' in stat.html
