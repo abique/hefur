@@ -5,8 +5,7 @@ package hefur.pb;
 enum Status
 {
   kOk = 0;
-  kNotFound = 1;
-  kInternalError = 2;
+  kInternalError = 1;
 }
 
 message StatusMsg
@@ -18,19 +17,8 @@ message Void
 {
 }
 
-message Torrent
-{
-  optional bytes  info_hash_v1 = 1;
-  optional bytes  info_hash_v2 = 5;
-  optional uint64 length       = 2;
-  optional bytes  name         = 3;
-  optional bytes  path         = 4;
-}
-
 service Control
 {
-  rpc addTorrent(Torrent) returns (StatusMsg);
-  rpc removeTorrent(Torrent) returns (StatusMsg);
   rpc releaseLogs(Void) returns (StatusMsg);
   rpc quit(Void) returns (StatusMsg);
 }

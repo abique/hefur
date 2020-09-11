@@ -48,10 +48,6 @@ add_executable(hefurd
 
   fs-tree-white-list.cc
   fs-tree-white-list.hh
-  master-white-list.cc
-  master-white-list.hh
-  control-white-list.cc
-  control-white-list.hh
 
   hefur.cc
   hefur.hh

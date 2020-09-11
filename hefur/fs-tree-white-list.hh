@@ -25,9 +25,6 @@ namespace hefur {
       explicit FsTreeWhiteList(const std::string &root, m::Time rescan_interval = m::minute);
       ~FsTreeWhiteList();
 
-      void lock() const { mutex_.lock(); }
-      void unlock() const { mutex_.unlock(); }
-
    private:
       /**
        * Scans root_, can be called at anytime, from any thread.
@@ -42,8 +39,6 @@ namespace hefur {
        */
       void loopScan();
       void checkTorrent(Torrent::Ptr torrent, std::vector<m::StringRef> &keys) const;
-
-      mutable std::mutex mutex_;
 
       const std::string &root_;
       const m::Time rescan_interval_;
