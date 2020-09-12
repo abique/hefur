@@ -20,8 +20,8 @@ namespace hefur {
    AnnounceResponse::Ptr TorrentDb::announce(AnnounceRequest::Ptr request) {
       m::SharedMutex::Locker locker(torrents_lock_);
 
-      auto entry = torrents_.find(request->info_hash_.bytes());
-      if (!entry.torrent) {
+      auto torrent = torrents_.find(request->info_hash_.bytes());
+      if (!torrent) {
          // we didn't find the torrent, so let's answer an error
          AnnounceResponse::Ptr response = new AnnounceResponse;
          response->error_ = true;
@@ -29,7 +29,7 @@ namespace hefur {
          return response;
       }
       // forward the request to the torrent
-      auto response = entry.torrent->announce(request);
+      auto response = torrent->announce(request);
       response->interval_ = ANNOUNCE_INTERVAL * 60;
       return response;
    }
@@ -42,14 +42,14 @@ namespace hefur {
       for (auto it = request->info_hashs_.begin(); it != request->info_hashs_.end(); ++it) {
          ScrapeResponse::Item item;
 
-         auto entry = torrents_.find(it->bytes());
-         if (!entry.torrent)
+         auto torrent = torrents_.find(it->bytes());
+         if (!torrent)
             continue;
 
          item.info_hash_ = *it;
-         item.nleechers_ = entry.torrent->leechers();
-         item.nseeders_ = entry.torrent->seeders();
-         item.ndownloaded_ = entry.torrent->completed();
+         item.nleechers_ = torrent->leechers();
+         item.nseeders_ = torrent->seeders();
+         item.ndownloaded_ = torrent->completed();
          response->items_.push_back(item);
       }
       response->interval_ = SCRAPE_INTERVAL * 60;
@@ -60,7 +60,7 @@ namespace hefur {
       // as we are not modifying the trie, we can use shared locking
       // the torrent, will do exclusive locking for itself
       m::SharedMutex::ReadLocker locker(torrents_lock_);
-      torrents_.foreach ([](TorrentEntry entry) { entry.torrent->cleanup(); });
+      torrents_.foreach ([](auto torrent) { torrent->cleanup(); });
    }
 
    void TorrentDb::cleanupLoop() {
@@ -74,12 +74,7 @@ namespace hefur {
 
       // requires exclusive locking as we modify the trie
       m::SharedMutex::Locker locker(torrents_lock_);
-
-      if (!torrent->keyV1().empty())
-         torrents_.insert({torrent, 1});
-
-      if (!torrent->keyV2().empty())
-         torrents_.insert({torrent, 2});
+      torrents_.insert(torrent);
    }
 
    void TorrentDb::removeTorrent(const m::StringRef &info_hash) {

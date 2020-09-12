@@ -16,10 +16,10 @@
 #include "torrent.hh"
 
 namespace hefur {
-   Torrent::Torrent(const InfoHash &info_hash_v1, const InfoHash &info_hash_v2,
-                    const std::string &name, const std::string &path, uint64_t length)
-      : info_hash_v1_(info_hash_v1), info_hash_v2_(info_hash_v2), name_(name), path_(path),
-        length_(length), timeouts_(), peers_(), leechers_(0), seeders_(0), completed_(0) {}
+   Torrent::Torrent(const InfoHash &info_hash, const std::string &name, const std::string &path,
+                    uint64_t length)
+      : info_hash_(info_hash), name_(name), path_(path), length_(length), timeouts_(), peers_(),
+        leechers_(0), seeders_(0), completed_(0) {}
 
    Torrent::~Torrent() {
       m::Mutex::Locker locker(lock_);
@@ -146,19 +146,5 @@ namespace hefur {
       timeouts_.erase(peer);
       peers_.erase(peer);
       delete peer;
-   }
-
-   Torrent::Ptr Torrent::parseFile(const std::string &path) {
-      m::bittorrent::TorrentParser p;
-
-      if (!p.parseFile(path)) {
-         log->error("%s: parse error", path);
-         return nullptr;
-      }
-
-      auto desc = p.result();
-      InfoHash info_v1(InfoHash::SHA1, reinterpret_cast<const char *>(desc->info_hash_v1_.bytes_));
-      InfoHash info_v2(InfoHash::SHA256, reinterpret_cast<const char *>(desc->info_hash_v2_.bytes_));
-      return new Torrent(info_v1, info_v2, desc->name_, path, desc->length_);
    }
 } // namespace hefur

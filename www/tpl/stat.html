@@ -7,8 +7,7 @@
   <thead>
     <tr>
       <th><!-- magnet, torrent, peers --></th>
-      <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">info hash v1</th>
-      <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">info hash v2</th>
+      <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">info hash</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">name</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortByte)">size</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortInt)">seeders</th>
@@ -37,8 +36,7 @@
         </a>
         {{/show_peers}}
       </td>
-      <td>{{info_sha1|b16}}</td>
-      <td>{{info_sha2|b16}}</td>
+      <td>{{info_hash|b16}}</td>
       <td>{{name}}</td>
       <td>{{length}}</td>
       <td>{{seeders}}</td>
@@ -51,7 +49,7 @@
 
   <tfoot>
     <tr>
-      <td colspan="4" style="text-align: right;"><strong>Total</strong></td>
+      <td colspan="3" style="text-align: right;"><strong>Total</strong></td>
       <td>{{total_length}}</td>
       <td>{{total_seeders}}</td>
       <td>{{total_leechers}}</td>

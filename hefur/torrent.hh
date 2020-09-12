@@ -19,7 +19,7 @@ namespace hefur {
 
    class Torrent final : public m::RefCountable<Torrent> {
    public:
-      Torrent(const InfoHash &info_hash_v1, const InfoHash &info_hash_v2,
+      Torrent(const InfoHash &info_hash,
               const std::string &name = "", const std::string &path = "", uint64_t length = 0);
       ~Torrent();
 
@@ -39,8 +39,7 @@ namespace hefur {
       /**
        * Return a key of the info hash to use in a Trie.
        */
-      inline std::string_view keyV1() const noexcept { return info_hash_v1_.bytes(); }
-      inline std::string_view keyV2() const noexcept { return info_hash_v2_.bytes(); }
+      inline std::string_view key() const noexcept { return info_hash_.bytes(); }
 
       inline const std::string &name() const { return name_; }
       inline const std::string &path() const { return path_; }
@@ -48,13 +47,6 @@ namespace hefur {
       inline uint32_t leechers() const { return leechers_; }
       inline uint32_t seeders() const { return seeders_; }
       inline uint32_t completed() const { return completed_; }
-
-      /**
-       * Parses a .torrent file, extracts the name, length and info_hash,
-       * and convert it into a Torrent object.
-       * @return nullptr on parse error.
-       */
-      static Torrent::Ptr parseFile(const std::string &path);
 
    private:
       friend class PeersHandler;
@@ -82,8 +74,7 @@ namespace hefur {
       using peers_type = m::Trie<Peer *, Peer::addr>;
 
       m::Mutex lock_;
-      InfoHash info_hash_v1_; // this is the torrent key
-      InfoHash info_hash_v2_; // this is the torrent key
+      InfoHash info_hash_; // this is the torrent key
       std::string name_;      // optional, used by StatHandler
       std::string path_;      // optional, for later download
       uint64_t length_;

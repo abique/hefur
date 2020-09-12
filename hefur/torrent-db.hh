@@ -68,29 +68,12 @@ namespace hefur {
       friend class FileHandler;
       friend class FsTreeWhiteList;
 
-      struct TorrentEntry {
-         TorrentEntry(Torrent::Ptr t = nullptr, int v = 1) : torrent(t), version(v) {}
-         TorrentEntry(std::nullptr_t) {}
-         operator bool() const noexcept { return torrent; }
-         Torrent* operator->() const noexcept { return torrent.get(); }
-
-         Torrent::Ptr torrent;
-         int version = 0;
-      };
-
       /** helper to use torrent->key() as a key for the trie */
-      static inline m::StringRef torrentKey(TorrentEntry torrent) {
-         switch (torrent.version) {
-         case 1:
-            return torrent.torrent->keyV1();
-         case 2:
-            return torrent.torrent->keyV2().substr(0, 20);
-         default:
-            std::terminate();
-         }
+      static inline m::StringRef torrentKey(Torrent::Ptr torrent) {
+         return torrent->key().substr(0, 20);
       }
 
-      typedef m::Trie<TorrentEntry, torrentKey> torrents_type;
+      typedef m::Trie<Torrent::Ptr, torrentKey> torrents_type;
 
       void cleanup();
       void cleanupLoop();

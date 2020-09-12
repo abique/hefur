@@ -1,5 +1,6 @@
 #include <fnmatch.h>
 
+#include <mimosa/bittorrent/torrent-parser.hh>
 #include <mimosa/fs/find.hh>
 
 #include "fs-tree-white-list.hh"
@@ -38,7 +39,6 @@ namespace hefur {
       uint32_t nb_inodes = 0;
 
       m::fs::find(root_, MAX_SCAN_DEPTH, [&](const std::string &path) {
-
          if (++nb_inodes > MAX_SCAN_INODES) {
             log->error("reached the limit of scanned inodes: %d", MAX_SCAN_INODES);
             return false;
@@ -48,8 +48,22 @@ namespace hefur {
             return true;
 
          auto tdb = Hefur::instance().torrentDb();
-         if (tdb)
-            tdb->addTorrent(Torrent::parseFile(path));
+         if (tdb) {
+            m::bittorrent::TorrentParser p;
+
+            if (!p.parseFile(path)) {
+               log->error("%s: parse error", path);
+               return true;
+            }
+
+            auto desc = p.result();
+
+            InfoHash info_v1(InfoHash::SHA1, reinterpret_cast<const char *>(desc->info_hash_v1_.bytes_));
+            tdb->addTorrent(new Torrent(info_v1, desc->name_, path, desc->length_));
+
+            InfoHash info_v2(InfoHash::SHA256, reinterpret_cast<const char *>(desc->info_hash_v2_.bytes_));
+            tdb->addTorrent(new Torrent(info_v2, desc->name_, path, desc->length_));
+         }
          return true;
       });
    }
@@ -58,21 +72,21 @@ namespace hefur {
       std::vector<std::string_view> keys;
       auto db = Hefur::instance().torrentDb();
       m::SharedMutex::Locker locker(db->torrents_lock_);
-      db->torrents_.foreach(
-         [this, &keys](TorrentDb::TorrentEntry torrent) { checkTorrent(torrent.torrent, keys); });
+      db->torrents_.foreach (
+         [this, &keys](Torrent::Ptr torrent) { checkTorrent(torrent, keys); });
 
       for (auto it = keys.begin(); it != keys.end(); ++it)
          db->torrents_.erase(*it);
    }
 
-   void FsTreeWhiteList::checkTorrent(Torrent::Ptr torrent, std::vector<std::string_view> &keys) const {
+   void FsTreeWhiteList::checkTorrent(Torrent::Ptr torrent,
+                                      std::vector<std::string_view> &keys) const {
       if (::strncmp(torrent->path().c_str(), root_.c_str(), root_.size()))
          return;
 
       struct ::stat st;
       if (::stat(torrent->path().c_str(), &st) && errno == ENOENT) {
-         keys.emplace_back(torrent->keyV1());
-         keys.emplace_back(torrent->keyV2());
+         keys.emplace_back(torrent->key());
       }
    }
 } // namespace hefur

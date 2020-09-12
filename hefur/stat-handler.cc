@@ -46,13 +46,7 @@ namespace hefur {
          uint64_t total_length = 0;
          uint64_t total_completed = 0;
 
-         std::unordered_set<void *> seen;
          tdb->torrents_.foreach ([&](auto it) {
-            /* Avoid duplicates as we might have the same torrent twice (v1 and v2) */
-            if (seen.count(it.torrent.get()) > 0)
-               return;
-            seen.insert(it.torrent.get());
-
             auto torrent = new mt::Dict("torrent");
             torrents->append(torrent);
             torrent->append("name", it->name());
@@ -61,8 +55,7 @@ namespace hefur {
                mf::printByteSize(ss, it->length());
                torrent->append("length", ss.str());
             }
-            torrent->append("info_sha1", it->keyV1());
-            torrent->append("info_sha2", it->keyV2());
+            torrent->append("info_hash", it->key());
             torrent->append("leechers", it->leechers());
             torrent->append("seeders", it->seeders());
             torrent->append("completed", it->completed());
