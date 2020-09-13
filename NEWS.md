@@ -8,6 +8,8 @@ Version 1.0
 
  * Modernize a bit the source code
 
+ * Upgrade bootstrap to version 4.5.2
+
 Version 0.4
 
  * replace '&' by '&amp;' in stat.html
