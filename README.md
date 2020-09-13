@@ -21,5 +21,9 @@ Features:
  - control interface
  - control program: hefurctl
 
+Installing:
+ - Archlinux: pacman -S hefur
+ - Debian: apt install hefur
+
 Contact:
  - hefur@googlegroups.com
