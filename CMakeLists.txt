@@ -39,9 +39,7 @@ add_subdirectory(hefur)
 install(
   DIRECTORY www/
   DESTINATION ${CMAKE_INSTALL_DATADIR}/hefur/www
-  PATTERN bootstrap EXCLUDE
-  PATTERN *.less EXCLUDE
-  PATTERN update-bootstrap.sh EXCLUDE)
+  )
 
 install(
   FILES manual/manual.html
