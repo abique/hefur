@@ -23,7 +23,7 @@ namespace hefur {
 
       info_hash = ss->str();
 
-      if (info_hash.size() != 20 || info_hash.size() != 32)
+      if (info_hash.size() != 20 && info_hash.size() != 32)
       {
          response.setStatus(mh::kStatusNotFound);
          return false;
