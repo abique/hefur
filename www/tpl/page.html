@@ -1,25 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf8" />
-    <link rel="stylesheet" type="text/css" href="/css/hefur.css" />
-    <style>
-      body { padding-top: 50px; }
-    </style>
-    <script language="javascript" src="/js/table-sorter.js"></script>
-    <title>{{title}}</title>
-  </head>
 
-  <body>
-    <div class="page-header">
-      <h1>{{title}}</h1>
-    </div>
-    {{body}}
-    <hr>
-    <h6>
-      <a href="https://github.com/abique/hefur">Hefur {{hefur_version}}</a>
-      is free software licensed under MIT: you are free to change and
-      redistribute it.
-    </h6>
-  </body>
+<head>
+  <meta charset="utf8" />
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.css" />
+  <style>
+    body {
+      padding-top: 50px;
+    }
+  </style>
+  <script language="javascript" src="/js/table-sorter.js"></script>
+  <title>{{title}}</title>
+</head>
+
+<body>
+  <div class="page-header">
+    <h1>{{title}}</h1>
+  </div>
+  {{body}}
+  <hr>
+  <h6>
+    <a href="https://github.com/abique/hefur">Hefur {{hefur_version}}</a>
+    is free software licensed under MIT: you are free to change and
+    redistribute it.<br/>
+    Uptime: {{hefur_uptime}}
+  </h6>
+</body>
+
 </html>

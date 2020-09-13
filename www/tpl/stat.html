@@ -1,12 +1,9 @@
-<ul>
-  <li>Version: {{hefur_version}}</li>
-  <li>Uptime: {{hefur_uptime}}</li>
-</ul>
-
 <table class="table table-striped table-condensed" id="torrents-table">
   <thead>
     <tr>
-      <th><!-- magnet, torrent, peers --></th>
+      <th>
+        <!-- magnet, torrent, peers -->
+      </th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">version</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">name</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">info hash</th>
@@ -23,17 +20,17 @@
     <tr>
       <td>
         <a href="magnet:?xt=urn:{{magnet_hash_key}}:{{info_hash|b16}}&amp;urn:btmh:1220{{info_sha2|b16}}&amp;dn={{name|u}}{{*tracker_udp}}&amp;tr={{tracker_udp|u}}{{/tracker_udp}}&amp;tr={{tracker_http|u}}"
-           title="Magnet link">
-          <img src="/img/magnet-icon.gif"/>
+          title="Magnet link">
+          <img src="/img/magnet-icon.gif" />
         </a>
         {{*show_torrent}}
         <a href="/file/{{name|u}}.torrent?info_hash={{info_hash|b16}}" title="Torrent">
-          <img src="/img/torrent-icon.png"/>
+          <img src="/img/torrent-icon.png" />
         </a>
         {{/show_torrent}}
         {{*show_peers}}
         <a href="/peers?info_hash={{info_hash|b16}}" title="List peers">
-          <img src="/img/peers.png"/>
+          <img src="/img/peers.png" />
         </a>
         {{/show_peers}}
       </td>
