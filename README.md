@@ -25,5 +25,7 @@ Installing:
  - Archlinux: pacman -S hefur
  - Debian: apt install hefur
 
+[Manual](manual/manual.md)
+
 Contact:
  - hefur@googlegroups.com
