@@ -55,6 +55,9 @@ namespace hefur {
                mf::printByteSize(ss, it->length());
                torrent->append("length", ss.str());
             }
+            int version = it->version();
+            torrent->append("version", version);
+            torrent->append("magnet_hash_key", version == 2 ? "btmh" : "btih");
             torrent->append("info_hash", it->key());
             torrent->append("leechers", it->leechers());
             torrent->append("seeders", it->seeders());

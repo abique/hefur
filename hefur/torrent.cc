@@ -1,3 +1,4 @@
+#include <exception>
 #include <mimosa/bencode/copy.hh>
 #include <mimosa/bencode/decoder.hh>
 #include <mimosa/bencode/encoder.hh>
@@ -11,6 +12,7 @@
 
 #include "address.hxx"
 #include "announce-request.hh"
+#include "info-hash.hh"
 #include "log.hh"
 #include "options.hh"
 #include "torrent.hh"
@@ -146,5 +148,16 @@ namespace hefur {
       timeouts_.erase(peer);
       peers_.erase(peer);
       delete peer;
+   }
+
+   int Torrent::version() const noexcept {
+      switch (info_hash_.type_) {
+      case InfoHash::SHA1:
+         return 1;
+      case InfoHash::SHA256:
+         return 2;
+      default:
+         std::terminate();
+      }
    }
 } // namespace hefur

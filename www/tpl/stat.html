@@ -7,8 +7,9 @@
   <thead>
     <tr>
       <th><!-- magnet, torrent, peers --></th>
-      <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">info hash</th>
+      <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">version</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">name</th>
+      <th onClick="sortTbody(this, 'torrents-tbody', sortStr)">info hash</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortByte)">size</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortInt)">seeders</th>
       <th onClick="sortTbody(this, 'torrents-tbody', sortInt)">leechers</th>
@@ -21,23 +22,24 @@
     {{*torrents}}
     <tr>
       <td>
-        <a href="magnet:?xt=urn:btih:{{info_sha1|b16}}&amp;urn:btmh:1220{{info_sha2|b16}}&amp;dn={{name|u}}{{*tracker_udp}}&amp;tr={{tracker_udp|u}}{{/tracker_udp}}&amp;tr={{tracker_http|u}}"
+        <a href="magnet:?xt=urn:{{magnet_hash_key}}:{{info_hash|b16}}&amp;urn:btmh:1220{{info_sha2|b16}}&amp;dn={{name|u}}{{*tracker_udp}}&amp;tr={{tracker_udp|u}}{{/tracker_udp}}&amp;tr={{tracker_http|u}}"
            title="Magnet link">
           <img src="/img/magnet-icon.gif"/>
         </a>
         {{*show_torrent}}
-        <a href="/file/{{name|u}}.torrent?info_hash={{info_sha1|b16}}" title="Torrent">
+        <a href="/file/{{name|u}}.torrent?info_hash={{info_hash|b16}}" title="Torrent">
           <img src="/img/torrent-icon.png"/>
         </a>
         {{/show_torrent}}
         {{*show_peers}}
-        <a href="/peers?info_hash={{info_sha1|b16}}" title="List peers">
+        <a href="/peers?info_hash={{info_hash|b16}}" title="List peers">
           <img src="/img/peers.png"/>
         </a>
         {{/show_peers}}
       </td>
-      <td>{{info_hash|b16}}</td>
+      <td>{{version}}</td>
       <td>{{name}}</td>
+      <td>{{info_hash|b16}}</td>
       <td>{{length}}</td>
       <td>{{seeders}}</td>
       <td>{{leechers}}</td>
@@ -49,7 +51,7 @@
 
   <tfoot>
     <tr>
-      <td colspan="3" style="text-align: right;"><strong>Total</strong></td>
+      <td colspan="4" style="text-align: right;"><strong>Total</strong></td>
       <td>{{total_length}}</td>
       <td>{{total_seeders}}</td>
       <td>{{total_leechers}}</td>

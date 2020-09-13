@@ -47,6 +47,7 @@ namespace hefur {
       inline uint32_t leechers() const { return leechers_; }
       inline uint32_t seeders() const { return seeders_; }
       inline uint32_t completed() const { return completed_; }
+      int version() const noexcept;
 
    private:
       friend class PeersHandler;
