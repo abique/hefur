@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.13)
+enable_testing()
 
 project(hefur C CXX)
-
-enable_testing()
+set(CMAKE_CXX_STANDARD 17)
 
 option(HEFUR_CONTROL_INTERFACE "enables Hefur's control interface and hefurctl" ON)
 
@@ -14,7 +14,6 @@ message("hefur version: ${HEFUR_VERSION}")
 message("control interface: ${HEFUR_CONTROL_INTERFACE}")
 
 add_definitions(
-  -std=c++17
   -D_GNU_SOURCE -D_LARGEFILE64_SOURCE
   -Wall -Wextra -Werror=return-type
   -DHEFUR_VERSION=\"${HEFUR_VERSION}\"
@@ -38,9 +37,8 @@ add_subdirectory(hefur)
 
 install(
   DIRECTORY www/
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/hefur/www
-  )
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/hefur/www)
 
 install(
-  FILES manual/manual.html
+  FILES manual/manual.md
   DESTINATION ${CMAKE_INSTALL_DOCDIR}/hefur/)
