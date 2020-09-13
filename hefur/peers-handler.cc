@@ -8,6 +8,7 @@
 #include <mimosa/tpl/value.hh>
 
 #include "hefur.hh"
+#include "mimosa/http/status.hh"
 #include "peers-handler.hh"
 #include "template-factory.hh"
 #include "torrent-db.hh"
@@ -22,8 +23,14 @@ namespace hefur {
 
       info_hash = ss->str();
 
-      if (info_hash.size() != 20)
+      if (info_hash.size() != 20 || info_hash.size() != 32)
+      {
+         response.setStatus(mh::kStatusNotFound);
          return false;
+      }
+
+      // Truncate sha256 so we find it in the torrent db
+      info_hash = info_hash.substr(0, 20);
 
       auto tpl = TemplateFactory::instance().create("page.html");
       if (!tpl)
