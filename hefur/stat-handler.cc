@@ -8,6 +8,8 @@
 #include <mimosa/tpl/value.hh>
 
 #include "hefur.hh"
+#include "mimosa/stream/base16-encoder.hh"
+#include "mimosa/stream/filter.hh"
 #include "options.hh"
 #include "stat-handler.hh"
 #include "template-factory.hh"
@@ -46,7 +48,7 @@ namespace hefur {
          uint64_t total_length = 0;
          uint64_t total_completed = 0;
 
-         tdb->torrents_.foreach ([&](auto it) {
+         tdb->torrents_.foreach ([&](Torrent::Ptr it) {
             auto torrent = new mt::Dict("torrent");
             torrents->append(torrent);
             torrent->append("name", it->name());
@@ -57,7 +59,8 @@ namespace hefur {
             }
             int version = it->version();
             torrent->append("version", version);
-            torrent->append("magnet_hash_key", version == 2 ? "btmh" : "btih");
+            auto key16 = ms::filter<ms::Base16Encoder>(it->key());
+            torrent->append("magnet_key", mf::str("%s%s", version == 1 ? "btih:" : "btmh:1220", key16));
             torrent->append("info_hash", it->key());
             torrent->append("leechers", it->leechers());
             torrent->append("seeders", it->seeders());
