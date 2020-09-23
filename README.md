@@ -12,6 +12,7 @@
 Hefur is a standalone C++ BitTorrent tracker.
 
 Features:
+ - support both BitTorrent v1 and v2
  - support HTTP, HTTPS and UPD announce and scrape
  - support both IPv4 and IPv6
  - no database required (everything in memory)
