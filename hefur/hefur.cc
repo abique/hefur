@@ -31,7 +31,7 @@ namespace hefur
     if (HTTPS_PORT != 0 && !CERT.empty() && !KEY.empty())
     {
       https_server_.reset(new HttpServer);
-      https_server_->start(HTTP_PORT, IPV6, CERT, KEY);
+      https_server_->start(HTTPS_PORT, IPV6, CERT, KEY);
     }
 
 #ifdef HEFUR_CONTROL_INTERFACE

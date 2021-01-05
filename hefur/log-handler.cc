@@ -14,9 +14,12 @@ namespace hefur {
       struct sockaddr_in in;
       struct sockaddr_in6 in6;
 
+
       // Are the reverse proxy settings enabled?
       if (!REVERSE_PROXY_FROM.empty() && !REVERSE_PROXY_HEADER.empty() &&
-          REVERSE_PROXY_FROM == original_ip.ipStr()) {
+          (REVERSE_PROXY_FROM == "0.0.0.0" ||
+           REVERSE_PROXY_FROM == "::" ||
+           REVERSE_PROXY_FROM == original_ip.ipStr())) {
          // Does the original IP match the reverse-proxy-from setting?
          auto headers = request.unparsedHeaders();
          auto header = headers.find(REVERSE_PROXY_HEADER);

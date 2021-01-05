@@ -97,6 +97,6 @@ namespace hefur
 
   const std::string & REVERSE_PROXY_FROM = *mo::addOption<std::string>(
     "", "reverse-proxy-from",
-    "IP to allow ip parsing from for reverse proxy",
+    "IP to allow ip parsing from for reverse proxy, '0.0.0.0' or '::' to allow from all",
     "");
 }
