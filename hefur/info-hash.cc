@@ -16,6 +16,17 @@ namespace hefur {
       }
    }
 
+   bool InfoHash::isValidHashSize(int size) noexcept {
+      switch (size) {
+         case 20:
+         case 32:
+            return true;
+
+         default:
+            return false;
+      }
+   }
+
    InfoHash::InfoHash(Type type, const char *data) : type_(type) {
       std::memcpy(bytes_, data, hashSize(type));
    }

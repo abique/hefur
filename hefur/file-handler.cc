@@ -9,6 +9,8 @@
 
 #include "file-handler.hh"
 #include "hefur.hh"
+#include "info-hash.hh"
+#include "mimosa/http/status.hh"
 #include "template-factory.hh"
 #include "torrent-db.hh"
 
@@ -23,8 +25,11 @@ namespace hefur {
       const std::string info_hash(ss->str());
 
       // valid sha1 must be 20 bytes
-      if (info_hash.size() != 20)
+      if (InfoHash::isValidHashSize(info_hash.size())) {
+         response.setStatus(mh::kStatusBadRequest);
+         response.setContentType("text");
          return false;
+      }
 
       // fetch the torrent path directly from the torrent db
       std::string path;

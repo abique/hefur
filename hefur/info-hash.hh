@@ -24,6 +24,8 @@ namespace hefur {
 
       static size_t hashSize(Type type) noexcept;
 
+      static bool isValidHashSize(int size) noexcept;
+
       uint8_t bytes_[32] = {0};
       Type type_ = NONE;
    };
