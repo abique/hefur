@@ -41,6 +41,7 @@ namespace hefur {
          return true;
       }
 
+      response.setContentType("text/html");
       {
          m::SharedMutex::ReadLocker locker(tdb->torrents_lock_);
          uint64_t total_leechers = 0;

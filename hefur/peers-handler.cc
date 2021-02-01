@@ -62,6 +62,7 @@ namespace hefur {
             return true;
          }
 
+         response.setContentType("text/html");
          for (auto it = torrent->timeouts_.begin(); it != torrent->timeouts_.end(); ++it) {
             auto peer = new mt::Dict("peer");
             peers->append(peer);
