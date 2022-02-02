@@ -1,0 +1,30 @@
+# For older apparmor versions you have to remove this line
+abi <abi/3.0>,
+
+include <tunables/global>
+
+profile hefurd /usr/sbin/hefurd {
+  include <abstractions/base>
+  include <abstractions/nameservice>
+
+  capability net_bind_service,
+
+  network inet  udp,
+  network inet  tcp,
+  network inet6 udp,
+  network inet6 tcp,
+
+  /etc/mime.types r,
+
+  /usr/share/hefur/** r,
+
+  /var/lib/hefur/ r,
+  /var/lib/hefur/* rwl,
+
+  /var/log/hefur/* rwl,
+
+  /{,var/}run/hefur/control rw,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/hefurd>
+}
