@@ -9,6 +9,8 @@ namespace hefur {
    extern const uint32_t &MAX_SCAN_DEPTH;
    extern const uint32_t &MAX_SCAN_INODES;
    extern const uint32_t &MAX_PEERS;
+   extern const uint32_t &MAX_NUMWANT;
+   extern const uint32_t &MIN_NUMWANT;
    extern const uint32_t &ANNOUNCE_INTERVAL;
    extern const uint32_t &SCRAPE_INTERVAL;
    extern const uint32_t &HTTP_TIMEOUT;
