@@ -30,14 +30,11 @@ bool AnnounceHandler::handle(mh::RequestReader &request, mh::ResponseWriter &res
    // is provided
    auto query_it = request.query().find("numwant");
    if (query_it == request.query().end())
-      rq->num_want_ = 50;
+      rq->num_want_ = MIN_NUMWANT;
    else {
       rq->num_want_ = atoi(query_it->second.c_str());
-      // The peer don't need more than 50 peers, so 100
-      // is more than enough. It can still try to use PEX
-      // to get more peers.
-      if (rq->num_want_ > 100)
-         rq->num_want_ = 100;
+      if (rq->num_want_ > MAX_NUMWANT)
+         rq->num_want_ = MAX_NUMWANT;
    }
 
    bool compact = request.query().count("compact");

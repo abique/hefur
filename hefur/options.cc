@@ -9,6 +9,14 @@ namespace hefur
     "", "max-peers", "the maximum number of peers per torrent",
     1024);
 
+  const uint32_t & MAX_NUMWANT = *mo::addOption<uint32_t>(
+    "", "max-numwant", "the maximum peers can be replied per announce request",
+    100);
+
+  const uint32_t & MIN_NUMWANT = *mo::addOption<uint32_t>(
+    "", "min-numwant", "the minimum peers can be replied per announce request",
+    50);
+
   const uint32_t & MAX_TORRENT_SIZE = *mo::addOption<uint32_t>(
     "", "max-torrent-size", "the maximum torrent size, in MiB",
     10);

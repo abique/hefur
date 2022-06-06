@@ -79,9 +79,12 @@ namespace hefur {
          response->error_msg_ = "internal error (2)";
          return response;
       }
-
-      if (request->num_want_ > 100)
-         request->num_want_ = 100;
+      
+      // correct numwant option to intended borders
+      if (request->num_want_ < MIN_NUMWANT)
+         request->num_want_ = MIN_NUMWANT;
+      if (request->num_want_ > MAX_NUMWANT)
+         request->num_want_ = MAX_NUMWANT;
 
       for (auto it = timeouts_.rbegin(); it != timeouts_.rend(); ++it) {
          if (response->addrs_.size() >= request->num_want_)
