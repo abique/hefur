@@ -46,6 +46,10 @@ std::string Address::str() const {
       snprintf(p, end - p, "]:%d", ntohs(in6_.port_));
       break;
 
+   case AF_UNSPEC:
+      // This can happen
+      break;
+
    default:
       assert(false);
       break;
@@ -66,6 +70,10 @@ std::string Address::ipStr() const {
       inet_ntop(AF_INET6, in6_.addr_, buffer, sizeof(buffer));
       break;
 
+   case AF_UNSPEC:
+      // This can happen
+      break;
+
    default:
       assert(false);
       break;
@@ -81,9 +89,15 @@ uint16_t Address::port() const {
 
    case AF_INET6:
       return ntohs(in6_.port_);
-   }
 
-   return 0;
+   case AF_UNSPEC:
+      // This can happen
+      return 0;
+
+   default:
+      assert(false);
+      return 0;
+   }
 }
 
 Address &Address::operator=(const struct ::sockaddr_in *in) {
@@ -121,16 +135,18 @@ Address &Address::operator=(const struct ::sockaddr *addr) {
 
    switch (addr->sa_family) {
    case AF_INET: {
-      *this = (const struct ::sockaddr_in *)addr;
+      *this = reinterpret_cast<const struct ::sockaddr_in *>(addr);
       break;
    }
 
    case AF_INET6: {
-      *this = (const struct ::sockaddr_in6 *)addr;
+      *this = reinterpret_cast<const struct ::sockaddr_in6 *>(addr);
       break;
    }
+
    default:
-      assert(false);
+      /* can't work with something else than ipv4 or ipv6 */
+      family_ = AF_UNSPEC;
       break;
    }
    return *this;
