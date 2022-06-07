@@ -1,3 +1,5 @@
 design.png
 build
 cmake-builds
+.cache
+compile_commands.json
