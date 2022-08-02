@@ -11,22 +11,30 @@
 
 Hefur is a standalone C++ BitTorrent tracker.
 
-Features:
- - support both BitTorrent v1 and v2
- - support HTTP, HTTPS and UPD announce and scrape
- - support both IPv4 and IPv6
- - no database required (everything in memory)
- - should be efficient
- - perfect for small setup
- - info_hash white list based on .torrent in a directory tree
- - control interface
- - control program: hefurctl
+## Features
+- Support both BitTorrent v1 and v2
+- Support HTTP, HTTPS and UDP announce and scrape
+- Support both IPv4 and IPv6
+- No database required (everything in memory)
+- Should be efficient
+- Perfect for small setup
+- info_hash white list based on .torrent in a directory tree
+- Control interface
+- Control program: hefurctl
 
-Installing:
- - Archlinux: pacman -S hefur
- - Debian: apt install hefur
+## Installing:
+### Archlinux
+``` shell
+pacman -S hefur
+```
 
+### Debian
+``` shell
+apt install hefur
+```
+
+## Usage
 [Manual](manual/manual.md)
 
-Contact:
- - hefur@googlegroups.com
+## Contact
+hefur@googlegroups.com
