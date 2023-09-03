@@ -1,0 +1,38 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 17,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "ninja",
+            "binaryDir": "${sourceDir}/build",
+            "generator": "Ninja Multi-Config",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": {
+                    "type": "BOOL",
+                    "value": true
+                }
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "ninja",
+            "description": "Build using Ninja and system libraries",
+            "configurePreset": "ninja-system",
+            "targets": [
+                "hefurd"
+            ]
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "ninja",
+            "description": "Test using Ninja and system libraries",
+            "configurePreset": "ninja"
+        }
+    ]
+}
