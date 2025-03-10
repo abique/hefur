@@ -1,28 +1,54 @@
 {
-    "version": 3,
+    "version": 10,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 17,
+        "minor": 23,
         "patch": 0
     },
     "configurePresets": [
         {
-            "name": "ninja",
+            "name": "ninja-system",
+            "displayName": "Ninja (System)",
             "binaryDir": "${sourceDir}/build",
             "generator": "Ninja Multi-Config",
+            "environment": {},
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": {
                     "type": "BOOL",
-                    "value": true
+                    "value": "TRUE"
+                }
+            }
+        },
+        {
+            "name": "ninja-homebrew",
+            "displayName": "Ninja (Homebrew)",
+            "binaryDir": "${sourceDir}/build",
+            "generator": "Ninja Multi-Config",
+            "environment": {
+                "PKG_CONFIG_PATH": "/opt/homebrew/opt/libarchive/lib/pkgconfig",
+                "PATH": "/opt/homebrew/opt/protobuf/bin/:/opt/homebrew/opt/bison/bin:/opt/homebrew/opt/flex/bin/:$penv{PATH}"
+            },
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": {
+                    "type": "BOOL",
+                    "value": "TRUE"
                 }
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "ninja",
+            "name": "ninja-system",
             "description": "Build using Ninja and system libraries",
             "configurePreset": "ninja-system",
+            "targets": [
+                "hefurd"
+            ]
+        },
+        {
+            "name": "ninja-homebrew",
+            "description": "Build using Ninja and homebrew libraries",
+            "configurePreset": "ninja-homebrew",
             "targets": [
                 "hefurd"
             ]
@@ -30,9 +56,9 @@
     ],
     "testPresets": [
         {
-            "name": "ninja",
+            "name": "ninja-system",
             "description": "Test using Ninja and system libraries",
-            "configurePreset": "ninja"
+            "configurePreset": "ninja-system"
         }
     ]
 }

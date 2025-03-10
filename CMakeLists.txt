@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.23)
 enable_testing()
 
 project(hefur C CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 option(HEFUR_CONTROL_INTERFACE "enables Hefur's control interface and hefurctl" ON)
-
-find_package(GnuTLS REQUIRED)
 
 file(STRINGS VERSION HEFUR_VERSION)
 
@@ -32,7 +30,6 @@ else()
 endif()
 
 add_subdirectory(mimosa EXCLUDE_FROM_ALL)
-include_directories(mimosa)
 add_subdirectory(hefur)
 
 install(
