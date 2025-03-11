@@ -2,6 +2,7 @@ if(HEFUR_CONTROL_INTERFACE)
   mimosa_protoc(hefur)
 
   add_library(hefur-proto STATIC hefur.pb.cc)
+  target_link_libraries(hefur-proto PUBLIC mimosa)
 
   add_executable(hefurctl hefurctl.cc)
 
