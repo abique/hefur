@@ -1,4 +1,6 @@
 #include <exception>
+#include <algorithm>
+
 #include <mimosa/bencode/copy.hh>
 #include <mimosa/bencode/decoder.hh>
 #include <mimosa/bencode/encoder.hh>
